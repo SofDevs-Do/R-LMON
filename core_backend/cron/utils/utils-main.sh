@@ -31,6 +31,15 @@ main()
 	    fi
 
 	    ## Data collection scripts being invoked.
+	    # Get hostname details
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/hostname.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/hostname.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/hostname.txt;
+		touch "${REMOTE_MACHINE_PATH}"/hostname-down;
+	    fi
+	    
+
 	    # CPU Usage stats collection.
 	    bash "${RLMON_HOME}"/core_backend/cron/utils/cpu-usage.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/cpu-usage.csv < /dev/null;
