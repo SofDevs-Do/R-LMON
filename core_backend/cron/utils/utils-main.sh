@@ -39,12 +39,27 @@ main()
 		touch "${REMOTE_MACHINE_PATH}"/cpu-test-down;
 	    fi
 
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/avg-cpu-usage.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/avg-cpu-usage.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/avg-cpu-usage.txt;
+		touch "${REMOTE_MACHINE_PATH}"/avg-cpu-test-down;
+	    fi
+
+
 	    # RAM Usage stats collection
 	    bash "${RLMON_HOME}"/core_backend/cron/utils/mem-usage.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/mem-usage.csv < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/mem-usage.csv;
 		touch "${REMOTE_MACHINE_PATH}"/mem-test-down;
+	    fi
+
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/avg-mem-usage.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/avg-mem-usage.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/avg-mem-usage.txt;
+		touch "${REMOTE_MACHINE_PATH}"/avg-mem-test-down;
 	    fi
 
 
