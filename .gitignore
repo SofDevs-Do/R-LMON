@@ -1,0 +1,6 @@
+# Ignore the log files
+_log/
+
+# Ignore python cache files
+__pycache__/
+*.pyc
