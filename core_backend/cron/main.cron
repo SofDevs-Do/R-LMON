@@ -1,0 +1,5 @@
+# Disable mailing
+MAILTO=""
+
+# Run the data collection at 1am everyday
+0 1 * * * /bin/bash $HOME/.r_lmon/core_backend/cron/main.sh 1>/dev/null 2>&1
