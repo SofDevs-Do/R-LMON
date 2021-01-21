@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. "${RLMON_HOME}"/core_backend/cron/utils/up-tests.sh;
+
 main()
 {
     REMOTE_MACHINE=$1;
@@ -7,5 +9,38 @@ main()
     MACHINE_LOCATION=$3;
     KVM_SWITCH=$4;
     KVM_NUMBER=$5;
-}
 
+    # The location to store the collected data from each remote machine.
+    REMOTE_MACHINE_PATH="${RLMON_HOME}"/log/"$(date --date="yesterday" '+%Y-%m-%d')/${REMOTE_MACHINE}";
+    mkdir -p "${REMOTE_MACHINE_PATH}";
+    echo "Collecting from ${REMOTE_MACHINE}";
+
+    ping_test "${REMOTE_MACHINE}"
+
+    if [ $? -eq 0 ]; then
+	# remove the ping test status file as the test passed now.
+	if [ -f "${REMOTE_MACHINE_PATH}"/ping-down ]; then
+	    rm "${REMOTE_MACHINE_PATH}"/ping-down;
+	fi
+
+	check_ssh "${REMOTE_MACHINE}"
+	if [ $? -eq 0 ]; then
+	    # remove the ssh test status file as the test passed now.
+	    if [ -f "${REMOTE_MACHINE_PATH}"/ssh-down ]; then
+		rm "${REMOTE_MACHINE_PATH}"/ssh-down;
+	    fi
+
+	    ## Data collection scripts being invoked.
+
+	    ## end of data collection scripts being invoked.
+
+	else # failed ssh test. Make a file to indicate this in the remote machine's log directory
+	    echo "Unable to remotely login to host - ${REMOTE_MACHINE}";
+	    touch "${REMOTE_MACHINE_PATH}"/ssh-down;
+	fi
+
+    else # failed ping test. Make a file to indicate this in the remote machine's log directory
+	echo "Unable to reach host - ${REMOTE_MACHINE}";
+	touch "${REMOTE_MACHINE_PATH}"/ping-down;
+    fi
+}
