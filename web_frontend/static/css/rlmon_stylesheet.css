@@ -1,0 +1,63 @@
+
+body {
+    background-color: hsla(210, 20%, 50%, 0.3);
+    font-family: "Lato", sans-serif;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+label {
+    font-family: serif;
+    color: #064771;
+}
+
+#main-div {
+    background-color: #FFFFFF;
+    border-radius: 25px;
+    height: 96%;
+    width: 98%;
+}
+
+#org-name-div {
+    color: #064771;
+    font-family: 'Playfair Display', serif;
+    font-size: 10px;
+    position: relative;
+    top: 0%;
+    left: 2%;
+    float: left;
+    height: 5%;
+    width:31.5%;
+}
+
+.dot {
+  height: 8px;
+  width: 8px;
+  background-color: #ff1e00;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.align-dot-bottom {
+     margin: 29px 0px 0px 5px;
+}
+
+#portal-name-div {
+    background-color: hsla(210, 20%, 50%, 0.3);
+    position: relative;
+    top: -2%;
+    left: 4%;
+    height: 7%;
+    width:40%;
+    border-radius: 10px 140px 10px 140px;
+}
+
+#portal-name {
+    color: #064769;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    text-align: center;
+    font-variant: small-caps;
+}
