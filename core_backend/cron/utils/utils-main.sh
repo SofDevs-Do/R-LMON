@@ -72,6 +72,15 @@ main()
 	    fi
 
 
+	    # Uptime of the system
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/uptime.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/uptime.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/uptime.txt;
+		touch "${REMOTE_MACHINE_PATH}"/uptime-down;
+	    fi
+
+
 	    ## end of data collection scripts being invoked.
 
 	else # failed ssh test. Make a file to indicate this in the remote machine's log directory
