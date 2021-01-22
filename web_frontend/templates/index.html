@@ -11,9 +11,21 @@
     <script src="/home/sneha/Documents/Sneha/CCBD/JRF/CodeBase/R-LMON/web_frontend/static/js/rlmon_action.js"></script>
   </body>
 
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="#" class="sidenav-tab">Overview</a>
+    <a href="#" class="sidenav-tab">Resource Utilization</a>
+    <a href="#" class="sidenav-tab">Network Diagram</a>
+    <a href="#" class="sidenav-tab">System Diagnostics</a>
+  </div>
+
   <div id="main-div">
     
-    <div id="org-name-with-dot">
+    <div id="org-name-with-dot-div">
+      <div id="menu-icon-div">
+	<button class="menu-icon-btn" onclick="openNav()"><i class="fa fa-bars"></i></button>
+      </div>
+
       <div id="org-name-div">
 	<h1>Centre for Cloud Computing and Big Data</h1>
       </div>
@@ -22,11 +34,9 @@
 
     <div id="portal-name-div">
       <div id="portal-name">
-	<h1>Systems Monitoring Dashboard</h1>
+    	<h1>Systems Monitoring Dashboard</h1>
       </div>
     </div>
-
     
   </div>
-  
 </html>

@@ -18,18 +18,24 @@ label {
     border-radius: 25px;
     height: 96%;
     width: 98%;
+    transition: margin-left .5s;
+    padding: 16px;
+}
+
+#org-name-with-dot-div {
+    top: 0%;
+    left: 0%;
+    height: 7%;
+    width: 35%;
 }
 
 #org-name-div {
     color: #064771;
     font-family: 'Playfair Display', serif;
-    font-size: 10px;
+    font-size: 8px;
     position: relative;
-    top: 0%;
-    left: 2%;
+    left: 13%;
     float: left;
-    height: 5%;
-    width:31.5%;
 }
 
 .dot {
@@ -41,14 +47,18 @@ label {
 }
 
 .align-dot-bottom {
-     margin: 29px 0px 0px 5px;
+    position: relative;
+    height: 8px;
+    width: 8px;
+    top: 50%;
+    left: 15%;
 }
 
 #portal-name-div {
     background-color: hsla(210, 20%, 50%, 0.3);
     position: relative;
-    top: -2%;
-    left: 4%;
+    top: -3%;
+    left: 1%;
     height: 7%;
     width:40%;
     border-radius: 10px 140px 10px 140px;
@@ -60,4 +70,69 @@ label {
     font-size: 14px;
     text-align: center;
     font-variant: small-caps;
+}
+
+#menu-icon-div {
+    top:10%;
+    left:40%;
+    height:7%;
+    width:3%;
+}
+
+.menu-icon-btn {
+  background-color: transparent;
+  border: none;
+  color: #064769;
+  padding: 12px 16px;
+  font-size: 27px;
+  cursor: pointer;
+}
+
+.menu-icon-btn:hover {
+    color: #ff1e00;
+}
+
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.sidenav .sidenav-tab {
+    font-size: 16px;
+    font-family: 'Playfair Display', serif;
 }
