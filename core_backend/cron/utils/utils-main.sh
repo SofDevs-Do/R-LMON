@@ -4,11 +4,14 @@
 
 main()
 {
-    REMOTE_MACHINE=$1;
-    RACK_ID=$2;
-    MACHINE_LOCATION=$3;
-    KVM_SWITCH=$4;
-    KVM_NUMBER=$5;
+    REMOTE_MACHINE="${1}";
+    ROOM_ID="${2}";
+    RACK_ID="${3}";
+    MACHINE_LOCATION="${4}";
+    KVM_SWITCH="${5}";
+    KVM_NUMBER="${6}";
+    ALLOTED_TO="${7}";
+    COMMENTS="${8}"
 
     # The location to store the collected data from each remote machine.
     REMOTE_MACHINE_PATH="${RLMON_HOME}"/core_backend/_log/"$(date --date="yesterday" '+%Y-%m-%d')/${REMOTE_MACHINE}";
