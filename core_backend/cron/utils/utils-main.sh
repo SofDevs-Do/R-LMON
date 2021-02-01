@@ -33,6 +33,19 @@ main()
 		rm "${REMOTE_MACHINE_PATH}"/ssh-down;
 	    fi
 
+	    # TODO: Currently information that don't change very
+	    # frequently are collected at very small intervals. This might cause
+	    # storage and performance related issues when planning for scalability.
+	    # Maybe setup a separate pipeline for these information?
+	    echo "${ROOM_ID}" > "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${RACK_ID}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${MACHINE_LOCATION}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${KVM_SWITCH}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${KVM_NUMBER}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${ALLOTED_TO}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${COMMENTS}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+
+
 	    ## Data collection scripts being invoked.
 	    # Get hostname details
 	    bash "${RLMON_HOME}"/core_backend/cron/utils/hostname.sh \
