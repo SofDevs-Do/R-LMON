@@ -1,1 +1,2 @@
-localhost,1,1,1,1
+# ADDRESS,       ROOM_ID,     RACK_ID,     MACHINE_LOCATION,    KVM_SWITCH,    KVM_NUMBER,    ALLOTED_TO,     COMMENTS
+localhost,             1,           1,                    1,             1,             1,          user,     test system

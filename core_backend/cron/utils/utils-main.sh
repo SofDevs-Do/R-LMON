@@ -4,11 +4,14 @@
 
 main()
 {
-    REMOTE_MACHINE=$1;
-    RACK_ID=$2;
-    MACHINE_LOCATION=$3;
-    KVM_SWITCH=$4;
-    KVM_NUMBER=$5;
+    REMOTE_MACHINE="${1}";
+    ROOM_ID="${2}";
+    RACK_ID="${3}";
+    MACHINE_LOCATION="${4}";
+    KVM_SWITCH="${5}";
+    KVM_NUMBER="${6}";
+    ALLOTED_TO="${7}";
+    COMMENTS="${8}"
 
     # The location to store the collected data from each remote machine.
     REMOTE_MACHINE_PATH="${RLMON_HOME}"/core_backend/_log/"$(date --date="yesterday" '+%Y-%m-%d')/${REMOTE_MACHINE}";
@@ -29,6 +32,19 @@ main()
 	    if [ -f "${REMOTE_MACHINE_PATH}"/ssh-down ]; then
 		rm "${REMOTE_MACHINE_PATH}"/ssh-down;
 	    fi
+
+	    # TODO: Currently information that don't change very
+	    # frequently are collected at very small intervals. This might cause
+	    # storage and performance related issues when planning for scalability.
+	    # Maybe setup a separate pipeline for these information?
+	    echo "${ROOM_ID}" > "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${RACK_ID}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${MACHINE_LOCATION}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${KVM_SWITCH}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${KVM_NUMBER}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${ALLOTED_TO}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${COMMENTS}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+
 
 	    ## Data collection scripts being invoked.
 	    # Get hostname details
