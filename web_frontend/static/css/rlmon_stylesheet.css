@@ -1,6 +1,6 @@
 
 body {
-    background-color: hsla(210, 20%, 50%, 0.3);
+    background-color: white;/*hsla(210, 20%, 50%, 0.3);*/
     font-family: "Lato", sans-serif;
     position: relative;
     display: flex;
@@ -13,6 +13,168 @@ label {
     color: #064771;
 }
 
+#workspace {
+    height: 100%;
+    width: 100% !important;
+}
+
+#top-menu-bar {
+    top: 0%;
+    width: 100%;
+    height: 7.5%;
+    background-color:  hsla(190, 20%, 40%, 0.3);
+}
+
+#dashboard-name {
+    font-family: "Lato",'Playfair Display', serif;
+    font-size: 19px;
+    text-align: center;
+    font-variant: small-caps;    
+}
+
+#tabspace {
+    margin-top: 4%;
+    height: 90%;
+    width: 100% !important;
+    background-color: hsla(190,30%,30%, 0.2);
+    border-radius: 5px;
+}
+
+.preferences-div {
+    position: relative;
+    top: 2%;
+    left: 0%;
+    height: 40%;
+    width: 25%;
+    border-left: 6px solid hsla(190,30%,30%, 1);
+    background-color: hsla(190,30%,90%,0.8);
+}
+
+.stats-div {
+    position: relative;
+    top: 6%;
+    left: 0%;
+    height: 40%;
+    width: 25%;
+    border-left: 6px solid hsla(190,30%,30%, 1);
+    background-color: hsla(190,30%,90%,0.8);
+}
+
+.rack-based-view-div {
+    position: relative;
+    top: -78%;
+    left: 26%;
+    height: 96%;
+    width: 74%;
+    border-left: 6px solid hsla(190,30%,30%, 1);
+    background-color: hsla(190,30%,90%,0.8);
+}
+
+.preference-heading {
+    height: 15%;
+    width: 20%;
+    position: relative;
+    top: 2%;
+    left: 35%;
+    color: #064771;
+    font-size: 18px;
+    font-variant: small-caps;
+}
+
+.overview-heading {
+    height: 5%;
+    width: 20%;
+    position: relative;
+    top: 2%;
+    left: 43.5%;
+    color: #064771;
+    font-size: 18px;
+    font-variant: small-caps;
+}
+
+.color-criteria-div {
+    height: 5%;
+    width: 100%;
+    position: relative;
+    top: 37%;
+    left: 2%;
+}
+
+.color-criteria-query {
+    height: 100%;
+    width: 50%;
+    position: relative;
+    top: 0%;
+    left: 0%;
+    font-size: 15px;
+    font-family: "Lato",'Playfair Display', serif;
+    color: #065769;
+}
+
+.color-criteria-dropdown {
+    height: 100%;
+    width: 35%;
+    position: relative;
+    top: -95%;
+    left: 45%;
+}
+
+.from-date-div {
+    height: 20%;
+    width: 100%;
+    position: relative;
+    top: 0%;
+    left: 3%;
+}
+
+.from-date-query {
+    height: 100%;
+    width: 30%;
+    position: relative;
+    top: 5%;
+    left: 2%;
+    font-size: 15px;
+    font-family: "Lato",'Playfair Display', serif;
+    color: #065769;
+}
+
+.from-date-input-div {
+    height: 100%;
+    width: 60%;
+    position: relative;
+    top: -100%;
+    left: 35%; 
+}
+
+.to-date-div {
+    height: 20%;
+    width: 100%;
+    position: relative;
+    top: -5%;
+    left: 3%;
+}
+
+.to-date-query {
+    height: 100%;
+    width: 25%;
+    position: relative;
+    top: 0%;
+    left: 2%;
+    font-size: 15px;
+    font-family: "Lato",'Playfair Display', serif;
+    color: #065769;
+}
+
+.to-date-input-div {
+    height: 100%;
+    width: 60%;
+    position: relative;
+    top: -100%;
+    left: 35%;
+}
+
+    
+
 #main-div {
     background-color: #FFFFFF;
     border-radius: 25px;
@@ -23,24 +185,30 @@ label {
 }
 
 #org-name-with-dot-div {
-    top: 0%;
-    left: 0%;
-    height: 7%;
+    position: relative;
+    top: -2%;
+    left: 2%;
+    height: 5%;
     width: 35%;
 }
 
 #org-name-div {
     color: #064771;
     font-family: 'Playfair Display', serif;
-    font-size: 8px;
+    font-size: 19px;
     position: relative;
-    left: 13%;
+    left: -5%;
     float: left;
 }
 
+.row-m-t{
+    margin-top : 0.1em;
+    margin-bottom: 0.1em;
+}
+
 .dot {
-  height: 8px;
-  width: 8px;
+  height: 10px;
+  width: 1px;
   background-color: #ff1e00;
   border-radius: 50%;
   display: inline-block;
@@ -50,89 +218,57 @@ label {
     position: relative;
     height: 8px;
     width: 8px;
-    top: 50%;
-    left: 15%;
+    top: -30%;
+    left: 81%;
 }
 
 #portal-name-div {
     background-color: hsla(210, 20%, 50%, 0.3);
     position: relative;
-    top: -3%;
-    left: 1%;
-    height: 7%;
-    width:40%;
+    top: 0%;
+    left: -2%;
+    height: 5%;
+    width: 28%;
     border-radius: 10px 140px 10px 140px;
 }
 
 #portal-name {
     color: #064769;
     font-family: 'Playfair Display', serif;
-    font-size: 14px;
+    font-size: 19px;
     text-align: center;
     font-variant: small-caps;
 }
 
-#menu-icon-div {
-    top:10%;
-    left:40%;
-    height:7%;
-    width:3%;
-}
-
 .menu-icon-btn {
-  background-color: transparent;
-  border: none;
-  color: #064769;
-  padding: 12px 16px;
-  font-size: 27px;
-  cursor: pointer;
+    width: 5%;
+    background-color: transparent;
+    border: none;
+    color: #064769;
+    /* padding: 12px 16px; */
+    font-size: 20px;
+    cursor: pointer;
+    text-align: left;
 }
 
 .menu-icon-btn:hover {
     color: #ff1e00;
 }
 
-
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
 }
 
-.sidenav a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
+#sidebar.active {
+    margin-left: -250px;
 }
 
-.sidenav a:hover {
-  color: #f1f1f1;
-}
-
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-
-.sidenav .sidenav-tab {
-    font-size: 16px;
-    font-family: 'Playfair Display', serif;
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
 }
