@@ -96,6 +96,65 @@ main()
 		touch "${REMOTE_MACHINE_PATH}"/uptime-down;
 	    fi
 
+	    # IPs of the system
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/get-ip.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/ip.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/ip.txt;
+		touch "${REMOTE_MACHINE_PATH}"/ip-test-down;
+	    fi
+
+	    # CPU model of the system
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/cpu-model.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/cpu-model.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/cpu-model.txt;
+		touch "${REMOTE_MACHINE_PATH}"/cpu-model-test-down;
+	    fi
+
+	    # RAM capacity of the system
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/ram-capacity.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/ram-capacity.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/ram-capacity.txt;
+		touch "${REMOTE_MACHINE_PATH}"/ram-capacity-test-down;
+	    fi
+
+	    # OS info of the system
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/which-os.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/os-info.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/os-info.txt;
+		touch "${REMOTE_MACHINE_PATH}"/os-info-test-down;
+	    fi
+
+	    # list users of the system
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/list-users.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/list-users.txt < /dev/null;
+
+	    # last login info for users of the system
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/last-login-info.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/last-login-info.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/last-login-info.txt;
+		touch "${REMOTE_MACHINE_PATH}"/last-login-info-test-down;
+	    fi
+
+	    # Disk utilization of the system
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/disk-info.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/disk-info.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/disk-info.txt;
+		touch "${REMOTE_MACHINE_PATH}"/disk-info-test-down;
+	    fi
+
+	    # Swap space info of the system
+	    bash "${RLMON_HOME}"/core_backend/cron/utils/swap-info.sh \
+		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/swap-info.txt < /dev/null;
+	    if [ $? -ne 0 ]; then
+		rm -f "${REMOTE_MACHINE_PATH}"/swap-info.txt;
+		touch "${REMOTE_MACHINE_PATH}"/swap-info-test-down;
+	    fi
 
 	    ## end of data collection scripts being invoked.
 
