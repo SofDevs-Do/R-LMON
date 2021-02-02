@@ -131,10 +131,6 @@ main()
 	    # list users of the system
 	    bash "${RLMON_HOME}"/core_backend/cron/utils/list-users.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/list-users.txt < /dev/null;
-	    if [ $? -ne 0 ]; then
-		rm -f "${REMOTE_MACHINE_PATH}"/list-users.txt;
-		touch "${REMOTE_MACHINE_PATH}"/list-users-test-down;
-	    fi
 
 	    # last login info for users of the system
 	    bash "${RLMON_HOME}"/core_backend/cron/utils/last-login-info.sh \
