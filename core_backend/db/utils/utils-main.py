@@ -1,3 +1,4 @@
+import sys
 import pymongo
 import warnings
 
@@ -36,4 +37,10 @@ mach_col = rlmon_db['mach_col']
 if 'mach_col' not in col_list:
     warnings.warn('\'mach_col\' collection was not found to exist. Creating it newly.')
 
+
+# accessing the path of data collection log for present day.
+log_path = sys.argv[1]
+
+# obtaining the present date from path
+today_date = os.path.basename(log_path)
 
