@@ -1,4 +1,4 @@
-rlmon_toggle_nav={
+rlmon_obj_1={
 
     // The number of racks to be shown in One row of the screen.
     number_of_racks_in_row: 5,
@@ -119,7 +119,7 @@ rlmon_toggle_nav={
 	meta_data_div = e.target.children[0];
 
 	if (!("meta_data_json" in meta_data_div)) {
-	    rlmon_toggle_nav.request_and_fill_data(meta_data_div);
+	    rlmon_obj_1.request_and_fill_data(meta_data_div);
 	}
 
 	meta_data_div.style.display = "flex";
