@@ -11,42 +11,12 @@ rlmon_obj_1={
 	    x[i].corresponding_div = document.getElementById(x[i].id.replace('-button', '-div'));
 	}
 	// Need to populate the racks.
-	// FIXME: replace the hardcoded JSON object by actually making
-	//        a request and getting back the data.
-	data_json = {
-	    0: {
-		'room_name': 'server room 1',
-		'rack_list': {
-		    0: {
-			'rack_name': 'rack A',
-			'machine_list': ['machine_001', 'machine_002', 'machine_003', 'machine_004', 'machine_005',
-					 'machine_006', 'machine_007', 'machine_008', 'machine_009', 'machine_010']
-		    },
-		    1: {
-			'rack_name': 'rack B',
-			'machine_list': ['machine_011', 'machine_012', 'machine_013', 'machine_014', 'machine_015',
-					 'machine_016', 'machine_017', 'machine_018', 'machine_019', 'machine_020']
-		    },
-		    2: {
-			'rack_name': 'rack C',
-			'machine_list': ['machine_021', 'machine_022', 'machine_023', 'machine_024', 'machine_025',
-					 'machine_026', 'machine_027', 'machine_028', 'machine_029', 'machine_030']
-		    },
-		    3: {
-			'rack_name': 'rack D',
-			'machine_list': ['machine_031', 'machine_032', 'machine_033', 'machine_034', 'machine_035',
-					 'machine_036', 'machine_037', 'machine_038', 'machine_039', 'machine_040']
-		    },
-		    4: {
-			'rack_name': 'rack E',
-			'machine_list': ['machine_041', 'machine_042', 'machine_043', 'machine_044', 'machine_045',
-					 'machine_046', 'machine_047', 'machine_048', 'machine_049', 'machine_050']
-		    }
-		}
-	    }
-	};
-
-	this.populate_rack_view(data_json);
+	// FIXME: replace the dummy request with a proper request to the
+	//        backend.
+	xhr_object = new XMLHttpRequest();
+	xhr_object.onload = this.populate_rack_view_callback;
+	xhr_object.open('GET', 'http://127.0.0.1:8000/api/dev/test/v1');
+	xhr_object.send();
     },
 
     change_view: function(e) {
@@ -57,6 +27,15 @@ rlmon_obj_1={
 	}
 	e.target.corresponding_div.style.display = "block";
 	console.log(e);
+    },
+
+    populate_rack_view_callback: function() {
+	if(this.readyState == 4 && this.status == 200)
+	{
+	    var res = this.responseText;
+	    var res_json = JSON.parse(res);
+	    rlmon_obj_1.populate_rack_view(res_json);
+	}
     },
 
     populate_rack_view: function(data_json) {
@@ -98,6 +77,7 @@ rlmon_obj_1={
 		    meta_data_obj.classList.add("w3-panel", "w3-green");
 		    meta_data_obj.style.position = "absolute";
 		    meta_data_obj.style.display = "none";
+		    meta_data_obj.meta_data_added = false;
 		    li_object.appendChild(meta_data_obj);
 
 		    li_object.addEventListener("mouseover", this.show_meta_data_div);
@@ -118,7 +98,7 @@ rlmon_obj_1={
     show_meta_data_div: function(e) {
 	meta_data_div = e.target.children[0];
 
-	if (!("meta_data_json" in meta_data_div)) {
+	if (!meta_data_div.meta_data_added) {
 	    rlmon_obj_1.request_and_fill_data(meta_data_div);
 	}
 
@@ -159,14 +139,24 @@ rlmon_obj_1={
     },
 
     request_and_fill_data: function(meta_data_div) {
-	// FIXME: request for data and fill after that.
-	meta_data_json = {
-	    "CPU": 30,
-	    "RAM": 40,
-	    "machine_name": "A-1"
-	}
+	// FIXME: replace the dummy request with a proper request to the
+	//        backend.
 
-	meta_data_div.meta_data_json = meta_data_json
-	this.fill_meta_data(meta_data_div);
+	xhr_object = new XMLHttpRequest();
+	xhr_object.onload = this.populate_meta_data;
+	xhr_object.meta_data_div = meta_data_div;
+	xhr_object.open('GET', 'http://127.0.0.1:8000/api/dev/test/v2');
+	xhr_object.send();
+    },
+
+    populate_meta_data: function() {
+	if(this.readyState == 4 && this.status == 200)
+	{
+	    var res = this.responseText;
+	    var res_json = JSON.parse(res);
+	    this.meta_data_div.meta_data_json = res_json;
+	    this.meta_data_div.meta_data_added = true;
+	    rlmon_obj_1.fill_meta_data(this.meta_data_div);
+	}
     }
 }
