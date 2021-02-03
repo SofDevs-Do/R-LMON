@@ -1,5 +1,8 @@
 rlmon_toggle_nav={
 
+    // The number of racks to be shown in One row of the screen.
+    number_of_racks_in_row: 5,
+
     setup_nav_buttons: function() {
 	var x;
 	x = document.getElementsByClassName("rlmon-display-buttons");
@@ -64,14 +67,15 @@ rlmon_toggle_nav={
 	    // for each room
 	    for (j = 0; j < Object.keys(data_json[i]['rack_list']).length; j++) {
 		// for each rack.
-		if (j%4==0) {
+		if (j%this.number_of_racks_in_row==0) {
 		    // make a new rack group.
 		    rack_group = document.createElement("div");
-		    rack_group.classList.add('4-racks', 'w3-row-padding', 'w3-bottombar');
+		    rack_group.classList.add('5-racks', 'w3-row-padding', 'w3-bottombar');
 		}
 
 		rack_object = document.createElement("div");
-		rack_object.classList.add("w3-quarter", "w3-padding-small", "w3-border");
+		rack_object.classList.add("w3-col", "w3-container", "w3-padding-small", "w3-border");
+		rack_object.style.width=(100/this.number_of_racks_in_row).toString()+"%";
 		ul_object = document.createElement("ul");
 		ul_object.classList.add("w3-ul", "w3-border", "w3-center", "w3-small");
 
@@ -84,18 +88,25 @@ rlmon_toggle_nav={
 		// add machines to each rack.
 		for (k = 0; k < data_json[i]['rack_list'][j]['machine_list'].length; k++) {
 		    li_object = document.createElement("li");
+		    li_object.rlmon_id = data_json[i]['rack_list'][j]['machine_list'][k];
+		    li_object.rlmon_meta_data = null;
 		    li_object.classList.add("w3-hover-shadow");
 		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k];
+		    li_object.addEventListener("mouseover", this.show_meta_data);
 		    ul_object.appendChild(li_object);
 		}
 		rack_object.appendChild(ul_object);
 
 		rack_group.appendChild(rack_object);
 
-		if (j%4==0) {
+		if (j%this.number_of_racks_in_row==0) {
 		    main_rack_div.appendChild(rack_group);
 		}
 	    }
 	}
+    },
+
+    show_meta_data: function(e) {
+
     }
 }
