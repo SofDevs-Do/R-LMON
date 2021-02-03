@@ -45,6 +45,7 @@ rlmon_toggle_nav={
 		}
 	    }
 	};
+
 	this.populate_rack_view(data_json);
     },
 
@@ -92,7 +93,15 @@ rlmon_toggle_nav={
 		    li_object.rlmon_meta_data = null;
 		    li_object.classList.add("w3-hover-shadow");
 		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k];
-		    li_object.addEventListener("mouseover", this.show_meta_data);
+
+		    meta_data_obj = document.createElement("div");
+		    meta_data_obj.classList.add("w3-panel", "w3-green");
+		    meta_data_obj.style.position = "absolute";
+		    meta_data_obj.style.display = "none";
+		    li_object.appendChild(meta_data_obj);
+
+		    li_object.addEventListener("mouseover", this.show_meta_data_div);
+		    li_object.addEventListener("mouseout", this.hide_meta_data_div);
 		    ul_object.appendChild(li_object);
 		}
 		rack_object.appendChild(ul_object);
@@ -106,7 +115,58 @@ rlmon_toggle_nav={
 	}
     },
 
-    show_meta_data: function(e) {
+    show_meta_data_div: function(e) {
+	meta_data_div = e.target.children[0];
 
+	if (!("meta_data_json" in meta_data_div)) {
+	    rlmon_toggle_nav.request_and_fill_data(meta_data_div);
+	}
+
+	meta_data_div.style.display = "flex";
+    },
+
+    hide_meta_data_div: function(e) {
+	meta_data_div = e.target.children[0];
+	meta_data_div.style.display = "none";
+    },
+
+    fill_meta_data: function(meta_data_div) {
+
+	var i;
+
+	main_div = document.createElement("div");
+	main_div.classList.add("w3-section");
+
+	values_to_disp = [{"name":"Machine name", "idx":"machine_name"},
+			  {"name":"CPU usage", "idx":"CPU"},
+			  {"name":"RAM usage", "idx":"RAM"}];
+
+	for (i = 0; i < values_to_disp.length; i++) {
+	    row_div = document.createElement("div");
+	    row_div.classList.add("w3-row-padding", "w3-border");
+	    name_idx_div = document.createElement("div");
+	    name_idx_div.classList.add("w3-col", "w3-half");
+	    name_idx_div.innerHTML = values_to_disp[i]["name"];
+	    row_div.appendChild(name_idx_div);
+	    name_val_div = document.createElement("div");
+	    name_val_div.classList.add("w3-col", "w3-half");
+	    name_val_div.innerHTML = meta_data_div.meta_data_json[values_to_disp[i]["idx"]];
+	    row_div.appendChild(name_val_div);
+	    main_div.appendChild(row_div)
+	}
+
+	meta_data_div.appendChild(main_div);
+    },
+
+    request_and_fill_data: function(meta_data_div) {
+	// FIXME: request for data and fill after that.
+	meta_data_json = {
+	    "CPU": 30,
+	    "RAM": 40,
+	    "machine_name": "A-1"
+	}
+
+	meta_data_div.meta_data_json = meta_data_json
+	this.fill_meta_data(meta_data_div);
     }
 }
