@@ -11,10 +11,11 @@ main()
     KVM_SWITCH="${5}";
     KVM_NUMBER="${6}";
     ALLOTED_TO="${7}";
-    COMMENTS="${8}"
+    COMMENTS="${8}";
+    MACHINE_ID="${9}";
 
     # The location to store the collected data from each remote machine.
-    REMOTE_MACHINE_PATH="${RLMON_HOME}"/core_backend/_log/"$(date --date="yesterday" '+%Y-%m-%d')/${REMOTE_MACHINE}";
+    REMOTE_MACHINE_PATH="${RLMON_HOME}"/core_backend/_log/"$(date --date="yesterday" '+%Y-%m-%d')/${MACHINE_ID}";
     mkdir -p "${REMOTE_MACHINE_PATH}";
     echo "Collecting from ${REMOTE_MACHINE}";
 
@@ -37,7 +38,8 @@ main()
 	    # frequently are collected at very small intervals. This might cause
 	    # storage and performance related issues when planning for scalability.
 	    # Maybe setup a separate pipeline for these information?
-	    echo "${ROOM_ID}" > "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${MACHINE_ID}" > "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${ROOM_ID}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${RACK_ID}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${MACHINE_LOCATION}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${KVM_SWITCH}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt

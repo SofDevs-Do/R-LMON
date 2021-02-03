@@ -8,7 +8,7 @@ RLMON_DEBUG=1;
 
 IFS=","
 grep -v '^#' < "${MACHINEFILE}" | \
-    { while read REMOTE_MACHINE ROOM_ID RACK_ID MACHINE_LOCATION KVM_SWITCH KVM_NUMBER ALLOTED_TO COMMENTS
+    { while read MACHINE_ID REMOTE_MACHINE ROOM_ID RACK_ID MACHINE_LOCATION KVM_SWITCH KVM_NUMBER ALLOTED_TO COMMENTS
       do
 	  main \
 	      "$(echo ${REMOTE_MACHINE} | xargs)" \
@@ -18,5 +18,6 @@ grep -v '^#' < "${MACHINEFILE}" | \
 	      "$(echo ${KVM_SWITCH} | xargs)" \
 	      "$(echo ${KVM_NUMBER} | xargs)" \
 	      "$(echo ${ALLOTED_TO} | xargs)" \
-	      "$(echo ${COMMENTS} | xargs)";
+	      "$(echo ${COMMENTS} | xargs)" \
+	      "$(echo ${MACHINE_ID} | xargs)";
       done; }
