@@ -1,11 +1,4 @@
-rlmon_obj_1={
-
-    // The number of racks to be shown in One row of the screen.
-    number_of_racks_in_row: 5,
-
-    values_to_disp: [{"name":"Machine name", "idx":"machine_name"},
-		     {"name":"CPU usage", "idx":"CPU"},
-		     {"name":"RAM usage", "idx":"RAM"}],
+navigation_selector_obj={
 
     setup_nav_buttons: function() {
 	var x;
@@ -18,7 +11,7 @@ rlmon_obj_1={
 	// FIXME: replace the dummy request with a proper request to the
 	//        backend.
 	xhr_object = new XMLHttpRequest();
-	xhr_object.onload = this.populate_rack_view_callback;
+	xhr_object.onload = overview_page_obj.populate_rack_view_callback;
 	xhr_object.open('GET', 'http://127.0.0.1:8000/api/dev/test/v1');
 	xhr_object.send();
     },
@@ -31,14 +24,23 @@ rlmon_obj_1={
 	}
 	e.target.corresponding_div.style.display = "block";
 	console.log(e);
-    },
+    }
+}
+
+overview_page_obj={
+    // The number of racks to be shown in One row of the screen.
+    number_of_racks_in_row: 5,
+
+    values_to_disp: [{"name":"Machine name", "idx":"machine_name"},
+		     {"name":"CPU usage", "idx":"CPU"},
+		     {"name":"RAM usage", "idx":"RAM"}],
 
     populate_rack_view_callback: function() {
 	if(this.readyState == 4 && this.status == 200)
 	{
 	    var res = this.responseText;
 	    var res_json = JSON.parse(res);
-	    rlmon_obj_1.populate_rack_view(res_json);
+	    overview_page_obj.populate_rack_view(res_json);
 	}
     },
 
@@ -102,7 +104,7 @@ rlmon_obj_1={
 
     show_meta_data_div_timer: function(e) {
 	e.target.hover_timer = setTimeout(function() {
-	    rlmon_obj_1.show_meta_data_div(e);
+	    overview_page_obj.show_meta_data_div(e);
 	}, 300);
     },
 
@@ -111,13 +113,13 @@ rlmon_obj_1={
 
 	if (meta_data_div !== undefined) {
 	    if (!meta_data_div.meta_data_added) {
-		rlmon_obj_1.request_and_fill_data(meta_data_div);
+		overview_page_obj.request_and_fill_data(meta_data_div);
 	    }
 	    else {
 		// NOTE: sometimes the data doesn't show up. Need
 		// to figure out why. This is an interim solution.
 		meta_data_div.innerHTML = "";
-		rlmon_obj_1.fill_meta_data(meta_data_div);
+		overview_page_obj.fill_meta_data(meta_data_div);
 	    }
 
 	    meta_data_div.style.display = "flex";
@@ -174,7 +176,7 @@ rlmon_obj_1={
 	    var res_json = JSON.parse(res);
 	    this.meta_data_div.meta_data_json = res_json;
 	    this.meta_data_div.meta_data_added = true;
-	    rlmon_obj_1.fill_meta_data(this.meta_data_div);
+	    overview_page_obj.fill_meta_data(this.meta_data_div);
 	}
     }
 }
