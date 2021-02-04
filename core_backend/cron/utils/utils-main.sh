@@ -15,7 +15,7 @@ main()
     MACHINE_ID="${9}";
 
     # The location to store the collected data from each remote machine.
-    REMOTE_MACHINE_PATH="${RLMON_HOME}"/core_backend/_log/"$(date --date="yesterday" '+%Y-%m-%d')/${MACHINE_ID}";
+    REMOTE_MACHINE_PATH="${LOG_DATE_PATH}/${MACHINE_ID}";
     mkdir -p "${REMOTE_MACHINE_PATH}";
     echo "Collecting from ${REMOTE_MACHINE}";
 

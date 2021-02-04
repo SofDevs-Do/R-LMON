@@ -2,7 +2,7 @@
 
 RLMON_HOME="${HOME}"/.r_lmon;
 MACHINEFILE="${RLMON_HOME}"/machinefile;
-RLMON_DEBUG=1;
+LOG_DATE_PATH="${RLMON_HOME}"/core_backend/_log/"$(date --date="yesterday" '+%Y-%m-%d')";
 
 . "${RLMON_HOME}"/core_backend/cron/utils/utils-main.sh;
 
@@ -21,3 +21,5 @@ grep -v '^#' < "${MACHINEFILE}" | \
 	      "$(echo ${COMMENTS} | xargs)" \
 	      "$(echo ${MACHINE_ID} | xargs)";
       done; }
+
+python3 "${RLMON_HOME}"/core_backend/db/main.py "${LOG_DATE_PATH}";
