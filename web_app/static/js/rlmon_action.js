@@ -1,5 +1,7 @@
 navigation_selector_obj={
 
+    backend_url: "http://127.0.0.1:8000",
+
     setup_nav_buttons: function() {
 	var x;
 	x = document.getElementsByClassName("rlmon-display-buttons");
