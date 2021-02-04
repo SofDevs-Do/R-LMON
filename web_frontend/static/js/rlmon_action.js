@@ -23,7 +23,6 @@ navigation_selector_obj={
 	    x[i].style.display = "none";
 	}
 	e.target.corresponding_div.style.display = "block";
-	console.log(e);
     }
 }
 
@@ -63,25 +62,43 @@ overview_page_obj={
 		rack_object.classList.add("w3-col", "w3-container", "w3-padding-small", "w3-border");
 		rack_object.style.width=(100/this.number_of_racks_in_row).toString()+"%";
 		ul_object = document.createElement("ul");
-		ul_object.classList.add("w3-ul", "w3-border", "w3-center", "w3-small");
+		ul_object.classList.add("w3-ul", "w3-center", "w3-small");
 
 		// Name of the RACK
 		li_object = document.createElement("li");
-		li_object.classList.add("w3-large");
+		li_object.classList.add("w3-large", "w3-border-black");
 		li_object.innerHTML = data_json[i]['rack_list'][j]['rack_name'];
 		ul_object.appendChild(li_object);
 
 		// add machines to each rack.
 		for (k = 0; k < data_json[i]['rack_list'][j]['machine_list'].length; k++) {
 		    li_object = document.createElement("li");
-		    li_object.id = data_json[i]['rack_list'][j]['machine_list'][k];
 		    li_object.rlmon_id = data_json[i]['rack_list'][j]['machine_list'][k];
-		    li_object.rlmon_meta_data = null;
-		    li_object.classList.add("w3-hover-shadow");
-		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k];
+		    li_object.classList.add("w3-hover-shadow", "w3-border-black");
+		    li_object.innerHTML = Object.keys(data_json[i]['rack_list'][j]['machine_list'][k])[0];
+
+		    if ((data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] >= 0) &&
+			(data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] < 25)) {
+			li_object.classList.add("w3-deep-orange");
+		    }
+		    else if ((data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] >= 25) &&
+			(data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] < 50)) {
+			li_object.classList.add("w3-amber");
+		    }
+		    else if ((data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] >= 50) &&
+			(data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] < 75)) {
+			li_object.classList.add("w3-light-green");
+		    }
+		    else if ((data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] >= 75) &&
+			(data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] < 100)) {
+			li_object.classList.add("w3-green");
+		    }
+		    else {
+			li_object.classList.add("w3-black");
+		    }
 
 		    meta_data_obj = document.createElement("div");
-		    meta_data_obj.classList.add("w3-panel", "w3-green");
+		    meta_data_obj.classList.add("w3-panel", "w3-dark-gray", "w3-hover-shadow");
 		    meta_data_obj.style.position = "absolute";
 		    meta_data_obj.style.display = "none";
 		    meta_data_obj.meta_data_added = false;
@@ -89,6 +106,7 @@ overview_page_obj={
 
 		    li_object.addEventListener("mouseover", this.show_meta_data_div_timer);
 		    li_object.addEventListener("mouseout", this.hide_meta_data_div);
+
 		    ul_object.appendChild(li_object);
 		}
 		rack_object.appendChild(ul_object);
