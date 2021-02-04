@@ -55,18 +55,18 @@ overview_page_obj={
 		if (j%this.number_of_racks_in_row==0) {
 		    // make a new rack group.
 		    rack_group = document.createElement("div");
-		    rack_group.classList.add('5-racks', 'w3-row-padding', 'w3-bottombar');
+		    rack_group.classList.add('5-racks', 'w3-row-padding');
 		}
 
 		rack_object = document.createElement("div");
-		rack_object.classList.add("w3-col", "w3-container", "w3-padding-small", "w3-border");
+		rack_object.classList.add("w3-col", "w3-container", "w3-padding-small", "w3-border-black");
 		rack_object.style.width=(100/this.number_of_racks_in_row).toString()+"%";
 		ul_object = document.createElement("ul");
-		ul_object.classList.add("w3-ul", "w3-center", "w3-small");
+		ul_object.classList.add("w3-ul", "w3-center", "w3-tiny");
 
 		// Name of the RACK
 		li_object = document.createElement("li");
-		li_object.classList.add("w3-large", "w3-border-black");
+		li_object.classList.add("w3-medium", "w3-border-black");
 		li_object.innerHTML = data_json[i]['rack_list'][j]['rack_name'];
 		ul_object.appendChild(li_object);
 

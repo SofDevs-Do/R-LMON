@@ -17,47 +17,85 @@
       </div> 
     </div>
     
-    <div id="overview-div" class="rlmon-display-div w3-container">
+    <div id="overview-div" class="rlmon-display-div w3-container w3-row-padding">
 
-	<div class="w3-container w3-col w3-row-padding w3-gray w3-center">
+	<div class="w3-section s3 w3-col w3-small w3-row-padding w3-center">
 
-	  <div class="w3-container w3-third w3-row-padding w3-padding-small">
-	    <div class="w3-third w3-padding-small">
-	      <p>Preference:</p>
+	  <div class="w3-gray w3-card-4 w3-round-large">
+	    <div class="w3-container w3-row-padding w3-padding-small">
+	      <div class="w3-half w3-padding-small">
+		<p>Color code based on:</p>
+	      </div>
+	      <div class="w3-container w3-half w3-center w3-padding-small">
+		<select class="w3-padding-small w3-border" name="option">
+		  <option> CPU utilization </option>
+		  <option> RAM utilization </option>
+		  <option> Disk utilization </option>
+		  <option> Last login </option>
+		</select>
+	      </div>
 	    </div>
-	    <div class="w3-container w3-twothird w3-center w3-padding-small">
-	      <select class="w3-padding-small w3-border" name="option">
-		<option> CPU utilization </option>
-		<option> RAM utilization </option>
-		<option> Disk utilization </option>
-		<option> Last login </option>
-	      </select>
+
+	    <div class="w3-row-padding">
+	      <div class="w3-half w3-padding-small">
+		<p>From date:</p>
+	      </div>
+	      <div class="w3-container w3-half w3-center w3-padding-small">
+		<input type="date" id="from-date-input" name="from-date">
+	      </div>
+	    </div>
+
+	    <div class="w3-row-padding">
+	      <div class="w3-half w3-padding-small">
+		<p>To date:</p>
+	      </div>
+	      <div class="w3-container w3-half w3-center w3-padding-small">
+		<input type="date" id="to-date-input" name="to-date">
+	      </div>
 	    </div>
 	  </div>
 
-	  <div class="w3-third w3-row-padding">
-	    <div class="w3-third w3-padding-small">
-	      <p>From date:</p>
-	    </div>
-	    <div class="w3-container w3-twothird w3-center w3-padding-small">
-	      <input type="date" id="from-date-input" name="from-date">
-	    </div>
-	  </div>
+	  <div class="w3-gray w3-section w3-card-4 w3-round-large">
 
-	  <div class="w3-third w3-row-padding">
-	    <div class="w3-third w3-padding-small">
-	      <p>To date:</p>
+	    <div class="w3-row-padding">
+	      <div class="w3-half">
+		<p>No. racks:</p>
+	      </div>
+	      <div class="w3-half w3-center">
+		<p id="number-of-racks">NIL</p>
+	      </div>
 	    </div>
-	    <div class="w3-container w3-twothird w3-center w3-padding-small">
-	      <input type="date" id="to-date-input" name="to-date">
-	    </div>
-	  </div>
 
+	    <div class="w3-row-padding">
+	      <div class="w3-half">
+		<p>No. machines:</p>
+	      </div>
+	      <div class="w3-half w3-center">
+		<p id="number-of-machines">NIL</p>
+	      </div>
+	    </div>
+
+	    <div class="w3-row-padding">
+	      <div class="w3-deep-orange">
+		<p>0-24%</p>
+	      </div>
+	      <div class="w3-amber">
+		<p>25%-49%</p>
+	      </div>
+	      <div class="w3-light-green">
+		<p>50%-74%</p>
+	      </div>
+	      <div class="w3-green">
+		<p>74%-100%</p>
+	      </div>
+	    </div>
+
+	  </div>
 	</div>
 
-      <div class="w3-row w3-row-padding w3-section">
+      <div class="w3-row w3-col s9 w3-dark-grey w3-section w3-card-4 w3-round-large">
 
-	<div id="rack-disp" class="w3-col w3-dark-grey w3-center">
+	<div id="rack-disp" class="w3-section w3-row-padding w3-small w3-center">
 	  <!-- The rack display -->
 	</div>
 
