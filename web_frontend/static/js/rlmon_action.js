@@ -12,7 +12,7 @@ navigation_selector_obj={
 	//        backend.
 	xhr_object = new XMLHttpRequest();
 	xhr_object.onload = overview_page_obj.populate_rack_view_callback;
-	xhr_object.open('GET', 'http://127.0.0.1:8000/api/dev/test/v1');
+	xhr_object.open('GET', this.backend_url+'/api/dev/test/v1');
 	xhr_object.send();
     },
 
@@ -184,7 +184,7 @@ overview_page_obj={
 	xhr_object = new XMLHttpRequest();
 	xhr_object.onload = this.populate_meta_data;
 	xhr_object.meta_data_div = meta_data_div;
-	xhr_object.open('GET', 'http://127.0.0.1:8000/api/dev/test/v2');
+	xhr_object.open('GET', navigation_selector_obj.backend_url+'/api/dev/test/v2');
 	xhr_object.send();
     },
 
