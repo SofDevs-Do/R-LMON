@@ -3,6 +3,10 @@ rlmon_obj_1={
     // The number of racks to be shown in One row of the screen.
     number_of_racks_in_row: 5,
 
+    values_to_disp: [{"name":"Machine name", "idx":"machine_name"},
+		     {"name":"CPU usage", "idx":"CPU"},
+		     {"name":"RAM usage", "idx":"RAM"}],
+
     setup_nav_buttons: function() {
 	var x;
 	x = document.getElementsByClassName("rlmon-display-buttons");
@@ -68,6 +72,7 @@ rlmon_obj_1={
 		// add machines to each rack.
 		for (k = 0; k < data_json[i]['rack_list'][j]['machine_list'].length; k++) {
 		    li_object = document.createElement("li");
+		    li_object.id = data_json[i]['rack_list'][j]['machine_list'][k];
 		    li_object.rlmon_id = data_json[i]['rack_list'][j]['machine_list'][k];
 		    li_object.rlmon_meta_data = null;
 		    li_object.classList.add("w3-hover-shadow");
@@ -80,7 +85,7 @@ rlmon_obj_1={
 		    meta_data_obj.meta_data_added = false;
 		    li_object.appendChild(meta_data_obj);
 
-		    li_object.addEventListener("mouseover", this.show_meta_data_div);
+		    li_object.addEventListener("mouseover", this.show_meta_data_div_timer);
 		    li_object.addEventListener("mouseout", this.hide_meta_data_div);
 		    ul_object.appendChild(li_object);
 		}
@@ -95,19 +100,36 @@ rlmon_obj_1={
 	}
     },
 
+    show_meta_data_div_timer: function(e) {
+	e.target.hover_timer = setTimeout(function() {
+	    rlmon_obj_1.show_meta_data_div(e);
+	}, 300);
+    },
+
     show_meta_data_div: function(e) {
 	meta_data_div = e.target.children[0];
 
-	if (!meta_data_div.meta_data_added) {
-	    rlmon_obj_1.request_and_fill_data(meta_data_div);
-	}
+	if (meta_data_div !== undefined) {
+	    if (!meta_data_div.meta_data_added) {
+		rlmon_obj_1.request_and_fill_data(meta_data_div);
+	    }
+	    else {
+		// NOTE: sometimes the data doesn't show up. Need
+		// to figure out why. This is an interim solution.
+		meta_data_div.innerHTML = "";
+		rlmon_obj_1.fill_meta_data(meta_data_div);
+	    }
 
-	meta_data_div.style.display = "flex";
+	    meta_data_div.style.display = "flex";
+	}
     },
 
     hide_meta_data_div: function(e) {
+	clearTimeout(e.target.hover_timer);
 	meta_data_div = e.target.children[0];
-	meta_data_div.style.display = "none";
+	if (meta_data_div !== undefined) {
+	    meta_data_div.style.display = "none";
+	}
     },
 
     fill_meta_data: function(meta_data_div) {
@@ -117,20 +139,16 @@ rlmon_obj_1={
 	main_div = document.createElement("div");
 	main_div.classList.add("w3-section");
 
-	values_to_disp = [{"name":"Machine name", "idx":"machine_name"},
-			  {"name":"CPU usage", "idx":"CPU"},
-			  {"name":"RAM usage", "idx":"RAM"}];
-
-	for (i = 0; i < values_to_disp.length; i++) {
+	for (i = 0; i < this.values_to_disp.length; i++) {
 	    row_div = document.createElement("div");
 	    row_div.classList.add("w3-row-padding", "w3-border");
 	    name_idx_div = document.createElement("div");
 	    name_idx_div.classList.add("w3-col", "w3-half");
-	    name_idx_div.innerHTML = values_to_disp[i]["name"];
+	    name_idx_div.innerHTML = this.values_to_disp[i]["name"];
 	    row_div.appendChild(name_idx_div);
 	    name_val_div = document.createElement("div");
 	    name_val_div.classList.add("w3-col", "w3-half");
-	    name_val_div.innerHTML = meta_data_div.meta_data_json[values_to_disp[i]["idx"]];
+	    name_val_div.innerHTML = meta_data_div.meta_data_json[this.values_to_disp[i]["idx"]];
 	    row_div.appendChild(name_val_div);
 	    main_div.appendChild(row_div)
 	}
