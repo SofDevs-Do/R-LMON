@@ -12,8 +12,9 @@ app = Flask(__name__,
 def index():
     return render_template("index.html")
 
-@app.route("/api/dev/test/v1")
-def v1():
+@app.route("/api/v2/overview-page-data/<string:color_coding_selector>/<string:from_date>/<string:to_date>",
+           methods=['GET'])
+def get_overview_page_data(color_coding_selector, from_date, to_date):
     to_ret = {
 	0: {
 	    'room_name': 'server room 1',

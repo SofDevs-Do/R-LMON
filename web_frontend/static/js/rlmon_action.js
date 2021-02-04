@@ -7,13 +7,15 @@ navigation_selector_obj={
 	    x[i].addEventListener("click", this.change_view);
 	    x[i].corresponding_div = document.getElementById(x[i].id.replace('-button', '-div'));
 	}
-	// Need to populate the racks.
-	// FIXME: replace the dummy request with a proper request to the
-	//        backend.
-	xhr_object = new XMLHttpRequest();
-	xhr_object.onload = overview_page_obj.populate_rack_view_callback;
-	xhr_object.open('GET', this.backend_url+'/api/dev/test/v1');
-	xhr_object.send();
+
+	// Add event listeners on change of dates, or the type of data to be used
+	// for color coding the machines.
+	document.getElementById("from-date-input").addEventListener("change", overview_page_obj.top_fun);
+	document.getElementById("to-date-input").addEventListener("change", overview_page_obj.top_fun);
+	document.getElementById("color-coding-selector").addEventListener("change", overview_page_obj.top_fun);
+
+	// invoke the loading of data.
+	overview_page_obj.top_fun(null);
     },
 
     change_view: function(e) {
@@ -34,6 +36,22 @@ overview_page_obj={
 		     {"name":"CPU usage", "idx":"CPU"},
 		     {"name":"RAM usage", "idx":"RAM"}],
 
+    top_fun: function(e) {
+	// Need to populate the racks.
+	from_date = document.getElementById("from-date-input").value;
+	to_date = document.getElementById("to-date-input").value;
+	color_coding_selector = document.getElementById("color-coding-selector").value;
+
+	xhr_object = new XMLHttpRequest();
+	xhr_object.onload = overview_page_obj.populate_rack_view_callback;
+	xhr_object.open('GET', navigation_selector_obj.backend_url
+			+ '/api/v2/overview-page-data/'
+			+ color_coding_selector + '/'
+			+ from_date +'/'
+			+ to_date);
+	xhr_object.send();
+    },
+
     populate_rack_view_callback: function() {
 	if(this.readyState == 4 && this.status == 200)
 	{
@@ -45,6 +63,7 @@ overview_page_obj={
 
     populate_rack_view: function(data_json) {
 	main_rack_div = document.getElementById("rack-disp");
+	main_rack_div.innerHTML = "";
 	var i, j, k;
 	var rack_group = null;
 
