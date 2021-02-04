@@ -73,7 +73,7 @@ overview_page_obj={
 		// add machines to each rack.
 		for (k = 0; k < data_json[i]['rack_list'][j]['machine_list'].length; k++) {
 		    li_object = document.createElement("li");
-		    li_object.rlmon_id = data_json[i]['rack_list'][j]['machine_list'][k];
+		    li_object.rlmon_id = Object.keys(data_json[i]['rack_list'][j]['machine_list'][k])[0];
 		    li_object.classList.add("w3-hover-shadow", "w3-border-black");
 		    li_object.innerHTML = Object.keys(data_json[i]['rack_list'][j]['machine_list'][k])[0];
 
@@ -106,6 +106,7 @@ overview_page_obj={
 
 		    li_object.addEventListener("mouseover", this.show_meta_data_div_timer);
 		    li_object.addEventListener("mouseout", this.hide_meta_data_div);
+		    li_object.addEventListener("click", machine_details_obj.change_view);
 
 		    ul_object.appendChild(li_object);
 		}
@@ -196,5 +197,23 @@ overview_page_obj={
 	    this.meta_data_div.meta_data_added = true;
 	    overview_page_obj.fill_meta_data(this.meta_data_div);
 	}
+    }
+}
+
+
+machine_details_obj={
+    change_view: function(e) {
+	var i, x;
+	x = document.getElementsByClassName("rlmon-display-div");
+	for (i = 0; i < x.length; i++) {
+	    x[i].style.display = "none";
+	}
+	document.getElementById("machine-details-div").style.display = "block";
+	machine_details_obj.top_fun(e.target);
+    },
+
+    top_fun: function(machine_li_obj) {
+	main_machine_details_div = document.getElementById("machine-details-div");
+	main_machine_details_div.innerHTML = "machine ID: "+machine_li_obj.rlmon_id.toString();
     }
 }
