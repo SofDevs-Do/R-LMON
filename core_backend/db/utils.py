@@ -13,6 +13,43 @@ AVG_CPU_UTIL_INFO_FILE_NAME     = "avg-cpu-usage.txt"
 AVG_MEM_UTIL_INFO_FILE_NAME     = "avg-mem-usage.txt"
 DISK_INFO_FILE_NAME             = "disk-info.txt" 
 
+
+def get_rack_details(machine_file_path):
+    lines = []
+    toret = dict()
+
+    with open(machine_file_path, 'r') as f:
+        lines = f.readlines()
+
+    for line in lines:
+        line = line.strip()
+
+        # ignore lines that are comments
+        if line[0] == '#':
+            continue
+
+        _fields = line.split(',')
+        fields = []
+        for field in _fields:
+            fields.append(field.strip())
+
+        # MACHINE_ID REMOTE_MACHINE ROOM_ID RACK_ID MACHINE_LOCATION KVM_SWITCH KVM_NUMBER ALLOTED_TO COMMENTS
+        # Make a dict for each room.
+        if fields[2] not in toret:
+            toret[fields[2]] = {"rack_list": dict()}
+
+        # Make a dict for each rack in it's room.
+        if fields[3] not in toret[fields[2]]["rack_list"]:
+            toret[fields[2]]["rack_list"][fields[3]] = {"machine_list": dict()}
+
+        # For each machine, make a dictionary. However, the
+        # key is the position of the machine, and the value is a dictionary
+        # with only one field: "_id": <machine-id>
+        toret[fields[2]]["rack_list"][fields[3]]["machine_list"][fields[4]] = {"_id": fields[0]}
+
+    return toret
+
+
 def get_disk_info(log_path, machine):
     machine = str(machine)
     t_date = os.path.basename(log_path)

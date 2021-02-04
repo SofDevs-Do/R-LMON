@@ -1,3 +1,4 @@
+import os
 import sys
 import pymongo
 import glob
@@ -39,9 +40,16 @@ mach_col = rlmon_db['mach_col']
 if 'mach_col' not in col_list:
     warnings.warn('\'mach_col\' collection was not found to exist. Creating it newly.')
 
+# accessing room_rack_col collection.
+room_rack_col = rlmon_db['room_rack_col']
+
+# warn if mach_col being created for the first time.
+if 'room_rack_col' not in col_list:
+    warnings.warn("'mach_col' collection was not found to exist. Creating it newly.")
+
 
 # accessing the path of data collection log for present day.
-log_path = sys.argv[1]
+log_path = os.path.join(sys.argv[1], "core_backend", "_log", sys.argv[2])
 
 # obtaining the present date from path
 today_date = os.path.basename(log_path)
@@ -61,7 +69,8 @@ avg_ram_util_key = "avg_ram_util"
 disk_info_key = "disk_info"
 
 # obtaining all the machine_id's for which the data was collected
-machine_id_list = list(map(int,[ os.path.basename(each_path) for each_path in glob.glob(os.path.join(log_path,'*'))]))
+# machine_id_list = list(map(int,[ os.path.basename(each_path) for each_path in glob.glob(os.path.join(log_path,'*'))]))
+machine_id_list = [ os.path.basename(each_path) for each_path in glob.glob(os.path.join(log_path,'*'))]
 
 # updating db for each machine_id
 for machine_id in machine_id_list:
@@ -142,3 +151,8 @@ for machine_id in machine_id_list:
 
     # updating the document in db
     mach_col.update_one({machine_id_key : machine_id}, {'$set' : data_dict}, upsert=True)
+
+# read machinefile and update the room/rack configuration.
+machine_file_path = os.path.join(sys.argv[1], "machinefile")
+to_ret = get_rack_details(machine_file_path)
+room_rack_col.update_one({"_id": 0}, {"$set": to_ret}, upsert=True)
