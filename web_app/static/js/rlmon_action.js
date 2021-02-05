@@ -252,7 +252,40 @@ machine_details_obj={
     },
 
     top_fun: function(machine_li_obj) {
-	main_machine_details_div = document.getElementById("machine-details-div");
-	main_machine_details_div.innerHTML = "machine ID: "+machine_li_obj.rlmon_id.toString();
+	//main_machine_details_div = document.getElementById("machine-details-div");
+	// main_machine_details_div.innerHTML = "machine ID: "+machine_li_obj.rlmon_id.toString();
+
+	var server_name = "A-15";
+	var hostname = "Blossom";
+	var ip_info = ['10.10.3.212', '192.168.113.224'];
+	var os_info = "Ubuntu 20.04.1 LTS";
+	var cpu_model = "Intel(R) Core(TM) i3-5005U CPU @ 2.00GHz"
+	var ram_capacity_info = "7.63"
+	var swap_space_info = "3.86"
+	var uptime_info = "4 days, 19 hours, 18 minutes";
+	
+	server_name_div = document.getElementById("server-name-md");
+	server_name_div.innerHTML = "Server : " + server_name;
+
+	hostname_div = document.getElementById("hostname-md");
+	hostname_div.innerHTML = "<td>" + "Hostname : " + "</td> <td>" +  hostname + "</td>";
+
+	// ip_info_div = document.getElementById("ip-info-md");
+	// ip_info_div.innerHTML = "IPs : " + ip_info.join(', ');
+
+	os_info_div = document.getElementById("os-info-md");
+	os_info_div.innerHTML = "<td>" + "Operating System : " + "</td> <td>" + os_info + "</td>";
+
+	cpu_model_div = document.getElementById("cpu-model-md");
+	cpu_model_div.innerHTML = "<td>" +"CPU Model : " + "</td> <td>" + cpu_model + "</td>";
+
+	ram_capacity_div = document.getElementById("ram-capacity-md");
+	ram_capacity_div.innerHTML = "<td>" + "RAM Capacity : " + "</td> <td>" + ram_capacity_info + " GB" + "</td>";
+
+	swap_space_div = document.getElementById("swap-space-md");
+	swap_space_div.innerHTML = "<td>" + "Swap Space : " + "</td> <td>" + swap_space_info + " GB" + "</td>";
+
+    	uptime_info_div = document.getElementById("uptime-info-md");
+	uptime_info_div.innerHTML = "<h6>" + "Up-time : " + uptime_info + "</h6>";
     }
 }
