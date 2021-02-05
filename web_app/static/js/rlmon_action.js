@@ -16,6 +16,19 @@ navigation_selector_obj={
 	document.getElementById("to-date-input").addEventListener("change", overview_page_obj.top_fun);
 	document.getElementById("color-coding-selector").addEventListener("change", overview_page_obj.top_fun);
 
+	// set the dates, and restrict the 'from date' field to a
+	// month
+	max_date = new Date(new Date().setDate(new Date().getDate()-1));
+	week_back_date = new Date(new Date().setDate(new Date().getDate()-7));
+	min_date = new Date(new Date().setDate(new Date().getDate()-30));
+
+	document.getElementById("from-date-input").min = min_date.toISOString().substr(0, 10);
+	document.getElementById("from-date-input").max = max_date.toISOString().substr(0, 10);
+	document.getElementById("from-date-input").value = week_back_date.toISOString().substr(0, 10);
+	document.getElementById("to-date-input").min = min_date.toISOString().substr(0, 10);
+	document.getElementById("to-date-input").max = max_date.toISOString().substr(0, 10);
+	document.getElementById("to-date-input").value = max_date.toISOString().substr(0, 10);
+
 	// invoke the loading of data.
 	overview_page_obj.top_fun(null);
     },
@@ -199,13 +212,18 @@ overview_page_obj={
     },
 
     request_and_fill_data: function(meta_data_div) {
-	// FIXME: replace the dummy request with a proper request to the
-	//        backend.
+	from_date = document.getElementById("from-date-input").value;
+	to_date = document.getElementById("to-date-input").value;
+	color_coding_selector = document.getElementById("color-coding-selector").value;
 
 	xhr_object = new XMLHttpRequest();
 	xhr_object.onload = this.populate_meta_data;
 	xhr_object.meta_data_div = meta_data_div;
-	xhr_object.open('GET', navigation_selector_obj.backend_url+'/api/dev/test/v2');
+	xhr_object.open('GET', navigation_selector_obj.backend_url
+			+ '/api/v2/overview-machine-meta-data/'
+			+ meta_data_div.parentElement.rlmon_id + '/'
+			+ from_date + '/'
+			+ to_date);
 	xhr_object.send();
     },
 

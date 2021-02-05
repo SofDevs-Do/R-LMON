@@ -45,7 +45,14 @@ room_rack_col = rlmon_db['room_rack_col']
 
 # warn if mach_col being created for the first time.
 if 'room_rack_col' not in col_list:
-    warnings.warn("'mach_col' collection was not found to exist. Creating it newly.")
+    warnings.warn("'mach_col' collection was not found. Creating it.")
+
+# accessing cpu_ram_col collection.
+cpu_ram_col = rlmon_db['cpu_ram_col']
+
+# warn if mach_col being created for the first time.
+if 'cpu_ram_col' not in col_list:
+    warnings.warn("'cpu_ram_col' collection was not found. Creating it.")
 
 
 # accessing the path of data collection log for present day.
@@ -76,10 +83,17 @@ machine_id_list = [ os.path.basename(each_path) for each_path in glob.glob(os.pa
 for machine_id in machine_id_list:
     # retrieve present values from the db
     data_dict = list(mach_col.find({machine_id_key : machine_id}))
+    cpu_ram_dict = list(cpu_ram_col.find({machine_id_key : machine_id}))
+
     if len(data_dict) == 0:
         data_dict = dict()
     else:
         data_dict = data_dict[0]
+
+    if len(cpu_ram_dict) == 0:
+        cpu_ram_dict = dict()
+    else:
+        cpu_ram_dict = cpu_ram_dict[0]
 
     # obtain hostname from data-collected and alter in data_dict
     hostname = get_hostname(log_path, machine_id)
@@ -117,21 +131,21 @@ for machine_id in machine_id_list:
     avg_cpu_util = get_avg_cpu_util_info(log_path, machine_id)
     log_date = list(avg_cpu_util.keys())[0]
     avg_cpu_util_val = avg_cpu_util[log_date]
-    if avg_cpu_util_key in data_dict:
-        data_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
+    if avg_cpu_util_key in cpu_ram_dict:
+        cpu_ram_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
     else:
-        data_dict[avg_cpu_util_key]=dict()
-        data_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
+        cpu_ram_dict[avg_cpu_util_key]=dict()
+        cpu_ram_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
 
     # obtain avg_ram_util from data_collected and alter in data_dict
     avg_ram_util = get_avg_mem_util_info(log_path, machine_id)
     log_date = list(avg_ram_util.keys())[0]
     avg_ram_util_val = avg_ram_util[log_date]
-    if avg_ram_util_key in data_dict:
-        data_dict[avg_ram_util_key][log_date] = avg_ram_util_val
+    if avg_ram_util_key in cpu_ram_dict:
+        cpu_ram_dict[avg_ram_util_key][log_date] = avg_ram_util_val
     else:
-        data_dict[avg_ram_util_key] = dict()
-        data_dict[avg_ram_util_key][log_date] = avg_ram_util_val
+        cpu_ram_dict[avg_ram_util_key] = dict()
+        cpu_ram_dict[avg_ram_util_key][log_date] = avg_ram_util_val
 
     # obtain disk-info from data_collected and alter in data_dict
     disk_info = get_disk_info(log_path, machine_id)
@@ -151,6 +165,7 @@ for machine_id in machine_id_list:
 
     # updating the document in db
     mach_col.update_one({machine_id_key : machine_id}, {'$set' : data_dict}, upsert=True)
+    cpu_ram_col.update_one({machine_id_key : machine_id}, {'$set' : cpu_ram_dict}, upsert=True)
 
 # read machinefile and update the room/rack configuration.
 machine_file_path = os.path.join(sys.argv[1], "machinefile")
