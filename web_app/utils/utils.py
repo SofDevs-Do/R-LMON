@@ -20,10 +20,12 @@ class Util:
         _from_date = datetime.date(*map(lambda x: int(x), from_date.split('-')))
         _to_date = datetime.date(*map(lambda x: int(x), to_date.split('-')))
         iter_date = _from_date
+        i = 0
 
         while iter_date < _to_date + datetime.timedelta(1):
             query_request_dict[what_data+"." + str(iter_date)] = 1
             iter_date += datetime.timedelta(1)
+            i += 1
 
         query_request_dict["_id"] = 0
         mongo_ret = self.cpu_ram_col.find({"_id": machine_id}, query_request_dict)
@@ -32,7 +34,7 @@ class Util:
             data_list = list(list(ret_val[what_data].values()))
 
         if (len(data_list) > 0):
-            return statistics.mean(data_list)
+            return (sum(data_list)/i)
         return 0
 
 
