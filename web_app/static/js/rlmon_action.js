@@ -263,29 +263,56 @@ machine_details_obj={
 	var ram_capacity_info = "7.63"
 	var swap_space_info = "3.86"
 	var uptime_info = "4 days, 19 hours, 18 minutes";
+	var users_last_login_info = {
+            "sneha": "Mon Dec 14 16:14:50",
+            "yashas": "Mon Sep 14 11:38:21",
+            "padma": "Mon Sep 14 13:06:40",
+            "ravi": "**Never logged in**"
+	}
 	
-	server_name_div = document.getElementById("server-name-md");
+	var server_name_div = document.getElementById("server-name-md");
 	server_name_div.innerHTML = "Server : " + server_name;
 
-	hostname_div = document.getElementById("hostname-md");
+	var hostname_div = document.getElementById("hostname-md");
 	hostname_div.innerHTML = "<td>" + "Hostname : " + "</td> <td>" +  hostname + "</td>";
 
 	// ip_info_div = document.getElementById("ip-info-md");
 	// ip_info_div.innerHTML = "IPs : " + ip_info.join(', ');
 
-	os_info_div = document.getElementById("os-info-md");
+	var os_info_div = document.getElementById("os-info-md");
 	os_info_div.innerHTML = "<td>" + "Operating System : " + "</td> <td>" + os_info + "</td>";
 
-	cpu_model_div = document.getElementById("cpu-model-md");
+	var cpu_model_div = document.getElementById("cpu-model-md");
 	cpu_model_div.innerHTML = "<td>" +"CPU Model : " + "</td> <td>" + cpu_model + "</td>";
 
-	ram_capacity_div = document.getElementById("ram-capacity-md");
+	var ram_capacity_div = document.getElementById("ram-capacity-md");
 	ram_capacity_div.innerHTML = "<td>" + "RAM Capacity : " + "</td> <td>" + ram_capacity_info + " GB" + "</td>";
 
-	swap_space_div = document.getElementById("swap-space-md");
+	var swap_space_div = document.getElementById("swap-space-md");
 	swap_space_div.innerHTML = "<td>" + "Swap Space : " + "</td> <td>" + swap_space_info + " GB" + "</td>";
 
-    	uptime_info_div = document.getElementById("uptime-info-md");
+    	var uptime_info_div = document.getElementById("uptime-info-md");
 	uptime_info_div.innerHTML = "<h6>" + "Up-time : " + uptime_info + "</h6>";
+
+	var users_last_login_table = document.getElementById("users-last-login-table");
+	users_last_login_table.innerHTML = '';
+	console.log(users_last_login_table)
+	var users_list = Object.keys(users_last_login_info).sort()
+	// console.log(users_list);
+	var head_row = users_last_login_table.insertRow(0);
+	var head_cell1 = head_row.insertCell(0);
+	var head_cell2 = head_row.insertCell(1);
+	head_cell1.innerHTML = "<b>User</b>";
+	head_cell2.innerHTML = "<b>Last Login</b>";
+	var i;
+	for(i=0; i<users_list.length; i++) {
+	    var row = users_last_login_table.insertRow(i+1);
+	    var cell1 = row.insertCell(0);
+	    var cell2 = row.insertCell(1);
+	    cell1.innerHTML = users_list[i];
+	    cell2.innerHTML = users_last_login_info[users_list[i]];
+	}
+	users_last_login_table.classList.add("w3-table", "w3-striped", "w3-bordered", "w3-small");
+	
     }
 }
