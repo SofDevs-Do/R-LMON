@@ -234,7 +234,9 @@ machine_details_obj={
     },
 
     top_fun: function(machine_li_obj) {
-	main_machine_details_div = document.getElementById("machine-details-div");
-	main_machine_details_div.innerHTML = "machine ID: "+machine_li_obj.rlmon_id.toString();
+	//main_machine_details_div = document.getElementById("machine-details-div");
+	// main_machine_details_div.innerHTML = "machine ID: "+machine_li_obj.rlmon_id.toString();
+	machine_name_div = document.getElementById("machine-name-md");
+	machine_name_div.innerHTML = "machine ID: "+machine_li_obj.rlmon_id.toString();
     }
 }
