@@ -73,6 +73,8 @@ uptime_key = "uptime"
 users_last_login_key = "users_last_login"
 avg_cpu_util_key = "avg_cpu_util"
 avg_ram_util_key = "avg_ram_util"
+cpu_util_key = "cpu_util"
+ram_util_key = "ram_util"
 disk_info_key = "disk_info"
 
 # obtaining all the machine_id's for which the data was collected
@@ -146,6 +148,27 @@ for machine_id in machine_id_list:
     else:
         cpu_ram_dict[avg_ram_util_key] = dict()
         cpu_ram_dict[avg_ram_util_key][log_date] = avg_ram_util_val
+
+    # obtain cpu_util from data_collected and alter in data_dict
+    cpu_util = get_cpu_ram_data(log_path, machine_id, "cpu")
+    log_date = os.path.basename(log_path)
+    cpu_util_val = cpu_util[machine_id]
+    if cpu_util_key in cpu_ram_dict:
+        cpu_ram_dict[cpu_util_key][log_date] = cpu_util_val
+    else:
+        cpu_ram_dict[cpu_util_key]=dict()
+        cpu_ram_dict[cpu_util_key][log_date] = cpu_util_val
+
+    # obtain ram_util from data_collected and alter in data_dict
+    ram_util = get_cpu_ram_data(log_path, machine_id, "ram")
+    log_date = os.path.basename(log_path)
+    ram_util_val = ram_util[machine_id]
+    if ram_util_key in cpu_ram_dict:
+        cpu_ram_dict[ram_util_key][log_date] = ram_util_val
+    else:
+        cpu_ram_dict[ram_util_key]=dict()
+        cpu_ram_dict[ram_util_key][log_date] = ram_util_val
+
 
     # obtain disk-info from data_collected and alter in data_dict
     disk_info = get_disk_info(log_path, machine_id)

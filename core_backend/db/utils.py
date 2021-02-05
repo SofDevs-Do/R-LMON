@@ -1,4 +1,6 @@
 import os
+import csv
+import glob
 
 # name of the filename in the log_path
 HOSTNAME_FILE_NAME              = "hostname.txt"
@@ -12,6 +14,36 @@ USERS_LAST_LOGIN_INFO_FILE_NAME = "last-login-info.txt"
 AVG_CPU_UTIL_INFO_FILE_NAME     = "avg-cpu-usage.txt"
 AVG_MEM_UTIL_INFO_FILE_NAME     = "avg-mem-usage.txt"
 DISK_INFO_FILE_NAME             = "disk-info.txt" 
+
+
+def get_cpu_ram_data(date_dir, machine_id, data_type):
+    """Return the CPU usage stats for a particular machine on a given date
+    """
+    machine_dir = os.path.join(date_dir, machine_id)
+    if data_type == "cpu":
+        data_file = "cpu-usage.csv"
+    else:
+        data_file = "mem-usage.csv"
+
+    if (os.path.isdir(machine_dir)):
+        _hours_present_dict = dict()
+        with open(os.path.join(machine_dir, data_file), 'r') as data_f:
+            csv_reader = csv.reader(data_f)
+            for data_point in csv_reader:
+                hour = int(data_point[0].split(':')[0])
+                if (hour not in _hours_present_dict):
+                    _hours_present_dict[hour] = float(data_point[1])
+
+        toret = []
+        for hour in range(0, 24):
+            if hour not in _hours_present_dict:
+                toret.append(0)
+            else:
+                toret.append(_hours_present_dict[hour])
+
+        return {machine_id:toret}
+    else:
+        return dict()
 
 
 def get_rack_details(machine_file_path):
