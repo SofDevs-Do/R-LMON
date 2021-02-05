@@ -199,13 +199,18 @@ overview_page_obj={
     },
 
     request_and_fill_data: function(meta_data_div) {
-	// FIXME: replace the dummy request with a proper request to the
-	//        backend.
+	from_date = document.getElementById("from-date-input").value;
+	to_date = document.getElementById("to-date-input").value;
+	color_coding_selector = document.getElementById("color-coding-selector").value;
 
 	xhr_object = new XMLHttpRequest();
 	xhr_object.onload = this.populate_meta_data;
 	xhr_object.meta_data_div = meta_data_div;
-	xhr_object.open('GET', navigation_selector_obj.backend_url+'/api/dev/test/v2');
+	xhr_object.open('GET', navigation_selector_obj.backend_url
+			+ '/api/v2/overview-machine-meta-data/'
+			+ meta_data_div.parentElement.rlmon_id + '/'
+			+ from_date + '/'
+			+ to_date);
 	xhr_object.send();
     },
 

@@ -27,13 +27,12 @@ def get_overview_page_cpu_ram_data(color_coding_selector, from_date, to_date):
     return to_ret
 
 
-@app.route("/api/dev/test/v2")
-def v2():
-    to_ret = {
-	"CPU": random.randint(-1,100),
-	"RAM": random.randint(-1,100),
-	"machine_name": ''.join(random.choices(string.ascii_letters+string.digits, k=5))
-    }
+@app.route("/api/v2/overview-machine-meta-data/<string:machine_id>/<string:from_date>/<string:to_date>")
+def get_machine_overview_meta_data(machine_id, from_date, to_date):
+    to_ret = dict()
+    to_ret["CPU"] = util_obj.get_machine_avg_data('avg_cpu_util', machine_id, from_date, to_date)
+    to_ret["RAM"] = util_obj.get_machine_avg_data('avg_ram_util', machine_id, from_date, to_date)
+    to_ret["machine_name"] = util_obj.get_machine_data(machine_id)["_id"]
 
     return to_ret
 
