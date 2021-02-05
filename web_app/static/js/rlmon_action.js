@@ -69,11 +69,12 @@ overview_page_obj={
 	var i, j, k;
 	var rack_group = null;
 
-	for (i = 0; i < Object.keys(data_json).length; i++) {
+	for (let i in data_json) {
 	    // for each room
-	    for (j = 0; j < Object.keys(data_json[i]['rack_list']).length; j++) {
+	    j_idx = 0;
+	    for (let j in data_json[i]['rack_list']) {
 		// for each rack.
-		if (j%this.number_of_racks_in_row==0) {
+		if (j_idx%this.number_of_racks_in_row==0) {
 		    // make a new rack group.
 		    rack_group = document.createElement("div");
 		    rack_group.classList.add('5-racks', 'w3-row-padding');
@@ -88,30 +89,28 @@ overview_page_obj={
 		// Name of the RACK
 		li_object = document.createElement("li");
 		li_object.classList.add("w3-medium", "w3-border-black");
-		li_object.innerHTML = data_json[i]['rack_list'][j]['rack_name'];
+		li_object.innerHTML = j;
 		ul_object.appendChild(li_object);
 
 		// add machines to each rack.
-		for (k = 0; k < data_json[i]['rack_list'][j]['machine_list'].length; k++) {
+		// for (k = 0; k < data_json[i]['rack_list'][j]['machine_list'].length; k++) {
+		for (let k in data_json[i]['rack_list'][j]['machine_list']) {
 		    li_object = document.createElement("li");
-		    li_object.rlmon_id = Object.keys(data_json[i]['rack_list'][j]['machine_list'][k])[0];
+		    li_object.rlmon_id = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 		    li_object.classList.add("w3-hover-shadow", "w3-border-black");
-		    li_object.innerHTML = Object.keys(data_json[i]['rack_list'][j]['machine_list'][k])[0];
+		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 
-		    if ((data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] >= 0) &&
-			(data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] < 25)) {
+		    value = data_json[i]['rack_list'][j]['machine_list'][k]["value"];
+		    if ((value >= 0) && (value < 25)) {
 			li_object.classList.add("w3-deep-orange");
 		    }
-		    else if ((data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] >= 25) &&
-			(data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] < 50)) {
+		    else if ((value >= 25) && (value < 50)) {
 			li_object.classList.add("w3-amber");
 		    }
-		    else if ((data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] >= 50) &&
-			(data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] < 75)) {
+		    else if ((value >= 50) && (value < 75)) {
 			li_object.classList.add("w3-light-green");
 		    }
-		    else if ((data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] >= 75) &&
-			(data_json[i]['rack_list'][j]['machine_list'][k][li_object.innerHTML] < 100)) {
+		    else if ((value >= 75) && (value < 100)) {
 			li_object.classList.add("w3-green");
 		    }
 		    else {
@@ -135,9 +134,10 @@ overview_page_obj={
 
 		rack_group.appendChild(rack_object);
 
-		if (j%this.number_of_racks_in_row==0) {
+		if (j_idx%this.number_of_racks_in_row==0) {
 		    main_rack_div.appendChild(rack_group);
 		}
+		j_idx = j_idx + 1;
 	    }
 	}
     },

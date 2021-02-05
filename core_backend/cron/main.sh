@@ -22,4 +22,4 @@ grep -v '^#' < "${MACHINEFILE}" | \
 	      "$(echo ${MACHINE_ID} | xargs)";
       done; }
 
-python3 "${RLMON_HOME}"/core_backend/db/main.py "${LOG_DATE_PATH}";
+python3 "${RLMON_HOME}"/core_backend/db/main.py "${RLMON_HOME}" "$(date --date="yesterday" '+%Y-%m-%d')";
