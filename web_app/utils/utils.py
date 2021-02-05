@@ -46,16 +46,14 @@ class Util:
 
                         avg_value = self.get_average_ram_cpu_data(from_date, to_date, data_dictionary)
 
-
                         data[room]["rack_list"][rack]["machine_list"][machine_pos]["value"] = avg_value
-
         return data
 
 
-    def get_machine_avg_data(self, what_data, machine_id, from_date, to_date):
+    def get_machine_avg_cpu_ram_data(self, what_data, machine_id, from_date, to_date):
         data_dictionary = list(self.mach_col.find({"_id": machine_id}))[0][what_data]
         avg_value = self.get_average_ram_cpu_data(from_date, to_date, data_dictionary)
-        return avg_value
+        return "{0:.2f}%".format(avg_value)
 
 
     def get_machine_data(self, machine_id):
