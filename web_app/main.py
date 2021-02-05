@@ -16,8 +16,14 @@ util_obj = utils.Util(db_url = db_url)
 
 @app.route("/api/v2/overview-page-data/<string:color_coding_selector>/<string:from_date>/<string:to_date>",
            methods=['GET'])
-def get_overview_page_data(color_coding_selector, from_date, to_date):
-    to_ret = util_obj.get_overview_page_data(color_coding_selector, from_date, to_date)
+def get_overview_page_cpu_ram_data(color_coding_selector, from_date, to_date):
+    if (color_coding_selector == "CPU utilization"):
+        to_ret = util_obj.get_overview_page_cpu_ram_data('avg_cpu_util', from_date, to_date)
+    elif (color_coding_selector == "RAM utilization"):
+        to_ret = util_obj.get_overview_page_cpu_ram_data('avg_ram_util', from_date, to_date)
+    else:
+        print("Not implemented warning")
+        to_ret = dict()
     return to_ret
 
 
