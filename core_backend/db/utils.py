@@ -14,10 +14,11 @@ USERS_LAST_LOGIN_INFO_FILE_NAME = "last-login-info.txt"
 AVG_CPU_UTIL_INFO_FILE_NAME     = "avg-cpu-usage.txt"
 AVG_MEM_UTIL_INFO_FILE_NAME     = "avg-mem-usage.txt"
 DISK_INFO_FILE_NAME             = "disk-info.txt" 
+ASSIGNED_TO_AND_COMMENTS        = "misc-info.txt"
 
 
 def get_cpu_ram_data(date_dir, machine_id, data_type):
-    """Return the CPU usage stats for a particular machine on a given date
+    """Return the CPU/RAM usage stats for a particular machine on a given date
     """
     machine_dir = os.path.join(date_dir, machine_id)
     if data_type == "cpu":
@@ -65,7 +66,6 @@ def get_rack_details(machine_file_path):
         for field in _fields:
             fields.append(field.strip())
 
-        # MACHINE_ID REMOTE_MACHINE ROOM_ID RACK_ID MACHINE_LOCATION KVM_SWITCH KVM_NUMBER ALLOTED_TO COMMENTS
         # Make a dict for each room.
         if fields[2] not in toret:
             toret[fields[2]] = {"rack_list": dict()}
@@ -81,6 +81,19 @@ def get_rack_details(machine_file_path):
 
     return toret
 
+def get_assigned_to_and_comments(log_path, machine):
+    machine = str(machine)
+    t_date = os.path.basename(log_path)
+    misc_info_file = os.path.join(log_path, machine, ASSIGNED_TO_AND_COMMENTS)
+    with open(misc_info_file, "r") as misc_info_fp:
+        misc_info = misc_info_fp.readlines()[-2:]
+
+    misc_data = dict()
+    if (len(misc_info) > 0):
+        misc_data["assigned_to"] = misc_info[0].strip()
+        misc_data["comments"] = misc_info[1].strip()
+
+    return misc_data
 
 def get_disk_info(log_path, machine):
     machine = str(machine)
