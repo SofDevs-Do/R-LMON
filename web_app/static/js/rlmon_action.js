@@ -81,6 +81,7 @@ overview_page_obj={
 	main_rack_div.innerHTML = "";
 	var i, j, k;
 	var rack_group = null;
+	var no_data = false;
 
 	for (let i in data_json) {
 	    // for each room
@@ -108,6 +109,7 @@ overview_page_obj={
 		// add machines to each rack.
 		// for (k = 0; k < data_json[i]['rack_list'][j]['machine_list'].length; k++) {
 		for (let k in data_json[i]['rack_list'][j]['machine_list']) {
+		    no_data = false;
 		    li_object = document.createElement("li");
 		    li_object.rlmon_id = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 		    li_object.classList.add("w3-hover-shadow", "w3-border-black");
@@ -128,6 +130,7 @@ overview_page_obj={
 		    }
 		    else {
 			li_object.classList.add("w3-black");
+			no_data = true;
 		    }
 
 		    meta_data_obj = document.createElement("div");
@@ -137,8 +140,10 @@ overview_page_obj={
 		    meta_data_obj.meta_data_added = false;
 		    li_object.appendChild(meta_data_obj);
 
-		    li_object.addEventListener("mouseover", this.show_meta_data_div_timer);
-		    li_object.addEventListener("mouseout", this.hide_meta_data_div);
+		    if (!no_data) {
+			li_object.addEventListener("mouseover", this.show_meta_data_div_timer);
+			li_object.addEventListener("mouseout", this.hide_meta_data_div);
+		    }
 		    li_object.addEventListener("click", machine_details_obj.change_view);
 
 		    ul_object.appendChild(li_object);
