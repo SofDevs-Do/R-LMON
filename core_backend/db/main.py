@@ -47,12 +47,12 @@ room_rack_col = rlmon_db['room_rack_col']
 if 'room_rack_col' not in col_list:
     warnings.warn("'mach_col' collection was not found. Creating it.")
 
-# accessing cpu_ram_col collection.
-cpu_ram_col = rlmon_db['cpu_ram_col']
+# accessing cpu_ram_disk_col collection.
+cpu_ram_disk_col = rlmon_db['cpu_ram_disk_col']
 
 # warn if mach_col being created for the first time.
-if 'cpu_ram_col' not in col_list:
-    warnings.warn("'cpu_ram_col' collection was not found. Creating it.")
+if 'cpu_ram_disk_col' not in col_list:
+    warnings.warn("'cpu_ram_disk_col' collection was not found. Creating it.")
 
 
 # accessing the path of data collection log for present day.
@@ -73,6 +73,8 @@ uptime_key = "uptime"
 users_last_login_key = "users_last_login"
 avg_cpu_util_key = "avg_cpu_util"
 avg_ram_util_key = "avg_ram_util"
+cpu_util_key = "cpu_util"
+ram_util_key = "ram_util"
 disk_info_key = "disk_info"
 
 # obtaining all the machine_id's for which the data was collected
@@ -83,17 +85,17 @@ machine_id_list = [ os.path.basename(each_path) for each_path in glob.glob(os.pa
 for machine_id in machine_id_list:
     # retrieve present values from the db
     data_dict = list(mach_col.find({machine_id_key : machine_id}))
-    cpu_ram_dict = list(cpu_ram_col.find({machine_id_key : machine_id}))
+    cpu_ram_disk_dict = list(cpu_ram_disk_col.find({machine_id_key : machine_id}))
 
     if len(data_dict) == 0:
         data_dict = dict()
     else:
         data_dict = data_dict[0]
 
-    if len(cpu_ram_dict) == 0:
-        cpu_ram_dict = dict()
+    if len(cpu_ram_disk_dict) == 0:
+        cpu_ram_disk_dict = dict()
     else:
-        cpu_ram_dict = cpu_ram_dict[0]
+        cpu_ram_disk_dict = cpu_ram_disk_dict[0]
 
     # obtain hostname from data-collected and alter in data_dict
     hostname = get_hostname(log_path, machine_id)
@@ -127,25 +129,51 @@ for machine_id in machine_id_list:
     users_last_login = get_users_last_login(log_path, machine_id)
     data_dict[users_last_login_key] = users_last_login
 
+    # misc information such as assigned to whom, and other comments.
+    misc_information = get_assigned_to_and_comments(log_path, machine_id)
+    data_dict["assigned_to"] = misc_information["assigned_to"]
+    data_dict["comments"] = misc_information["comments"]
+
     # obtain avg_cpu_util from data_collected and alter in data_dict
     avg_cpu_util = get_avg_cpu_util_info(log_path, machine_id)
     log_date = list(avg_cpu_util.keys())[0]
     avg_cpu_util_val = avg_cpu_util[log_date]
-    if avg_cpu_util_key in cpu_ram_dict:
-        cpu_ram_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
+    if avg_cpu_util_key in cpu_ram_disk_dict:
+        cpu_ram_disk_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
     else:
-        cpu_ram_dict[avg_cpu_util_key]=dict()
-        cpu_ram_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
+        cpu_ram_disk_dict[avg_cpu_util_key]=dict()
+        cpu_ram_disk_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
 
     # obtain avg_ram_util from data_collected and alter in data_dict
     avg_ram_util = get_avg_mem_util_info(log_path, machine_id)
     log_date = list(avg_ram_util.keys())[0]
     avg_ram_util_val = avg_ram_util[log_date]
-    if avg_ram_util_key in cpu_ram_dict:
-        cpu_ram_dict[avg_ram_util_key][log_date] = avg_ram_util_val
+    if avg_ram_util_key in cpu_ram_disk_dict:
+        cpu_ram_disk_dict[avg_ram_util_key][log_date] = avg_ram_util_val
     else:
-        cpu_ram_dict[avg_ram_util_key] = dict()
-        cpu_ram_dict[avg_ram_util_key][log_date] = avg_ram_util_val
+        cpu_ram_disk_dict[avg_ram_util_key] = dict()
+        cpu_ram_disk_dict[avg_ram_util_key][log_date] = avg_ram_util_val
+
+    # obtain cpu_util from data_collected and alter in data_dict
+    cpu_util = get_cpu_ram_data(log_path, machine_id, "cpu")
+    log_date = os.path.basename(log_path)
+    cpu_util_val = cpu_util[machine_id]
+    if cpu_util_key in cpu_ram_disk_dict:
+        cpu_ram_disk_dict[cpu_util_key][log_date] = cpu_util_val
+    else:
+        cpu_ram_disk_dict[cpu_util_key]=dict()
+        cpu_ram_disk_dict[cpu_util_key][log_date] = cpu_util_val
+
+    # obtain ram_util from data_collected and alter in data_dict
+    ram_util = get_cpu_ram_data(log_path, machine_id, "ram")
+    log_date = os.path.basename(log_path)
+    ram_util_val = ram_util[machine_id]
+    if ram_util_key in cpu_ram_disk_dict:
+        cpu_ram_disk_dict[ram_util_key][log_date] = ram_util_val
+    else:
+        cpu_ram_disk_dict[ram_util_key]=dict()
+        cpu_ram_disk_dict[ram_util_key][log_date] = ram_util_val
+
 
     # obtain disk-info from data_collected and alter in data_dict
     disk_info = get_disk_info(log_path, machine_id)
@@ -153,19 +181,27 @@ for machine_id in machine_id_list:
     for each_fs in fs_list:
         if disk_info_key not in data_dict:
             data_dict[disk_info_key] = dict()
+        if disk_info_key not in cpu_ram_disk_dict:
+            cpu_ram_disk_dict[disk_info_key] = dict()
+
         if each_fs not in data_dict[disk_info_key]:
             data_dict[disk_info_key][each_fs] = dict()
+        if each_fs not in cpu_ram_disk_dict[disk_info_key]:
+            cpu_ram_disk_dict[disk_info_key][each_fs] = dict()
+
         data_dict[disk_info_key][each_fs]['total_GB'] = disk_info[each_fs]['total_GB']
         data_dict[disk_info_key][each_fs]['mounted_on'] = disk_info[each_fs]['mounted_on']
-        if 'used_GB' not in data_dict[disk_info_key][each_fs]:
-            data_dict[disk_info_key][each_fs]['used_GB'] = dict()
+
+        if 'used_GB' not in cpu_ram_disk_dict[disk_info_key][each_fs]:
+            cpu_ram_disk_dict[disk_info_key][each_fs]['used_GB'] = dict()
+
         log_date = list(disk_info[each_fs]['used_GB'].keys())[0]
         used_gb_val_for_log_date = disk_info[each_fs]['used_GB'][log_date]
-        data_dict[disk_info_key][each_fs]['used_GB'][log_date] = used_gb_val_for_log_date
+        cpu_ram_disk_dict[disk_info_key][each_fs]['used_GB'][log_date] = used_gb_val_for_log_date
 
     # updating the document in db
     mach_col.update_one({machine_id_key : machine_id}, {'$set' : data_dict}, upsert=True)
-    cpu_ram_col.update_one({machine_id_key : machine_id}, {'$set' : cpu_ram_dict}, upsert=True)
+    cpu_ram_disk_col.update_one({machine_id_key : machine_id}, {'$set' : cpu_ram_disk_dict}, upsert=True)
 
 # read machinefile and update the room/rack configuration.
 machine_file_path = os.path.join(sys.argv[1], "machinefile")
