@@ -312,7 +312,7 @@ machine_details_obj={
 	    cell1.innerHTML = users_list[i];
 	    cell2.innerHTML = users_last_login_info[users_list[i]];
 	}
-	users_last_login_table.classList.add("w3-table", "w3-striped", "w3-bordered", "w3-small");
+	users_last_login_table.classList.add("w3-table", "w3-striped", "w3-bordered", "w3-small", "w3-round");
 	
     }
 }
