@@ -11,7 +11,7 @@ class Util:
 
         self.mach_col = self.db['mach_col']
         self.room_rack_col = self.db['room_rack_col']
-        self.cpu_ram_col = self.db['cpu_ram_col']
+        self.cpu_ram_disk_col = self.db['cpu_ram_disk_col']
 
 
     def get_average_ram_cpu_data(self, what_data, machine_id, from_date, to_date):
@@ -28,14 +28,14 @@ class Util:
             i += 1
 
         query_request_dict["_id"] = 0
-        mongo_ret = self.cpu_ram_col.find({"_id": machine_id}, query_request_dict)
+        mongo_ret = self.cpu_ram_disk_col.find({"_id": machine_id}, query_request_dict)
 
         for ret_val in mongo_ret:
             data_list = list(list(ret_val[what_data].values()))
 
         if (len(data_list) > 0):
             return (sum(data_list)/i)
-        return 0
+        return -1
 
 
     def get_overview_page_cpu_ram_data(self, color_coding_selector, from_date, to_date):
