@@ -357,29 +357,134 @@ machine_details_obj={
 	var ram_capacity_info = "7.63"
 	var swap_space_info = "3.86"
 	var uptime_info = "4 days, 19 hours, 18 minutes";
+	var users_last_login_info = {
+            "sneha": "Mon Dec 14 16:14:50",
+            "yashas": "Mon Sep 14 11:38:21",
+            "padma": "Mon Sep 14 13:06:40",
+            "ravi": "**Never logged in**"
+	}
+	var avg_cpu_util_val = 20.25;
+	var avg_cpu_util_data = {
+	    datasets: [{
+		data: [avg_cpu_util_val, (100-avg_cpu_util_val)],
+		backgroundColor: ['rgba(54, 162, 155, 1)', 'transparent'],
+		borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+	    }],
+	    labels: ['Avg CPU utilized %', 'Avg CPU Un-utilized%']
+	};
+	var avg_ram_util_val = 20.25;
+	var avg_ram_util_data = {
+	    datasets: [{
+		data: [avg_ram_util_val, (100-avg_ram_util_val)],
+		backgroundColor: ['rgba(254, 162, 55, 1)', 'transparent'],
+		borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+	    }],
+	    labels: ['Avg RAM utilized %', 'Avg RAM Un-utilized%']
+	};
+	var avg_disk_util_val = 60.25;
+	var avg_disk_util_val1 = 20.25;
+	var avg_disk_util_data = {
+	    datasets: [{
+		           data: [avg_disk_util_val, (100-avg_disk_util_val)],
+		           backgroundColor: ['rgba(54, 255, 55, 1)', 'transparent'],
+		           // borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+	               },
+		       {
+			   data: [avg_disk_util_val1, (100-avg_disk_util_val1)],
+			   backgroundColor: ['rgba(254, 255, 55, 1)', 'transparent'],
+			   // borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+		       }],
+	    labels: ['Avg Disk utilized %', 'AVg Disk Un-utilized%']
+	};
 	
-	server_name_div = document.getElementById("server-name-md");
+	var server_name_div = document.getElementById("server-name-md");
 	server_name_div.innerHTML = "Server : " + server_name;
 
-	hostname_div = document.getElementById("hostname-md");
+	var hostname_div = document.getElementById("hostname-md");
 	hostname_div.innerHTML = "<td>" + "Hostname : " + "</td> <td>" +  hostname + "</td>";
 
 	// ip_info_div = document.getElementById("ip-info-md");
 	// ip_info_div.innerHTML = "IPs : " + ip_info.join(', ');
 
-	os_info_div = document.getElementById("os-info-md");
-	os_info_div.innerHTML = "<td>" + "Operating System : " + "</td> <td>" + os_info + "</td>";
+	var os_info_div = document.getElementById("os-info-md");
+	os_info_div.innerHTML = "<td>" + "OS : " + "</td> <td>" + os_info + "</td>";
 
-	cpu_model_div = document.getElementById("cpu-model-md");
+	var cpu_model_div = document.getElementById("cpu-model-md");
 	cpu_model_div.innerHTML = "<td>" +"CPU Model : " + "</td> <td>" + cpu_model + "</td>";
 
-	ram_capacity_div = document.getElementById("ram-capacity-md");
+	var ram_capacity_div = document.getElementById("ram-capacity-md");
 	ram_capacity_div.innerHTML = "<td>" + "RAM Capacity : " + "</td> <td>" + ram_capacity_info + " GB" + "</td>";
 
-	swap_space_div = document.getElementById("swap-space-md");
+	var swap_space_div = document.getElementById("swap-space-md");
 	swap_space_div.innerHTML = "<td>" + "Swap Space : " + "</td> <td>" + swap_space_info + " GB" + "</td>";
 
-    	uptime_info_div = document.getElementById("uptime-info-md");
+    	var uptime_info_div = document.getElementById("uptime-info-md");
 	uptime_info_div.innerHTML = "<h6>" + "Up-time : " + uptime_info + "</h6>";
+
+	var users_last_login_table = document.getElementById("users-last-login-table");
+	users_last_login_table.innerHTML = '';
+	console.log(users_last_login_table)
+	var users_list = Object.keys(users_last_login_info).sort()
+	// console.log(users_list);
+	var head_row = users_last_login_table.insertRow(0);
+	var head_cell1 = head_row.insertCell(0);
+	var head_cell2 = head_row.insertCell(1);
+	head_cell1.innerHTML = "<b>User</b>";
+	head_cell2.innerHTML = "<b>Last Login</b>";
+	var i;
+	for(i=0; i<users_list.length; i++) {
+	    var row = users_last_login_table.insertRow(i+1);
+	    var cell1 = row.insertCell(0);
+	    var cell2 = row.insertCell(1);
+	    cell1.innerHTML = users_list[i];
+	    cell2.innerHTML = users_last_login_info[users_list[i]];
+	}
+	users_last_login_table.classList.add("w3-table", "w3-striped", "w3-bordered", "w3-small", "w3-round");
+
+	var ctx = document.getElementById("avg-cpu-util-doughnut-chart-canvas");
+	var avg_cpu_util_donoughnut_chart = new Chart(ctx, {
+	    type: 'doughnut',
+	    data: avg_cpu_util_data,
+	    options: {
+		responsive: true,
+		cutoutPercentage: 60,
+		legend: false,
+		title: {
+		    display: true,
+		    text: 'Average CPU Utilization'
+		}
+	    }
+	});
+
+	var ctx_ram = document.getElementById("avg-ram-util-doughnut-chart-canvas");
+	var avg_ram_util_donoughnut_chart = new Chart(ctx_ram, {
+	    type: 'doughnut',
+	    data: avg_ram_util_data,
+	    options: {
+		responsive: true,
+		cutoutPercentage: 60,
+		legend: false,
+		title: {
+		    display: true,
+		    text: 'Average RAM Utilization'
+		},
+	    }
+	});
+	
+	var ctx_disk = document.getElementById("avg-disk-util-doughnut-chart-canvas");
+	var avg_disk_util_donoughnut_chart = new Chart(ctx_disk, {
+	    type: 'doughnut',
+	    data: avg_disk_util_data,
+	    options: {
+		responsive: true,
+		cutoutPercentage: 60,
+		legend: false,
+		title: {
+		    display: true,
+		    text: 'Average Disk Utilization'
+		},
+	    }
+	});
+
     }
 }

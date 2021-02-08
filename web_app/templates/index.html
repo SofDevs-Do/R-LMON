@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script type="text/javascript" src="js/rlmon_action.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
   </head>
   <body onload="navigation_selector_obj.setup_nav_buttons();">
     <div id="top-menu">
@@ -115,34 +116,55 @@
 
     <div id="machine-details-div" class="rlmon-display-div" style="display:none">
       <!-- The machine details page -->
-      <div class="w3-container w3-row w3-padding">
-	<div class="w3-col s4 w3-card-4">
-	  <header class="w3-container w3-blue w3-padding-small w3-round-small">
+      <div class="w3-container w3-col s4">
+	<div class="w3-row s4 w3-padding">
+	  <header class="w3-container w3-blue w3-padding w3-round-small">
 	    <h2 id="server-name-md" class="w3-center"> </h2>
 	  </header>
 	</div>
-      </div>
-      <div class="w3-container w3-row">
-	<div class="w3-col s4 w3-card-4 w3-round-large">
-	  <div class="w3-ul w3-card-4 w3-small w3-round-large" style="width:100%">
-	    <table class="w3-table w3-striped w3-bordered">
-	      <tr id="hostname-md" class="w3-container w3-hover-grey w3-padding-small"></tr>
-	      <!-- <li id="ip-info-md" class="w3-container w3-hover-grey w3-padding-small"></li> -->
-	      <tr id="os-info-md" class="w3-container w3-hover-grey w3-padding-small"></tr>
-	      <tr id="cpu-model-md" class="w3-container w3-hover-grey w3-padding-small"></tr>
-	      <tr id="ram-capacity-md" class="w3-container w3-hover-grey w3-padding-small"></tr>
-	      <tr id="swap-space-md" class="w3-container w3-hover-grey w3-padding-small"></tr>
+	<div class="w3-container w3-row">
+	  <div class="w3-card-4 w3-round-large">
+	    <div class="w3-ul w3-card-4 w3-small w3-round-large" style="width:100%">
+	      <table class="w3-table w3-striped w3-bordered">
+		<tr id="hostname-md" class="w3-container w3-hover-grey w3-padding-small"></tr>
+		<!-- <li id="ip-info-md" class="w3-container w3-hover-grey w3-padding-small"></li> -->
+		<tr id="os-info-md" class="w3-container w3-hover-grey w3-padding-small"></tr>
+		<tr id="cpu-model-md" class="w3-container w3-hover-grey w3-padding-small"></tr>
+		<tr id="ram-capacity-md" class="w3-container w3-hover-grey w3-padding-small"></tr>
+		<tr id="swap-space-md" class="w3-container w3-hover-grey w3-padding-small"></tr>
+	      </table>
+	    </div>
+	  </div>
+	</div>
+	<div class="w3-container w3-row w3-padding">
+	  <div class="w3-card-4 w3-center w3-light-green w3-round-large">
+	    <div id="uptime-info-md" class="w3-container">
+	    </div>
+	  </div>
+	</div>
+	<div class="w3-container w3-row w3-padding">
+	  <div id="users-last-login-md" class="w3-card-4 w3-center w3-light-grey w3-round-large">
+	    <table id="users-last-login-table" class="w3-table-all w3-small w3-round-large">
 	    </table>
 	  </div>
 	</div>
       </div>
-    </div>
-    <div class="w3-container w3-row w3-padding">
-      <div class="w3-col s4 w3-card-4 w3-center w3-light-green w3-round-large">
-	<div id="uptime-info-md" class="w3-container">
+      <div id="avg-util-doughnut-chart-div" class=" w3-section w3-col s4 w3-round">
+	<div class="w3-container w3-row w3-card-4 w3-padding w3-round-large">
+	  <div  class="w3-col s6">
+	    <canvas id="avg-cpu-util-doughnut-chart-canvas">
+	    </canvas>
+	  </div>
+	  <div  class="w3-col s6">
+	    <canvas id="avg-ram-util-doughnut-chart-canvas">
+	    </canvas>
+	  </div>
+	</div>
+	<div class="w3-container w3-row  w3-card-4 w3-padding w3-round-large">
+	    <canvas id="avg-disk-util-doughnut-chart-canvas">
+	    </canvas>
 	</div>
       </div>
     </div>
-
-  </body>
+</body>
 </html> 
