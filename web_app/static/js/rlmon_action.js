@@ -47,6 +47,7 @@ navigation_selector_obj={
 overview_page_obj={
     // The number of racks to be shown in One row of the screen.
     number_of_racks_in_row: 5,
+    order_of_view: "low-top",
 
     values_to_disp: [{"name":"Machine name", "idx":"machine_name"},
 		     {"name":"CPU usage", "idx":"CPU"},
@@ -102,7 +103,6 @@ overview_page_obj={
 		    return a["value"] - b["value"];
 		});
 
-	    overview_page_obj.order_of_view = "low-top";
 	    overview_page_obj.refresh_vidualization();
 	}
     },
@@ -125,6 +125,11 @@ overview_page_obj={
 	}
 	ul_object = document.getElementById("machine-graph-sorted-view-list-div");
 	overview_page_obj.populate_sorted_graph_view(ul_object);
+	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
+	    document.getElementById("color-coding-selector").value == "RAM utilization") {
+	    graph_canvas_div = document.getElementById("machine-graph-graph-canvas");
+	    overview_page_obj.populate_bar_graph_view(graph_canvas_div);
+	}
     },
 
     populate_graph_view: function(e) {
@@ -139,20 +144,48 @@ overview_page_obj={
 	ul_object.id = "machine-graph-sorted-view-list-div";
 	ul_object.classList.add("w3-ul", "w3-center", "w3-tiny", "w3-col");
 	ul_object.style.width=(100/overview_page_obj.number_of_racks_in_row).toString()+"%";
-	graph_canvas = document.createElement("canvas");
-	graph_canvas.id = "machine-graph-graph-canvas-div";
-	graph_canvas.classList.add("w3-ul", "w3-center", "w3-tiny", "w3-col");
-	graph_canvas.style.width=(100-(100/overview_page_obj.number_of_racks_in_row)).toString()+"%";
-
+	graph_canvas_div = document.createElement("div");
+	graph_canvas_div.id = "machine-graph-graph-canvas";
+	graph_canvas_div.classList.add("w3-tiny", "w3-col");
+	graph_canvas_div.style.width=(90-(100/overview_page_obj.number_of_racks_in_row)).toString()+"%";
 	graph_view_div.appendChild(ul_object);
-	graph_view_div.appendChild(graph_canvas);
+	graph_view_div.appendChild(graph_canvas_div);
 	main_graph_div.appendChild(graph_view_div);
 	overview_page_obj.populate_sorted_graph_view(ul_object);
-	overview_page_obj.populate_bar_graph_view(graph_canvas);
+	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
+	    document.getElementById("color-coding-selector").value == "RAM utilization") {
+	    overview_page_obj.populate_bar_graph_view(graph_canvas_div);
+	}
     },
 
-    populate_bar_graph_view: function(graph_canvas) {
-	graph_canvas.innerHTML = "";
+    populate_bar_graph_view: function(graph_canvas_div) {
+	graph_canvas_div.innerHTML = "";
+	labels = []
+	data_points = []
+	flattened_data_json = overview_page_obj.flattened_data_json.slice(0);
+
+	if (overview_page_obj.order_of_view != "low-top") {
+	    flattened_data_json = flattened_data_json.reverse();
+	}
+
+	graph_canvas = document.createElement("canvas");
+	graph_canvas_div.appendChild(graph_canvas);
+
+	for (let i in flattened_data_json) {
+	    labels.push(flattened_data_json[i]["_id"]);
+	    data_points.push(flattened_data_json[i]["value"]);
+	}
+
+	bar_graph = new Chart(graph_canvas.getContext('2d'), {
+	    type: 'horizontalBar',
+	    data: {
+		labels: labels,
+		datasets: [{
+		    data: data_points,
+		    borderWidth: 1,
+		}]
+	    }
+	});
     },
 
     populate_sorted_graph_view: function(ul_object) {
@@ -188,7 +221,13 @@ overview_page_obj={
 	    li_object.classList.add("w3-hover-shadow", "w3-border-black");
 	    li_object.style.cursor = "pointer";
 	    value = flattened_data_json[i]["value"];
-	    li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + value.toFixed(2);
+	    if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
+		document.getElementById("color-coding-selector").value == "RAM utilization") {
+		li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + value.toFixed(2);
+	    }
+	    else {
+		li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + value;
+	    }
 	    li_object.addEventListener("click", machine_details_obj.change_view);
 	    coloring_function(value, li_object);
 	    ul_object.appendChild(li_object);
