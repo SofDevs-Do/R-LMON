@@ -91,6 +91,18 @@ overview_page_obj={
 	var i, j, k;
 	var rack_group = null;
 	var no_data = false;
+	coloring_function = null;
+
+	// different coloring functions based on the data requested by the user.
+	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
+	    document.getElementById("color-coding-selector").value == "RAM utilization") {
+	    coloring_function = this.color_machines_based_on_cpu_ram_data;
+	}
+	else {
+	    coloring_function = this.color_machines_based_on_last_login_data;
+	}
+
+	this.update_legend();
 
 	for (let i in data_json) {
 	    // for each room
@@ -125,14 +137,7 @@ overview_page_obj={
 		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 
 		    value = data_json[i]['rack_list'][j]['machine_list'][k]["value"];
-
-		    if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
-			document.getElementById("color-coding-selector").value == "RAM utilization") {
-			this.color_machines_based_on_cpu_ram_data(value, li_object);
-		    }
-		    else {
-			this.color_machines_based_on_last_login_data(value, li_object);
-		    }
+		    coloring_function(value, li_object);
 
 		    meta_data_obj = document.createElement("div");
 		    meta_data_obj.classList.add("w3-panel", "w3-dark-gray", "w3-hover-shadow");
@@ -158,6 +163,23 @@ overview_page_obj={
 		}
 		j_idx = j_idx + 1;
 	    }
+	}
+    },
+
+    update_legend: function() {
+	legend_key = document.getElementById("color-coding-selector").value;
+
+	if (legend_key == "CPU utilization" || legend_key == "RAM utilization") {
+	    document.getElementById("legend-div-1").innerHTML = "0-24";
+	    document.getElementById("legend-div-2").innerHTML = "25-49";
+	    document.getElementById("legend-div-3").innerHTML = "50-74";
+	    document.getElementById("legend-div-4").innerHTML = "74-100";
+	}
+	else {
+	    document.getElementById("legend-div-1").innerHTML = ">4w";
+	    document.getElementById("legend-div-2").innerHTML = "3w";
+	    document.getElementById("legend-div-3").innerHTML = "2w";
+	    document.getElementById("legend-div-4").innerHTML = "1w";
 	}
     },
 
