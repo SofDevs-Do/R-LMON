@@ -1,7 +1,7 @@
 navigation_selector_obj={
 
     backend_url: "http://127.0.0.1:8000",
-    prev_view : "overview-div",
+    prev_view : "machine-overview-data-div",
 
     setup_nav_buttons: function() {
 	var x;
@@ -40,20 +40,6 @@ navigation_selector_obj={
 	for (i = 0; i < x.length; i++) {
 	    x[i].style.display = "none";
 	}
-
-	// Reuse the display settings div and move it between the overview page and
-	// sys util page as when the user clicks on them.
-	display_settings_div = document.getElementById("display-settings-div");
-	if (e.target.corresponding_div.id == "sys-util-div" && navigation_selector_obj.prev_view == "overview-div") {
-	    document.getElementById("overview-div").removeChild(display_settings_div);
-	    document.getElementById("sys-util-div").insertBefore(display_settings_div, document.getElementById("sys-util-div").firstChild);
-	    navigation_selector_obj.prev_view = "sys-util-div";
-	}
-	else if (e.target.corresponding_div.id == "overview-div" && navigation_selector_obj.prev_view == "sys-util-div") {
-	    document.getElementById("sys-util-div").removeChild(display_settings_div);
-	    document.getElementById("overview-div").insertBefore(display_settings_div, document.getElementById("overview-div").firstChild);
-	    navigation_selector_obj.prev_view = "overview-div";
-	}
 	e.target.corresponding_div.style.display = "block";
     }
 }
@@ -67,13 +53,16 @@ overview_page_obj={
 		     {"name":"RAM usage", "idx":"RAM"}],
 
     top_fun: function(e) {
+	document.getElementById("rack-view-button").addEventListener("click", overview_page_obj.populate_rack_view);
+	document.getElementById("graph-view-button").addEventListener("click", overview_page_obj.populate_graph_view);
+
 	// Need to populate the racks.
 	from_date = document.getElementById("from-date-input").value;
 	to_date = document.getElementById("to-date-input").value;
 	color_coding_selector = document.getElementById("color-coding-selector").value;
 
 	xhr_object = new XMLHttpRequest();
-	xhr_object.onload = overview_page_obj.populate_rack_view_callback;
+	xhr_object.onload = overview_page_obj.get_machine_overview_data_callback;
 	xhr_object.open('GET', navigation_selector_obj.backend_url
 			+ '/api/v2/overview-page-data/'
 			+ color_coding_selector + '/'
@@ -91,18 +80,117 @@ overview_page_obj={
 	}
     },
 
-    populate_rack_view_callback: function() {
+    get_machine_overview_data_callback: function() {
 	if(this.readyState == 4 && this.status == 200)
 	{
 	    var res = this.responseText;
-	    var res_json = JSON.parse(res);
-	    overview_page_obj.populate_rack_view(res_json);
+	    var data_json = JSON.parse(res);
+	    overview_page_obj.data_json = data_json;
+	    flattened_data_json = [];
+
+	    for (let i in data_json) {
+		for (let j in data_json[i]['rack_list']) {
+		    for (let k in data_json[i]['rack_list'][j]['machine_list']) {
+			to_add = data_json[i]['rack_list'][j]['machine_list'][k];
+			flattened_data_json.push(to_add);
+		    }
+		}
+	    }
+
+	    overview_page_obj.flattened_data_json = flattened_data_json.sort(
+		function(a, b) {
+		    return a["value"] - b["value"];
+		});
+
+	    overview_page_obj.order_of_view = "low-top";
+	    overview_page_obj.refresh_vidualization();
 	}
     },
 
-    populate_rack_view: function(data_json) {
-	main_rack_div = document.getElementById("rack-disp");
+    refresh_vidualization: function() {
+	if (document.getElementById("machine-graph-disp").style.display != "none") {
+	    overview_page_obj.populate_graph_view(null);
+	}
+	else {
+	    overview_page_obj.populate_rack_view(null);
+	}
+    },
+
+    toggle_sorted_view: function(e) {
+	if (overview_page_obj.order_of_view != "low-top") {
+	    overview_page_obj.order_of_view = "low-top";
+	}
+	else {
+	    overview_page_obj.order_of_view = "high-top";
+	}
+	ul_object = document.getElementById("machine-graph-sorted-view-list-div");
+	overview_page_obj.populate_sorted_graph_view(ul_object);
+    },
+
+    populate_graph_view: function(e) {
+	document.getElementById("machine-rack-disp").style.display = "none";
+	main_graph_div = document.getElementById("machine-graph-disp");
+	main_graph_div.style.display = "block";
+	main_graph_div.innerHTML = "";
+	graph_view_div = document.createElement("div");
+	graph_view_div.id = "machine-graph-disp-inner-div";
+	ul_object = document.createElement("ul");
+	ul_object.id = "machine-graph-sorted-view-list-div";
+	ul_object.classList.add("w3-ul", "w3-center", "w3-tiny", "w3-col");
+	ul_object.style.width=(100/overview_page_obj.number_of_racks_in_row).toString()+"%";
+	graph_view_div.classList.add("w3-row-padding", "w3-container", "w3-padding-small");
+	main_graph_div.appendChild(graph_view_div);
+	overview_page_obj.populate_sorted_graph_view(ul_object);
+    },
+
+    populate_sorted_graph_view: function(ul_object) {
+	ul_object.innerHTML = "";
+	flattened_data_json = overview_page_obj.flattened_data_json.slice(0);
+	coloring_function = null;
+	sorted_text = "Sort descending";
+
+	// different coloring functions based on the data requested by the user.
+	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
+	    document.getElementById("color-coding-selector").value == "RAM utilization") {
+	    coloring_function = overview_page_obj.color_machines_based_on_cpu_ram_data;
+	}
+	else {
+	    coloring_function = overview_page_obj.color_machines_based_on_last_login_data;
+	}
+
+	if (overview_page_obj.order_of_view != "low-top") {
+	    flattened_data_json = flattened_data_json.reverse();
+	    sorted_text = "Sort ascending";
+	}
+
+	li_object = document.createElement("li");
+	li_object.classList.add("w3-medium", "w3-border-black", "w3-gray", "w3-hover-shadow");
+	li_object.style.cursor = "pointer";
+	li_object.innerHTML = sorted_text;
+	li_object.addEventListener("click", overview_page_obj.toggle_sorted_view);
+	ul_object.appendChild(li_object);
+
+	for (let i in flattened_data_json) {
+	    li_object = document.createElement("li");
+	    li_object.rlmon_id = flattened_data_json[i]["_id"];
+	    li_object.classList.add("w3-hover-shadow", "w3-border-black");
+	    li_object.style.cursor = "pointer";
+	    value = flattened_data_json[i]["value"];
+	    li_object.innerHTML = value;
+	    li_object.addEventListener("click", machine_details_obj.change_view);
+	    coloring_function(value, li_object);
+	    ul_object.appendChild(li_object);
+	}
+
+	graph_view_div.appendChild(ul_object);
+    },
+
+    populate_rack_view: function(e) {
+	document.getElementById("machine-graph-disp").style.display = "none";
+	main_rack_div = document.getElementById("machine-rack-disp");
+	main_rack_div.style.display = "block";
 	main_rack_div.innerHTML = "";
+	data_json = overview_page_obj.data_json;
 	var i, j, k;
 	var rack_group = null;
 	var no_data = false;
@@ -112,20 +200,20 @@ overview_page_obj={
 	// different coloring functions based on the data requested by the user.
 	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
 	    document.getElementById("color-coding-selector").value == "RAM utilization") {
-	    coloring_function = this.color_machines_based_on_cpu_ram_data;
+	    coloring_function = overview_page_obj.color_machines_based_on_cpu_ram_data;
 	}
 	else {
-	    coloring_function = this.color_machines_based_on_last_login_data;
+	    coloring_function = overview_page_obj.color_machines_based_on_last_login_data;
 	}
 
-	this.update_legend();
+	overview_page_obj.update_legend();
 
 	for (let i in data_json) {
 	    // for each room
 	    j_idx = 0;
 	    for (let j in data_json[i]['rack_list']) {
 		// for each rack.
-		if (j_idx%this.number_of_racks_in_row==0) {
+		if (j_idx%overview_page_obj.number_of_racks_in_row==0) {
 		    // make a new rack group.
 		    rack_group = document.createElement("div");
 		    rack_group.classList.add('5-racks', 'w3-row-padding');
@@ -134,7 +222,7 @@ overview_page_obj={
 		rack_object = document.createElement("div");
 		num_racks += 1;
 		rack_object.classList.add("w3-col", "w3-container", "w3-padding-small", "w3-border-black");
-		rack_object.style.width=(100/this.number_of_racks_in_row).toString()+"%";
+		rack_object.style.width=(100/overview_page_obj.number_of_racks_in_row).toString()+"%";
 		ul_object = document.createElement("ul");
 		ul_object.classList.add("w3-ul", "w3-center", "w3-tiny");
 
@@ -151,6 +239,7 @@ overview_page_obj={
 		    num_machines += 1;
 		    li_object.rlmon_id = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 		    li_object.classList.add("w3-hover-shadow", "w3-border-black");
+		    li_object.style.cursor = "pointer";
 		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 
 		    value = data_json[i]['rack_list'][j]['machine_list'][k]["value"];
@@ -164,8 +253,8 @@ overview_page_obj={
 		    li_object.appendChild(meta_data_obj);
 
 		    if (!no_data) {
-			li_object.addEventListener("mouseover", this.show_meta_data_div_timer);
-			li_object.addEventListener("mouseout", this.hide_meta_data_div);
+			li_object.addEventListener("mouseover", overview_page_obj.show_meta_data_div_timer);
+			li_object.addEventListener("mouseout", overview_page_obj.hide_meta_data_div);
 		    }
 		    li_object.addEventListener("click", machine_details_obj.change_view);
 
@@ -175,7 +264,7 @@ overview_page_obj={
 
 		rack_group.appendChild(rack_object);
 
-		if (j_idx%this.number_of_racks_in_row==0) {
+		if (j_idx%overview_page_obj.number_of_racks_in_row==0) {
 		    main_rack_div.appendChild(rack_group);
 		}
 		j_idx = j_idx + 1;
