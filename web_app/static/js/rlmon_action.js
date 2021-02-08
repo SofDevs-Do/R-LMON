@@ -39,6 +39,16 @@ navigation_selector_obj={
 	for (i = 0; i < x.length; i++) {
 	    x[i].style.display = "none";
 	}
+
+	display_settings_div = document.getElementById("display-settings-div");
+	if (e.target.corresponding_div.id == "sys-util-div") {
+	    document.getElementById("overview-div").removeChild(display_settings_div);
+	    document.getElementById("sys-util-div").insertBefore(display_settings_div, document.getElementById("sys-util-div").firstChild);
+	}
+	else if (e.target.corresponding_div.id == "overview-div") {
+	    document.getElementById("sys-util-div").removeChild(display_settings_div);
+	    document.getElementById("overview-div").insertBefore(display_settings_div, document.getElementById("overview-div").firstChild);
+	}
 	e.target.corresponding_div.style.display = "block";
     }
 }
