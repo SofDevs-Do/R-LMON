@@ -467,5 +467,9 @@ machine_details_obj={
 	    }
 	});
 
+	var ip_md_div = document.getElementById("ip-md");
+	ip_md_div.innerHTML = "";
+	ip_md_div.innerHTML = "<li><h4>IPs :</h4></li> <li>" + ip_info.join(' </li> <li> ') + " </li> </ul>";
+	
     }
 }
