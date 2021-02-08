@@ -65,6 +65,15 @@ overview_page_obj={
 			+ from_date +'/'
 			+ to_date);
 	xhr_object.send();
+
+	if (e != null && e.target.id == "color-coding-selector" && color_coding_selector == "Last login") {
+	    document.getElementById("from-date-input").disabled = true;
+	    document.getElementById("to-date-input").disabled = true;
+	}
+	else {
+	    document.getElementById("from-date-input").disabled = false;
+	    document.getElementById("to-date-input").disabled = false;
+	}
     },
 
     populate_rack_view_callback: function() {
@@ -81,6 +90,19 @@ overview_page_obj={
 	main_rack_div.innerHTML = "";
 	var i, j, k;
 	var rack_group = null;
+	var no_data = false;
+	coloring_function = null;
+
+	// different coloring functions based on the data requested by the user.
+	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
+	    document.getElementById("color-coding-selector").value == "RAM utilization") {
+	    coloring_function = this.color_machines_based_on_cpu_ram_data;
+	}
+	else {
+	    coloring_function = this.color_machines_based_on_last_login_data;
+	}
+
+	this.update_legend();
 
 	for (let i in data_json) {
 	    // for each room
@@ -108,27 +130,14 @@ overview_page_obj={
 		// add machines to each rack.
 		// for (k = 0; k < data_json[i]['rack_list'][j]['machine_list'].length; k++) {
 		for (let k in data_json[i]['rack_list'][j]['machine_list']) {
+		    no_data = false;
 		    li_object = document.createElement("li");
 		    li_object.rlmon_id = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 		    li_object.classList.add("w3-hover-shadow", "w3-border-black");
 		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 
 		    value = data_json[i]['rack_list'][j]['machine_list'][k]["value"];
-		    if ((value >= 0) && (value < 25)) {
-			li_object.classList.add("w3-deep-orange");
-		    }
-		    else if ((value >= 25) && (value < 50)) {
-			li_object.classList.add("w3-amber");
-		    }
-		    else if ((value >= 50) && (value < 75)) {
-			li_object.classList.add("w3-light-green");
-		    }
-		    else if ((value >= 75) && (value < 100)) {
-			li_object.classList.add("w3-green");
-		    }
-		    else {
-			li_object.classList.add("w3-black");
-		    }
+		    coloring_function(value, li_object);
 
 		    meta_data_obj = document.createElement("div");
 		    meta_data_obj.classList.add("w3-panel", "w3-dark-gray", "w3-hover-shadow");
@@ -137,8 +146,10 @@ overview_page_obj={
 		    meta_data_obj.meta_data_added = false;
 		    li_object.appendChild(meta_data_obj);
 
-		    li_object.addEventListener("mouseover", this.show_meta_data_div_timer);
-		    li_object.addEventListener("mouseout", this.hide_meta_data_div);
+		    if (!no_data) {
+			li_object.addEventListener("mouseover", this.show_meta_data_div_timer);
+			li_object.addEventListener("mouseout", this.hide_meta_data_div);
+		    }
 		    li_object.addEventListener("click", machine_details_obj.change_view);
 
 		    ul_object.appendChild(li_object);
@@ -152,6 +163,70 @@ overview_page_obj={
 		}
 		j_idx = j_idx + 1;
 	    }
+	}
+    },
+
+    update_legend: function() {
+	legend_key = document.getElementById("color-coding-selector").value;
+
+	if (legend_key == "CPU utilization" || legend_key == "RAM utilization") {
+	    document.getElementById("legend-div-1").innerHTML = "0-24";
+	    document.getElementById("legend-div-2").innerHTML = "25-49";
+	    document.getElementById("legend-div-3").innerHTML = "50-74";
+	    document.getElementById("legend-div-4").innerHTML = "74-100";
+	}
+	else {
+	    document.getElementById("legend-div-1").innerHTML = ">4w";
+	    document.getElementById("legend-div-2").innerHTML = "3w";
+	    document.getElementById("legend-div-3").innerHTML = "2w";
+	    document.getElementById("legend-div-4").innerHTML = "1w";
+	}
+    },
+
+    color_machines_based_on_cpu_ram_data: function(value, li_object) {
+	if ((value >= 0) && (value < 25)) {
+	    li_object.classList.add("w3-deep-orange");
+	}
+	else if ((value >= 25) && (value < 50)) {
+	    li_object.classList.add("w3-amber");
+	}
+	else if ((value >= 50) && (value < 75)) {
+	    li_object.classList.add("w3-light-green");
+	}
+	else if ((value >= 75) && (value < 100)) {
+	    li_object.classList.add("w3-green");
+	}
+	else {
+	    li_object.classList.add("w3-black");
+	    no_data = true;
+	}
+    },
+
+    color_machines_based_on_last_login_data: function(value, li_object) {
+
+	today = new Date(new Date().setDate(new Date().getDate()));
+	one_week_back_date = new Date(new Date().setDate(new Date().getDate()-7));
+	two_week_back_date = new Date(new Date().setDate(new Date().getDate()-14));
+	three_week_back_date = new Date(new Date().setDate(new Date().getDate()-21));
+	four_week_back_date = new Date(new Date().setDate(new Date().getDate()-28));
+
+	value_date = new Date(Date.parse(value));
+
+	if (value_date < three_week_back_date) {
+	    li_object.classList.add("w3-deep-orange");
+	}
+	else if (value_date < two_week_back_date) {
+	    li_object.classList.add("w3-amber");
+	}
+	else if (value_date < one_week_back_date) {
+	    li_object.classList.add("w3-light-green");
+	}
+	else if (value_date <= today ) {
+	    li_object.classList.add("w3-green");
+	}
+	else {
+	    li_object.classList.add("w3-black");
+	    no_data = true;
 	}
     },
 
