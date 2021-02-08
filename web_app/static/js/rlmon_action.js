@@ -1,6 +1,7 @@
 navigation_selector_obj={
 
     backend_url: "http://127.0.0.1:8000",
+    prev_view : "overview-div",
 
     setup_nav_buttons: function() {
 	var x;
@@ -40,14 +41,18 @@ navigation_selector_obj={
 	    x[i].style.display = "none";
 	}
 
+	// Reuse the display settings div and move it between the overview page and
+	// sys util page as when the user clicks on them.
 	display_settings_div = document.getElementById("display-settings-div");
-	if (e.target.corresponding_div.id == "sys-util-div") {
+	if (e.target.corresponding_div.id == "sys-util-div" && navigation_selector_obj.prev_view == "overview-div") {
 	    document.getElementById("overview-div").removeChild(display_settings_div);
 	    document.getElementById("sys-util-div").insertBefore(display_settings_div, document.getElementById("sys-util-div").firstChild);
+	    navigation_selector_obj.prev_view = "sys-util-div";
 	}
-	else if (e.target.corresponding_div.id == "overview-div") {
+	else if (e.target.corresponding_div.id == "overview-div" && navigation_selector_obj.prev_view == "sys-util-div") {
 	    document.getElementById("sys-util-div").removeChild(display_settings_div);
 	    document.getElementById("overview-div").insertBefore(display_settings_div, document.getElementById("overview-div").firstChild);
+	    navigation_selector_obj.prev_view = "overview-div";
 	}
 	e.target.corresponding_div.style.display = "block";
     }
