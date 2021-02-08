@@ -38,6 +38,10 @@ def get_machine_overview_meta_data(machine_id, from_date, to_date):
 
     return to_ret
 
+@app.route("/api/v2/machine-details-page-data/<string:machine_id>")
+def get_machine_details(machine_id):
+    to_ret = util_obj.get_machine_data(machine_id)
+    return to_ret
 
 @app.route("/")
 def index():
