@@ -269,6 +269,39 @@ machine_details_obj={
             "padma": "Mon Sep 14 13:06:40",
             "ravi": "**Never logged in**"
 	}
+	var avg_cpu_util_val = 20.25;
+	var avg_cpu_util_data = {
+	    datasets: [{
+		data: [avg_cpu_util_val, (100-avg_cpu_util_val)],
+		backgroundColor: ['rgba(54, 162, 155, 1)', 'transparent'],
+		borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+	    }],
+	    labels: ['Avg CPU utilized %', 'Avg CPU Un-utilized%']
+	};
+	var avg_ram_util_val = 20.25;
+	var avg_ram_util_data = {
+	    datasets: [{
+		data: [avg_ram_util_val, (100-avg_ram_util_val)],
+		backgroundColor: ['rgba(254, 162, 55, 1)', 'transparent'],
+		borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+	    }],
+	    labels: ['Avg RAM utilized %', 'Avg RAM Un-utilized%']
+	};
+	var avg_disk_util_val = 60.25;
+	var avg_disk_util_val1 = 20.25;
+	var avg_disk_util_data = {
+	    datasets: [{
+		           data: [avg_disk_util_val, (100-avg_disk_util_val)],
+		           backgroundColor: ['rgba(54, 255, 55, 1)', 'transparent'],
+		           // borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+	               },
+		       {
+			   data: [avg_disk_util_val1, (100-avg_disk_util_val1)],
+			   backgroundColor: ['rgba(254, 255, 55, 1)', 'transparent'],
+			   // borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+		       }],
+	    labels: ['Avg Disk utilized %', 'AVg Disk Un-utilized%']
+	};
 	
 	var server_name_div = document.getElementById("server-name-md");
 	server_name_div.innerHTML = "Server : " + server_name;
@@ -280,7 +313,7 @@ machine_details_obj={
 	// ip_info_div.innerHTML = "IPs : " + ip_info.join(', ');
 
 	var os_info_div = document.getElementById("os-info-md");
-	os_info_div.innerHTML = "<td>" + "Operating System : " + "</td> <td>" + os_info + "</td>";
+	os_info_div.innerHTML = "<td>" + "OS : " + "</td> <td>" + os_info + "</td>";
 
 	var cpu_model_div = document.getElementById("cpu-model-md");
 	cpu_model_div.innerHTML = "<td>" +"CPU Model : " + "</td> <td>" + cpu_model + "</td>";
@@ -313,6 +346,51 @@ machine_details_obj={
 	    cell2.innerHTML = users_last_login_info[users_list[i]];
 	}
 	users_last_login_table.classList.add("w3-table", "w3-striped", "w3-bordered", "w3-small", "w3-round");
+
+	var ctx = document.getElementById("avg-cpu-util-doughnut-chart-canvas");
+	var avg_cpu_util_donoughnut_chart = new Chart(ctx, {
+	    type: 'doughnut',
+	    data: avg_cpu_util_data,
+	    options: {
+		responsive: true,
+		cutoutPercentage: 60,
+		legend: false,
+		title: {
+		    display: true,
+		    text: 'Average CPU Utilization'
+		}
+	    }
+	});
+
+	var ctx_ram = document.getElementById("avg-ram-util-doughnut-chart-canvas");
+	var avg_ram_util_donoughnut_chart = new Chart(ctx_ram, {
+	    type: 'doughnut',
+	    data: avg_ram_util_data,
+	    options: {
+		responsive: true,
+		cutoutPercentage: 60,
+		legend: false,
+		title: {
+		    display: true,
+		    text: 'Average RAM Utilization'
+		},
+	    }
+	});
 	
+	var ctx_disk = document.getElementById("avg-disk-util-doughnut-chart-canvas");
+	var avg_disk_util_donoughnut_chart = new Chart(ctx_disk, {
+	    type: 'doughnut',
+	    data: avg_disk_util_data,
+	    options: {
+		responsive: true,
+		cutoutPercentage: 60,
+		legend: false,
+		title: {
+		    display: true,
+		    text: 'Average Disk Utilization'
+		},
+	    }
+	});
+
     }
 }
