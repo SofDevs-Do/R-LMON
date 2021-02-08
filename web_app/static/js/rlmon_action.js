@@ -134,13 +134,25 @@ overview_page_obj={
 	main_graph_div.innerHTML = "";
 	graph_view_div = document.createElement("div");
 	graph_view_div.id = "machine-graph-disp-inner-div";
+	graph_view_div.classList.add("w3-row-padding", "w3-container", "w3-padding-small");
 	ul_object = document.createElement("ul");
 	ul_object.id = "machine-graph-sorted-view-list-div";
 	ul_object.classList.add("w3-ul", "w3-center", "w3-tiny", "w3-col");
 	ul_object.style.width=(100/overview_page_obj.number_of_racks_in_row).toString()+"%";
-	graph_view_div.classList.add("w3-row-padding", "w3-container", "w3-padding-small");
+	graph_canvas = document.createElement("canvas");
+	graph_canvas.id = "machine-graph-graph-canvas-div";
+	graph_canvas.classList.add("w3-ul", "w3-center", "w3-tiny", "w3-col");
+	graph_canvas.style.width=(100-(100/overview_page_obj.number_of_racks_in_row)).toString()+"%";
+
+	graph_view_div.appendChild(ul_object);
+	graph_view_div.appendChild(graph_canvas);
 	main_graph_div.appendChild(graph_view_div);
 	overview_page_obj.populate_sorted_graph_view(ul_object);
+	overview_page_obj.populate_bar_graph_view(graph_canvas);
+    },
+
+    populate_bar_graph_view: function(graph_canvas) {
+	graph_canvas.innerHTML = "";
     },
 
     populate_sorted_graph_view: function(ul_object) {
@@ -176,13 +188,11 @@ overview_page_obj={
 	    li_object.classList.add("w3-hover-shadow", "w3-border-black");
 	    li_object.style.cursor = "pointer";
 	    value = flattened_data_json[i]["value"];
-	    li_object.innerHTML = value;
+	    li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + value.toFixed(2);
 	    li_object.addEventListener("click", machine_details_obj.change_view);
 	    coloring_function(value, li_object);
 	    ul_object.appendChild(li_object);
 	}
-
-	graph_view_div.appendChild(ul_object);
     },
 
     populate_rack_view: function(e) {
