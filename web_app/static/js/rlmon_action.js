@@ -65,6 +65,15 @@ overview_page_obj={
 			+ from_date +'/'
 			+ to_date);
 	xhr_object.send();
+
+	if (e != null && e.target.id == "color-coding-selector" && color_coding_selector == "Last login") {
+	    document.getElementById("from-date-input").disabled = true;
+	    document.getElementById("to-date-input").disabled = true;
+	}
+	else {
+	    document.getElementById("from-date-input").disabled = false;
+	    document.getElementById("to-date-input").disabled = false;
+	}
     },
 
     populate_rack_view_callback: function() {
@@ -116,21 +125,13 @@ overview_page_obj={
 		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 
 		    value = data_json[i]['rack_list'][j]['machine_list'][k]["value"];
-		    if ((value >= 0) && (value < 25)) {
-			li_object.classList.add("w3-deep-orange");
-		    }
-		    else if ((value >= 25) && (value < 50)) {
-			li_object.classList.add("w3-amber");
-		    }
-		    else if ((value >= 50) && (value < 75)) {
-			li_object.classList.add("w3-light-green");
-		    }
-		    else if ((value >= 75) && (value < 100)) {
-			li_object.classList.add("w3-green");
+
+		    if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
+			document.getElementById("color-coding-selector").value == "RAM utilization") {
+			this.color_machines_based_on_cpu_ram_data(value, li_object);
 		    }
 		    else {
-			li_object.classList.add("w3-black");
-			no_data = true;
+			this.color_machines_based_on_last_login_data(value, li_object);
 		    }
 
 		    meta_data_obj = document.createElement("div");
@@ -157,6 +158,53 @@ overview_page_obj={
 		}
 		j_idx = j_idx + 1;
 	    }
+	}
+    },
+
+    color_machines_based_on_cpu_ram_data: function(value, li_object) {
+	if ((value >= 0) && (value < 25)) {
+	    li_object.classList.add("w3-deep-orange");
+	}
+	else if ((value >= 25) && (value < 50)) {
+	    li_object.classList.add("w3-amber");
+	}
+	else if ((value >= 50) && (value < 75)) {
+	    li_object.classList.add("w3-light-green");
+	}
+	else if ((value >= 75) && (value < 100)) {
+	    li_object.classList.add("w3-green");
+	}
+	else {
+	    li_object.classList.add("w3-black");
+	    no_data = true;
+	}
+    },
+
+    color_machines_based_on_last_login_data: function(value, li_object) {
+
+	today = new Date(new Date().setDate(new Date().getDate()));
+	one_week_back_date = new Date(new Date().setDate(new Date().getDate()-7));
+	two_week_back_date = new Date(new Date().setDate(new Date().getDate()-14));
+	three_week_back_date = new Date(new Date().setDate(new Date().getDate()-21));
+	four_week_back_date = new Date(new Date().setDate(new Date().getDate()-28));
+
+	value_date = new Date(Date.parse(value));
+
+	if (value_date < three_week_back_date) {
+	    li_object.classList.add("w3-deep-orange");
+	}
+	else if (value_date < two_week_back_date) {
+	    li_object.classList.add("w3-amber");
+	}
+	else if (value_date < one_week_back_date) {
+	    li_object.classList.add("w3-light-green");
+	}
+	else if (value_date <= today ) {
+	    li_object.classList.add("w3-green");
+	}
+	else {
+	    li_object.classList.add("w3-black");
+	    no_data = true;
 	}
     },
 
