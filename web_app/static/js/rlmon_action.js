@@ -1,6 +1,7 @@
 navigation_selector_obj={
 
     backend_url: "http://127.0.0.1:8000",
+    prev_view : "overview-div",
 
     setup_nav_buttons: function() {
 	var x;
@@ -39,6 +40,20 @@ navigation_selector_obj={
 	for (i = 0; i < x.length; i++) {
 	    x[i].style.display = "none";
 	}
+
+	// Reuse the display settings div and move it between the overview page and
+	// sys util page as when the user clicks on them.
+	display_settings_div = document.getElementById("display-settings-div");
+	if (e.target.corresponding_div.id == "sys-util-div" && navigation_selector_obj.prev_view == "overview-div") {
+	    document.getElementById("overview-div").removeChild(display_settings_div);
+	    document.getElementById("sys-util-div").insertBefore(display_settings_div, document.getElementById("sys-util-div").firstChild);
+	    navigation_selector_obj.prev_view = "sys-util-div";
+	}
+	else if (e.target.corresponding_div.id == "overview-div" && navigation_selector_obj.prev_view == "sys-util-div") {
+	    document.getElementById("sys-util-div").removeChild(display_settings_div);
+	    document.getElementById("overview-div").insertBefore(display_settings_div, document.getElementById("overview-div").firstChild);
+	    navigation_selector_obj.prev_view = "overview-div";
+	}
 	e.target.corresponding_div.style.display = "block";
     }
 }
@@ -66,7 +81,7 @@ overview_page_obj={
 			+ to_date);
 	xhr_object.send();
 
-	if (e != null && e.target.id == "color-coding-selector" && color_coding_selector == "Last login") {
+	if (document.getElementById("color-coding-selector").value == "Last login") {
 	    document.getElementById("from-date-input").disabled = true;
 	    document.getElementById("to-date-input").disabled = true;
 	}
@@ -92,6 +107,7 @@ overview_page_obj={
 	var rack_group = null;
 	var no_data = false;
 	coloring_function = null;
+	var num_machines = 0, num_racks = 0;
 
 	// different coloring functions based on the data requested by the user.
 	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
@@ -116,6 +132,7 @@ overview_page_obj={
 		}
 
 		rack_object = document.createElement("div");
+		num_racks += 1;
 		rack_object.classList.add("w3-col", "w3-container", "w3-padding-small", "w3-border-black");
 		rack_object.style.width=(100/this.number_of_racks_in_row).toString()+"%";
 		ul_object = document.createElement("ul");
@@ -128,10 +145,10 @@ overview_page_obj={
 		ul_object.appendChild(li_object);
 
 		// add machines to each rack.
-		// for (k = 0; k < data_json[i]['rack_list'][j]['machine_list'].length; k++) {
 		for (let k in data_json[i]['rack_list'][j]['machine_list']) {
 		    no_data = false;
 		    li_object = document.createElement("li");
+		    num_machines += 1;
 		    li_object.rlmon_id = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 		    li_object.classList.add("w3-hover-shadow", "w3-border-black");
 		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
@@ -164,6 +181,8 @@ overview_page_obj={
 		j_idx = j_idx + 1;
 	    }
 	}
+	document.getElementById("number-of-racks").innerHTML = num_racks;
+	document.getElementById("number-of-machines").innerHTML = num_machines;
     },
 
     update_legend: function() {
