@@ -335,6 +335,7 @@ machine_details_obj={
 	var ip_info = ['10.10.3.212', '192.168.113.224'];
 	var kvm_info = ['01-1'];
 	var assigned_to_info = ['Prof ABCD'];
+	var comments_info = ['Hadoop Cluster', 'KVM Host'];
 	var os_info = "Ubuntu 20.04.1 LTS";
 	var cpu_model = "Intel(R) Core(TM) i3-5005U CPU @ 2.00GHz"
 	var ram_capacity_info = "7.63"
@@ -480,6 +481,9 @@ machine_details_obj={
 	var kvm_info_md_div = document.getElementById("kvm-info-md");
 	kvm_info_md_div.innerHTML = "";
 	kvm_info_md_div.innerHTML = "<li><h6>KVM Switch </h6></li> <li>" + kvm_info.join(' </li> <li> ') + " </li> </ul>";
-	
+
+	var comments_md_div = document.getElementById("comments-md");
+	comments_md_div.innerHTML = "";
+	comments_md_div.innerHTML = "<li><h6>Comments </h6></li> <li>" + comments_info.join(' </li> <li> ') + " </li> </ul>";	
     }
 }
