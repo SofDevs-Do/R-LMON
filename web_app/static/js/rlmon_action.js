@@ -333,6 +333,8 @@ machine_details_obj={
 	var server_name = "A-15";
 	var hostname = "Blossom";
 	var ip_info = ['10.10.3.212', '192.168.113.224'];
+	var kvm_info = ['01-1'];
+	var assigned_to_info = ['Prof ABCD'];
 	var os_info = "Ubuntu 20.04.1 LTS";
 	var cpu_model = "Intel(R) Core(TM) i3-5005U CPU @ 2.00GHz"
 	var ram_capacity_info = "7.63"
@@ -469,7 +471,15 @@ machine_details_obj={
 
 	var ip_md_div = document.getElementById("ip-md");
 	ip_md_div.innerHTML = "";
-	ip_md_div.innerHTML = "<li><h4>IPs :</h4></li> <li>" + ip_info.join(' </li> <li> ') + " </li> </ul>";
+	ip_md_div.innerHTML = "<li><h4>IPs </h4></li> <li>" + ip_info.join(' </li> <li> ') + " </li> </ul>";
+
+	var assigned_to_md_div = document.getElementById("assigned-to-md");
+	assigned_to_md_div.innerHTML = "";
+	assigned_to_md_div.innerHTML = "<li><h6>Assigned To </h6></li> <li>" + assigned_to_info.join(' </li> <li> ') + " </li> </ul>";
+
+	var kvm_info_md_div = document.getElementById("kvm-info-md");
+	kvm_info_md_div.innerHTML = "";
+	kvm_info_md_div.innerHTML = "<li><h6>KVM Switch </h6></li> <li>" + kvm_info.join(' </li> <li> ') + " </li> </ul>";
 	
     }
 }
