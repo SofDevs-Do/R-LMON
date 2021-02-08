@@ -380,7 +380,7 @@ machine_details_obj={
 	
 	var server_name_div = document.getElementById("server-name-md");
 	server_name_div.innerHTML = "Server : " + server_name;
-
+	
 	var hostname_div = document.getElementById("hostname-md");
 	hostname_div.innerHTML = "<td>" + "Hostname : " + "</td> <td>" +  hostname + "</td>";
 

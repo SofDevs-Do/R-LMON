@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <title>CCBD Systems Monitoring Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script type="text/javascript" src="js/rlmon_action.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
@@ -119,8 +121,16 @@
       <div class="w3-container w3-col s4">
 	<div class="w3-row s4 w3-padding">
 	  <header class="w3-container w3-blue w3-padding w3-round-small">
-	    <h2 id="server-name-md" class="w3-center"> </h2>
+	    <h3 id="server-name-md" class="w3-center"> </h3>
 	  </header>
+	</div>
+	<div class="w3-container w3-row w3-padding">
+	  <div id="controls-md" class="w3-card w3-round-large">
+	    <button class="w3-button w3-padding-small w3-round w3-border w3-border-red w3-small w3-red"><i class="fa fa-power-off"></i> Power Off </button>
+	    <button class="w3-button w3-padding-small w3-round w3-border w3-border-teal w3-small w3-teal"><i class="fa fa-refresh"></i> Reboot </button>
+	    <button class="w3-button w3-padding-small w3-round w3-border w3-border-indigo w3-small w3-indigo"><i class="glyphicon glyphicon-file"></i> Get Syslog </button>
+	    <button class="w3-button w3-padding-small w3-round w3-border w3-border-deep-orange w3-small w3-deep-orange"><i class="fa fa-warning"></i> Warnings </button>
+	  </div>
 	</div>
 	<div class="w3-container w3-row">
 	  <div class="w3-card-4 w3-round-large">
@@ -150,7 +160,7 @@
 	</div>
       </div>
       <div id="avg-util-doughnut-chart-div" class=" w3-section w3-col s4 w3-round">
-	<div class="w3-container w3-row w3-card-4 w3-padding w3-round-large">
+	<div class="w3-container w3-row w3-card-4 w3-round-large">
 	  <div  class="w3-col s6">
 	    <canvas id="avg-cpu-util-doughnut-chart-canvas">
 	    </canvas>
