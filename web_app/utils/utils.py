@@ -39,6 +39,35 @@ class Util:
             return (sum(data_list)/i)
         return -1
 
+    def get_ram_cpu_data(self, what_data, machine_id, from_date, to_date):
+        query_request_dict = dict()
+        data_list = []
+        date_list = []
+        _from_date = datetime.date(*map(lambda x: int(x), from_date.split('-')))
+        _to_date = datetime.date(*map(lambda x: int(x), to_date.split('-')))
+        iter_date = _from_date
+        i = 0
+
+        while iter_date < _to_date + datetime.timedelta(1):
+            query_request_dict[what_data+"." + str(iter_date)] = 1
+            date_list.append(str(iter_date))
+            iter_date += datetime.timedelta(1)
+            i += 1
+
+        query_request_dict["_id"] = 0
+        ret_val = list(self.cpu_ram_disk_col.find({"_id": machine_id}, query_request_dict))[0]
+
+        j = 0
+        for j in date_list:
+            if j not in ret_val[what_data]:
+                data_list.extend([0]*24)
+            else:
+                data_list.extend(ret_val[what_data][j])
+
+        print(data_list)
+        return data_list
+
+
     def get_last_login_data(self, machine_id):
         mongo_ret = list(self.mach_col.find({"_id": machine_id}, {"_id":0, "users_last_login":1}))[0]
         return mongo_ret
