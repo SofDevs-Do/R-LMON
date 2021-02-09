@@ -76,6 +76,7 @@ avg_ram_util_key = "avg_ram_util"
 cpu_util_key = "cpu_util"
 ram_util_key = "ram_util"
 disk_info_key = "disk_info"
+address_key = "address"
 
 # obtaining all the machine_id's for which the data was collected
 # machine_id_list = list(map(int,[ os.path.basename(each_path) for each_path in glob.glob(os.path.join(log_path,'*'))]))
@@ -96,6 +97,10 @@ for machine_id in machine_id_list:
         cpu_ram_disk_dict = dict()
     else:
         cpu_ram_disk_dict = cpu_ram_disk_dict[0]
+
+    # obtain address from data-collected and alter in data_dict
+    address = get_address(log_path, machine_id)
+    data_dict[address_key] = address
 
     # obtain hostname from data-collected and alter in data_dict
     hostname = get_hostname(log_path, machine_id)

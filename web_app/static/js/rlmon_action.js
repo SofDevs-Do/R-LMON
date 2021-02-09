@@ -57,6 +57,8 @@ overview_page_obj={
 	document.getElementById("rack-view-button").addEventListener("click", overview_page_obj.populate_rack_view);
 	document.getElementById("graph-view-button").addEventListener("click", overview_page_obj.populate_graph_view);
 
+	overview_page_obj.update_legend();
+
 	// Need to populate the racks.
 	from_date = document.getElementById("from-date-input").value;
 	to_date = document.getElementById("to-date-input").value;
@@ -183,8 +185,6 @@ overview_page_obj={
 		data_points.push(0);
 	}
 
-	console.log(labels);
-
 	Chart.defaults.global.defaultFontColor = 'black';
 	ctx = graph_canvas.getContext('2d');
 	ctx.font = "semibold 20px 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
@@ -285,7 +285,6 @@ overview_page_obj={
 	    coloring_function = overview_page_obj.color_machines_based_on_last_login_data;
 	}
 
-	overview_page_obj.update_legend();
 
 	for (let i in data_json) {
 	    // for each room
