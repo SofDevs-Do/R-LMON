@@ -510,6 +510,25 @@ machine_details_obj={
 	    x[i].style.display = "none";
 	}
 	document.getElementById("machine-details-div").style.display = "block";
+	
+	// Add event listeners on change of dates in machine details page
+	document.getElementById("from-date-input-md").addEventListener("change", machine_details_obj.top_fun);
+	document.getElementById("to-date-input-md").addEventListener("change", machine_details_obj.top_fun);
+
+	// set the dates, and restrict the 'from date' field to a
+	// month
+	max_date = new Date(new Date().setDate(new Date().getDate()-1));
+	week_back_date = new Date(new Date().setDate(new Date().getDate()-7));
+	min_date = new Date(new Date().setDate(new Date().getDate()-30));
+
+	document.getElementById("from-date-input-md").min = min_date.toISOString().substr(0, 10);
+	document.getElementById("from-date-input-md").max = max_date.toISOString().substr(0, 10);
+	document.getElementById("from-date-input-md").value = week_back_date.toISOString().substr(0, 10);
+	document.getElementById("to-date-input-md").min = min_date.toISOString().substr(0, 10);
+	document.getElementById("to-date-input-md").max = max_date.toISOString().substr(0, 10);
+	document.getElementById("to-date-input-md").value = max_date.toISOString().substr(0, 10);
+
+	// invoke the loading of data.
 	machine_details_obj.top_fun(e.target);
     },
 
