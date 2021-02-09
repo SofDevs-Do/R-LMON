@@ -537,26 +537,8 @@ machine_details_obj={
 	// main_machine_details_div.innerHTML = "machine ID: "+machine_li_obj.rlmon_id.toString();
 
 	machine_details_obj.request_and_fill_mach_col_data(machine_li_obj.rlmon_id.toString());
+	machine_details_obj.request_and_fill_avg_cpu_ram_data(machine_li_obj.rlmon_id.toString());
 
-	avg_cpu_util_val = 20.5;
-	
-	var avg_cpu_util_data = {
-	    datasets: [{
-		data: [avg_cpu_util_val, (100-avg_cpu_util_val)],
-		backgroundColor: ['rgba(54, 162, 155, 1)', 'transparent'],
-		borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
-	    }],
-	    labels: ['Avg CPU utilized %', 'Avg CPU Un-utilized%']
-	};
-	var avg_ram_util_val = 20.25;
-	var avg_ram_util_data = {
-	    datasets: [{
-		data: [avg_ram_util_val, (100-avg_ram_util_val)],
-		backgroundColor: ['rgba(254, 162, 55, 1)', 'transparent'],
-		borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
-	    }],
-	    labels: ['Avg RAM utilized %', 'Avg RAM Un-utilized%']
-	};
 	var avg_disk_util_val = 60.25;
 	var avg_disk_util_val1 = 20.25;
 	var avg_disk_util_data = {
@@ -573,10 +555,67 @@ machine_details_obj={
 	    labels: ['Avg Disk utilized %', 'AVg Disk Un-utilized%']
 	};
 
-	// ip_info_div = document.getElementById("ip-info-md");
-	// ip_info_div.innerHTML = "IPs : " + ip_info.join(', ');
-
 	
+	var ctx_disk = document.getElementById("avg-disk-util-doughnut-chart-canvas");
+	var avg_disk_util_donoughnut_chart = new Chart(ctx_disk, {
+	    type: 'doughnut',
+	    data: avg_disk_util_data,
+	    options: {
+		responsive: true,
+		cutoutPercentage: 60,
+		legend: false,
+		title: {
+		    display: true,
+		    text: 'Average Disk Utilization'
+		},
+	    }
+	});
+
+    },
+
+    request_and_fill_avg_cpu_ram_data: function(machine_id) {
+	var from_date = document.getElementById("from-date-input-md").value;
+	var to_date = document.getElementById("to-date-input-md").value;
+	xhr_object = new XMLHttpRequest();
+	xhr_object.onload = this.get_avg_cpu_ram_data;
+
+	endpoint = navigation_selector_obj.backend_url + '/api/v2/overview-machine-meta-data/' + machine_id + '/' + from_date + '/' + to_date;
+	
+	xhr_object.open('GET', endpoint);
+	xhr_object.send();
+    },
+
+    get_avg_cpu_ram_data: function() {
+	if(this.readyState == 4 && this.status == 200)
+	{
+	    var res = this.responseText;
+	    var res_json = JSON.parse(res);
+	    machine_details_obj.populate_avg_cpu_ram_data(res_json);
+	}
+    },
+
+    populate_avg_cpu_ram_data: function(avg_cpu_ram_data) {
+	var avg_cpu_util_val = parseFloat(avg_cpu_ram_data['CPU'])
+	
+	var avg_cpu_util_data = {
+	    datasets: [{
+		data: [avg_cpu_util_val, (100-avg_cpu_util_val)],
+		backgroundColor: ['rgba(54, 162, 155, 1)', 'transparent'],
+		borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+	    }],
+	    labels: ['Avg CPU utilized %', 'Avg CPU Un-utilized%']
+	};
+
+	var avg_ram_util_val = parseFloat(avg_cpu_ram_data['RAM']);
+	var avg_ram_util_data = {
+	    datasets: [{
+		data: [avg_ram_util_val, (100-avg_ram_util_val)],
+		backgroundColor: ['rgba(254, 162, 55, 1)', 'transparent'],
+		borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+	    }],
+	    labels: ['Avg RAM utilized %', 'Avg RAM Un-utilized%']
+	};
+
 	var ctx = document.getElementById("avg-cpu-util-doughnut-chart-canvas");
 	var avg_cpu_util_donoughnut_chart = new Chart(ctx, {
 	    type: 'doughnut',
@@ -603,21 +642,6 @@ machine_details_obj={
 		title: {
 		    display: true,
 		    text: 'Average RAM Utilization'
-		},
-	    }
-	});
-	
-	var ctx_disk = document.getElementById("avg-disk-util-doughnut-chart-canvas");
-	var avg_disk_util_donoughnut_chart = new Chart(ctx_disk, {
-	    type: 'doughnut',
-	    data: avg_disk_util_data,
-	    options: {
-		responsive: true,
-		cutoutPercentage: 60,
-		legend: false,
-		title: {
-		    display: true,
-		    text: 'Average Disk Utilization'
 		},
 	    }
 	});
