@@ -101,7 +101,7 @@ def get_address(log_path, machine):
     misc_info_file = os.path.join(log_path, machine, MISC_FILE_NAME)
     address = ""
     with open(misc_info_file, "r") as misc_info_fp:
-        address = misc_info_fp.readlines()[1]
+        address = misc_info_fp.readlines()[1].strip()
 
     return address
 
