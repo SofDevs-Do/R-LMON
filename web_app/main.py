@@ -38,6 +38,15 @@ def get_machine_overview_meta_data(machine_id, from_date, to_date):
 
     return to_ret
 
+
+@app.route("/api/v2/machine-details-cpu-ram-data/<string:machine_id>/<string:from_date>/<string:to_date>")
+def get_machine_cpu_ram_data(machine_id, from_date, to_date):
+    to_ret = dict()
+    to_ret["CPU"] = util_obj.get_ram_cpu_data('cpu_util', machine_id, from_date, to_date)
+    to_ret["RAM"] = util_obj.get_ram_cpu_data('ram_util', machine_id, from_date, to_date)
+    return to_ret
+
+
 @app.route("/api/v2/machine-details-page-data/<string:machine_id>")
 def get_machine_details(machine_id):
     to_ret = util_obj.get_machine_data(machine_id)
