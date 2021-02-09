@@ -538,6 +538,7 @@ machine_details_obj={
 
 	machine_details_obj.request_and_fill_mach_col_data(machine_li_obj.rlmon_id.toString());
 	machine_details_obj.request_and_fill_avg_cpu_ram_data(machine_li_obj.rlmon_id.toString());
+	machine_details_obj.populate_avg_disk_data({});
 
 	var avg_disk_util_val = 60.25;
 	var avg_disk_util_val1 = 20.25;
@@ -571,6 +572,34 @@ machine_details_obj={
 	    }
 	});
 
+    },
+
+    populate_avg_disk_data: function(avg_disk_data) {
+	var avg_disk_util_val = 40;
+	
+	var avg_disk_util_data = {
+	    datasets: [{
+		data: [avg_disk_util_val, (100-avg_disk_util_val)],
+		backgroundColor: ['rgba(138, 92, 116, 1)', 'transparent'],
+		borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
+	    }],
+	    labels: ['Avg Disk utilized%', 'Avg Disk Un-utilized%']
+	};
+
+	var ctx = document.getElementById("avg-disk-overall-util-doughnut-chart-canvas");
+	var avg_disk_util_donoughnut_chart = new Chart(ctx, {
+	    type: 'doughnut',
+	    data: avg_disk_util_data,
+	    options: {
+		responsive: true,
+		cutoutPercentage: 60,
+		legend: false,
+		title: {
+		    display: true,
+		    text: 'Average Disk Utilization'
+		}
+	    }
+	});
     },
 
     request_and_fill_avg_cpu_ram_data: function(machine_id) {
