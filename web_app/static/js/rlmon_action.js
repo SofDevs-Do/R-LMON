@@ -349,24 +349,10 @@ machine_details_obj={
 	//main_machine_details_div = document.getElementById("machine-details-div");
 	// main_machine_details_div.innerHTML = "machine ID: "+machine_li_obj.rlmon_id.toString();
 
-	var server_name = "A-15";
-	var hostname = "Blossom";
-	var ip_info = ['10.10.3.212', '192.168.113.224'];
-	var kvm_info = ['01-1'];
-	var assigned_to_info = ['Prof ABCD'];
-	var comments_info = ['Hadoop Cluster', 'KVM Host'];
-	var os_info = "Ubuntu 20.04.1 LTS";
-	var cpu_model = "Intel(R) Core(TM) i3-5005U CPU @ 2.00GHz"
-	var ram_capacity_info = "7.63"
-	var swap_space_info = "3.86"
-	var uptime_info = "4 days, 19 hours, 18 minutes";
-	var users_last_login_info = {
-            "sneha": "Mon Dec 14 16:14:50",
-            "yashas": "Mon Sep 14 11:38:21",
-            "padma": "Mon Sep 14 13:06:40",
-            "ravi": "**Never logged in**"
-	}
-	var avg_cpu_util_val = 20.25;
+	machine_details_obj.request_and_fill_mach_col_data(machine_li_obj.rlmon_id.toString());
+
+	avg_cpu_util_val = 20.5;
+	
 	var avg_cpu_util_data = {
 	    datasets: [{
 		data: [avg_cpu_util_val, (100-avg_cpu_util_val)],
@@ -399,51 +385,11 @@ machine_details_obj={
 		       }],
 	    labels: ['Avg Disk utilized %', 'AVg Disk Un-utilized%']
 	};
-	
-	var server_name_div = document.getElementById("server-name-md");
-	server_name_div.innerHTML = "Server : " + server_name;
-	
-	var hostname_div = document.getElementById("hostname-md");
-	hostname_div.innerHTML = "<td>" + "Hostname : " + "</td> <td>" +  hostname + "</td>";
 
 	// ip_info_div = document.getElementById("ip-info-md");
 	// ip_info_div.innerHTML = "IPs : " + ip_info.join(', ');
 
-	var os_info_div = document.getElementById("os-info-md");
-	os_info_div.innerHTML = "<td>" + "OS : " + "</td> <td>" + os_info + "</td>";
-
-	var cpu_model_div = document.getElementById("cpu-model-md");
-	cpu_model_div.innerHTML = "<td>" +"CPU Model : " + "</td> <td>" + cpu_model + "</td>";
-
-	var ram_capacity_div = document.getElementById("ram-capacity-md");
-	ram_capacity_div.innerHTML = "<td>" + "RAM Capacity : " + "</td> <td>" + ram_capacity_info + " GB" + "</td>";
-
-	var swap_space_div = document.getElementById("swap-space-md");
-	swap_space_div.innerHTML = "<td>" + "Swap Space : " + "</td> <td>" + swap_space_info + " GB" + "</td>";
-
-    	var uptime_info_div = document.getElementById("uptime-info-md");
-	uptime_info_div.innerHTML = "<h6>" + "Up-time : " + uptime_info + "</h6>";
-
-	var users_last_login_table = document.getElementById("users-last-login-table");
-	users_last_login_table.innerHTML = '';
-	console.log(users_last_login_table)
-	var users_list = Object.keys(users_last_login_info).sort()
-	// console.log(users_list);
-	var head_row = users_last_login_table.insertRow(0);
-	var head_cell1 = head_row.insertCell(0);
-	var head_cell2 = head_row.insertCell(1);
-	head_cell1.innerHTML = "<b>User</b>";
-	head_cell2.innerHTML = "<b>Last Login</b>";
-	var i;
-	for(i=0; i<users_list.length; i++) {
-	    var row = users_last_login_table.insertRow(i+1);
-	    var cell1 = row.insertCell(0);
-	    var cell2 = row.insertCell(1);
-	    cell1.innerHTML = users_list[i];
-	    cell2.innerHTML = users_last_login_info[users_list[i]];
-	}
-	users_last_login_table.classList.add("w3-table", "w3-striped", "w3-bordered", "w3-small", "w3-round");
-
+	
 	var ctx = document.getElementById("avg-cpu-util-doughnut-chart-canvas");
 	var avg_cpu_util_donoughnut_chart = new Chart(ctx, {
 	    type: 'doughnut',
@@ -489,20 +435,146 @@ machine_details_obj={
 	    }
 	});
 
-	var ip_md_div = document.getElementById("ip-md");
-	ip_md_div.innerHTML = "";
-	ip_md_div.innerHTML = "<li><h4>IPs </h4></li> <li>" + ip_info.join(' </li> <li> ') + " </li> </ul>";
+    },
 
-	var assigned_to_md_div = document.getElementById("assigned-to-md");
-	assigned_to_md_div.innerHTML = "";
-	assigned_to_md_div.innerHTML = "<li><h6>Assigned To </h6></li> <li>" + assigned_to_info.join(' </li> <li> ') + " </li> </ul>";
+    request_and_fill_mach_col_data: function(machine_id) {
+	xhr_object = new XMLHttpRequest();
+	xhr_object.onload = this.get_mach_col_data;
+	xhr_object.open('GET', navigation_selector_obj.backend_url
+			+ '/api/v2/machine-details-page-data/'
+			+ machine_id);
+	xhr_object.send();
+    },
 
+   get_mach_col_data: function() {
+	if(this.readyState == 4 && this.status == 200)
+	{
+	    var res = this.responseText;
+	    var res_json = JSON.parse(res);
+	    machine_details_obj.populate_mach_col_data(res_json);
+	}
+   },
+
+    populate_mach_col_data: function(mach_col_data) {
+	var server_name = mach_col_data['_id'];
+	machine_details_obj._update_server_name(server_name);
+	
+	var hostname = mach_col_data['hostname'];
+	machine_details_obj._update_hostname(hostname);
+	
+	var ip_info = mach_col_data['ip_info'];
+	machine_details_obj._update_ip_info(ip_info);
+	
+	var kvm_info = ['01-1'];
+	machine_details_obj._update_kvm_info(kvm_info);
+	
+	var assigned_to_info = mach_col_data['assigned_to'];
+	machine_details_obj._update_assigned_to_info(assigned_to_info);
+	
+	var comments_info = [mach_col_data['comments']];
+	machine_details_obj._update_comments_info(comments_info);
+	
+	var os_info = mach_col_data['os_info'];
+	machine_details_obj._update_os_info(os_info);
+	
+	var cpu_model = mach_col_data['cpu_model'];
+	machine_details_obj._update_cpu_model_info(cpu_model);
+	
+	var ram_capacity_info = mach_col_data['ram_capacity'];
+	machine_details_obj._update_ram_capacity_info(ram_capacity_info);
+	
+	var swap_space_info = mach_col_data['swap_info'];
+	machine_details_obj._update_swap_space_info(swap_space_info);
+	
+	var uptime_info = mach_col_data['uptime'];
+	machine_details_obj._update_uptime_info(uptime_info);
+
+	var users_last_login_info = mach_col_data['users_last_login'];
+	machine_details_obj._update_users_last_login_info(users_last_login_info);
+
+    },
+
+    _update_users_last_login_info: function(users_last_login_info){
+	var users_last_login_table = document.getElementById("users-last-login-table");
+	users_last_login_table.innerHTML = '';
+
+	var users_list = Object.keys(users_last_login_info).sort()
+	
+	var head_row = users_last_login_table.insertRow(0);
+	var head_cell1 = head_row.insertCell(0);
+	var head_cell2 = head_row.insertCell(1);
+	head_cell1.innerHTML = "<b>User</b>";
+	head_cell2.innerHTML = "<b>Last Login</b>";
+	var i;
+	for(i=0; i<users_list.length; i++) {
+	    var row = users_last_login_table.insertRow(i+1);
+	    var cell1 = row.insertCell(0);
+	    var cell2 = row.insertCell(1);
+	    cell1.innerHTML = users_list[i];
+	    cell2.innerHTML = users_last_login_info[users_list[i]];
+	}
+	users_last_login_table.classList.add("w3-table", "w3-striped", "w3-bordered", "w3-small", "w3-round");
+
+    },
+
+    _update_uptime_info: function(uptime_info){
+	var uptime_info_div = document.getElementById("uptime-info-md");
+	uptime_info_div.innerHTML = "<h6>" + "Up-time : " + uptime_info + "</h6>";
+    },
+
+    _update_swap_space_info: function(swap_space_info){
+	var swap_space_div = document.getElementById("swap-space-md");
+	swap_space_div.innerHTML = "<td>" + "Swap Space : " + "</td> <td>" + swap_space_info + " GB" + "</td>";
+    },
+
+    _update_ram_capacity_info: function(ram_capacity_info){
+	var ram_capacity_div = document.getElementById("ram-capacity-md");
+	ram_capacity_div.innerHTML = "<td>" + "RAM Capacity : " + "</td> <td>" + ram_capacity_info + " GB" + "</td>";
+    },
+
+    _update_cpu_model_info: function(cpu_model){
+	var cpu_model_div = document.getElementById("cpu-model-md");
+	cpu_model_div.innerHTML = "<td>" +"CPU Model : " + "</td> <td>" + cpu_model + "</td>";
+    },
+
+    _update_kvm_info: function(kvm_info){
 	var kvm_info_md_div = document.getElementById("kvm-info-md");
 	kvm_info_md_div.innerHTML = "";
 	kvm_info_md_div.innerHTML = "<li><h6>KVM Switch </h6></li> <li>" + kvm_info.join(' </li> <li> ') + " </li> </ul>";
+    },
 
+    _update_comments_info: function(comments_info){
 	var comments_md_div = document.getElementById("comments-md");
 	comments_md_div.innerHTML = "";
 	comments_md_div.innerHTML = "<li><h6>Comments </h6></li> <li>" + comments_info.join(' </li> <li> ') + " </li> </ul>";	
+    },
+
+    _update_assigned_to_info: function(assigned_to_info) {
+	var assigned_to_md_div = document.getElementById("assigned-to-md");
+	assigned_to_md_div.innerHTML = "";
+	console.log(assigned_to_info);
+	assigned_to_md_div.innerHTML = "<li><h6>Assigned To </h6></li> <li>" + assigned_to_info +' </li>' + "</ul>";
+    },
+
+    _update_ip_info: function(ip_info) {
+	var ip_md_div = document.getElementById("ip-md");
+	ip_md_div.innerHTML = "";
+	ip_md_div.innerHTML = "<li><h4>IPs </h4></li> <li>" + ip_info.join(' </li> <li> ') + " </li> </ul>";
+    },
+
+    _update_server_name: function(server_name) {
+	var server_name_div = document.getElementById("server-name-md");
+	server_name_div.innerHTML = "Server : " + server_name;
+    },
+
+    _update_hostname: function(hostname) {
+	var hostname_div = document.getElementById("hostname-md");
+	hostname_div.innerHTML = "<td>" + "Hostname : " + "</td> <td>" +  hostname + "</td>";
+    },
+
+    _update_os_info: function(os_info) {
+	var os_info_div = document.getElementById("os-info-md");
+	os_info_div.innerHTML = "<td>" + "OS : " + "</td> <td>" + os_info + "</td>";
     }
+    
 }
