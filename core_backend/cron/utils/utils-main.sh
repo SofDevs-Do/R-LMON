@@ -39,6 +39,7 @@ main()
 	    # storage and performance related issues when planning for scalability.
 	    # Maybe setup a separate pipeline for these information?
 	    echo "${MACHINE_ID}" > "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${REMOTE_MACHINE}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${ROOM_ID}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${RACK_ID}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${MACHINE_LOCATION}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt

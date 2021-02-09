@@ -14,7 +14,7 @@ USERS_LAST_LOGIN_INFO_FILE_NAME = "last-login-info.txt"
 AVG_CPU_UTIL_INFO_FILE_NAME     = "avg-cpu-usage.txt"
 AVG_MEM_UTIL_INFO_FILE_NAME     = "avg-mem-usage.txt"
 DISK_INFO_FILE_NAME             = "disk-info.txt" 
-ASSIGNED_TO_AND_COMMENTS        = "misc-info.txt"
+MISC_FILE_NAME                  = "misc-info.txt"
 
 
 def get_cpu_ram_data(date_dir, machine_id, data_type):
@@ -84,7 +84,7 @@ def get_rack_details(machine_file_path):
 def get_assigned_to_and_comments(log_path, machine):
     machine = str(machine)
     t_date = os.path.basename(log_path)
-    misc_info_file = os.path.join(log_path, machine, ASSIGNED_TO_AND_COMMENTS)
+    misc_info_file = os.path.join(log_path, machine, MISC_FILE_NAME)
     with open(misc_info_file, "r") as misc_info_fp:
         misc_info = misc_info_fp.readlines()[-2:]
 
@@ -94,6 +94,16 @@ def get_assigned_to_and_comments(log_path, machine):
         misc_data["comments"] = misc_info[1].strip()
 
     return misc_data
+
+def get_address(log_path, machine):
+    machine = str(machine)
+    t_date = os.path.basename(log_path)
+    misc_info_file = os.path.join(log_path, machine, MISC_FILE_NAME)
+    address = ""
+    with open(misc_info_file, "r") as misc_info_fp:
+        address = misc_info_fp.readlines()[1]
+
+    return address
 
 def get_disk_info(log_path, machine):
     machine = str(machine)
