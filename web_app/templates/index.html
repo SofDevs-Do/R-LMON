@@ -171,8 +171,22 @@
 	  </div>
 	</div>
       </div>
-      <div id="avg-util-doughnut-chart-div" class="w3-container w3-padding w3-col s6 w3-round">
-	<div class="w3-container w3-row w3-card-4 w3-round-large">
+      <div id="avg-util-doughnut-chart-div" class="w3-card w3-padding w3-col m6 w3-round w3-center">
+	<div class="w3-container w3-center w3-row-padding">
+	  <div class="w3-container w3-section w3-col s3 w3-padding-8">
+	    <p class="w3-right-align">From date:</p>
+	  </div>
+	  <div class="w3-container w3-section w3-col s3 w3-padding-16">
+	    <input type="date" id="from-date-input" name="from-date" value="2021-01-01">
+	  </div>
+	  <div class="w3-container w3-section w3-col s2 w3-padding-8">
+	    <p class="w3-right-align">To date:</p>
+	  </div>
+	  <div class="w3-container w3-section w3-col s3 w3-padding-16">
+	    <input type="date" id="to-date-input" name="to-date" value="2021-01-01">
+	  </div>
+	</div>
+	<div class="w3-container w3-row w3-card-4 w3-round-large w3-white">
 	  <div  class="w3-col s4">
 	    <canvas id="avg-cpu-util-doughnut-chart-canvas">
 	    </canvas>
@@ -182,7 +196,7 @@
 	    </canvas>
 	  </div>
 	</div>
-	<div class="w3-container w3-row  w3-card-4 w3-padding w3-round-large">
+	<div class="w3-container w3-row  w3-card-4 w3-padding w3-round-large w3-white">
 	    <canvas id="avg-disk-util-doughnut-chart-canvas">
 	    </canvas>
 	</div>
