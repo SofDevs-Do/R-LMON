@@ -147,7 +147,7 @@ overview_page_obj={
 	graph_canvas_div = document.createElement("div");
 	graph_canvas_div.id = "machine-graph-graph-canvas";
 	graph_canvas_div.classList.add("w3-tiny", "w3-col");
-	graph_canvas_div.style.width=(90-(100/overview_page_obj.number_of_racks_in_row)).toString()+"%";
+	graph_canvas_div.style.width=(100-(100/overview_page_obj.number_of_racks_in_row)).toString()+"%";
 	graph_view_div.appendChild(ul_object);
 	graph_view_div.appendChild(graph_canvas_div);
 	main_graph_div.appendChild(graph_view_div);
@@ -168,24 +168,51 @@ overview_page_obj={
 	    flattened_data_json = flattened_data_json.reverse();
 	}
 
+	p_object = document.createElement("p");
+	p_object.classList.add("w3-medium");
+	p_object.innerHTML = document.getElementById("color-coding-selector").value + " graph";
+	graph_canvas_div.appendChild(p_object);
 	graph_canvas = document.createElement("canvas");
 	graph_canvas_div.appendChild(graph_canvas);
 
 	for (let i in flattened_data_json) {
 	    labels.push(flattened_data_json[i]["_id"]);
-	    data_points.push(flattened_data_json[i]["value"]);
+	    if (flattened_data_json[i]["value"] > 0)
+		data_points.push(flattened_data_json[i]["value"]);
+	    else
+		data_points.push(0);
 	}
 
-	bar_graph = new Chart(graph_canvas.getContext('2d'), {
+	console.log(labels);
+
+	Chart.defaults.global.defaultFontColor = 'black';
+	ctx = graph_canvas.getContext('2d');
+	ctx.font = "semibold 20px 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
+	bar_graph = new Chart(ctx, {
 	    type: 'horizontalBar',
+	    title: document.getElementById("color-coding-selector").value + " graph",
 	    data: {
 		labels: labels,
 		datasets: [{
 		    data: data_points,
-		    borderWidth: 1,
+		    backgroundColor: 'rgb(255, 87, 34)',
 		}]
-	    }
+	    },
+	    options: {
+		legend: {
+		    display: false
+		},
+		scales: {
+		    xAxes: [{
+			ticks: {
+			    suggestedMin: 0,
+			    suggestedMax: 100
+			}
+		    }]
+		}
+	    },
 	});
+
     },
 
     populate_sorted_graph_view: function(ul_object) {
@@ -223,7 +250,10 @@ overview_page_obj={
 	    value = flattened_data_json[i]["value"];
 	    if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
 		document.getElementById("color-coding-selector").value == "RAM utilization") {
-		li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + value.toFixed(2);
+		if (value > 0)
+		    li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + value.toFixed(2);
+		else
+		    li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + 0;
 	    }
 	    else {
 		li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + value;
