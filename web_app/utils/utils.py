@@ -1,3 +1,4 @@
+import os
 import pymongo
 import datetime
 import statistics
@@ -120,3 +121,23 @@ class Util:
             used_GB_avg = used_GB_sum / days_count
             mach_disk_info[each_fs]['avg_used_GB'] = used_GB_avg
         return mach_disk_info
+
+    def machine_ctrl(self, machine_id, operation):
+        mongo_ret = self.mach_col.find({"_id": machine_id}, {"_id": 0, "address": 1})
+        address = ""
+        _operation = ""
+
+        if (operation == "shutdown"):
+            _operation = " '/sbin/shutdown 0'"
+        elif (operation == "reboot"):
+            _operation = " '/sbin/reboot'"
+
+        for ret_val in mongo_ret:
+            address = ret_val["address"]
+
+        if (address != "" and _operation != ""):
+            response = os.system("ssh " + address + _operation)
+            if (response == 0):
+                return True
+
+        return False

@@ -29,7 +29,8 @@ def get_overview_page_data(color_coding_selector, from_date, to_date):
     return to_ret
 
 
-@app.route("/api/v2/overview-machine-meta-data/<string:machine_id>/<string:from_date>/<string:to_date>")
+@app.route("/api/v2/overview-machine-meta-data/<string:machine_id>/<string:from_date>/<string:to_date>",
+           methods=['GET'])
 def get_machine_overview_meta_data(machine_id, from_date, to_date):
     to_ret = dict()
     to_ret["CPU"] = "{0:.2f}%".format(util_obj.get_average_ram_cpu_data('avg_cpu_util', machine_id, from_date, to_date))
@@ -39,7 +40,8 @@ def get_machine_overview_meta_data(machine_id, from_date, to_date):
     return to_ret
 
 
-@app.route("/api/v2/machine-details-cpu-ram-data/<string:machine_id>/<string:from_date>/<string:to_date>")
+@app.route("/api/v2/machine-details-cpu-ram-data/<string:machine_id>/<string:from_date>/<string:to_date>",
+           methods=['GET'])
 def get_machine_cpu_ram_data(machine_id, from_date, to_date):
     to_ret = dict()
     to_ret["CPU"] = util_obj.get_ram_cpu_data('cpu_util', machine_id, from_date, to_date)
@@ -47,10 +49,18 @@ def get_machine_cpu_ram_data(machine_id, from_date, to_date):
     return to_ret
 
 
-@app.route("/api/v2/machine-details-page-data/<string:machine_id>")
+@app.route("/api/v2/machine-details-page-data/<string:machine_id>",
+           methods=['GET'])
 def get_machine_details(machine_id):
     to_ret = util_obj.get_machine_data(machine_id)
     return to_ret
+
+
+@app.route("/api/v2/machine-ctrl/<string:machine_id>/<string:operation>")
+def machine_ctrl(machine_id, operation):
+    to_ret = util_obj.machine_ctrl(machine_id, operation)
+    return to_ret
+
 
 @app.route("/")
 def index():
