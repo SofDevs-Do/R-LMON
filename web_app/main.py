@@ -55,6 +55,11 @@ def get_machine_details(machine_id):
     to_ret = util_obj.get_machine_data(machine_id)
     return to_ret
 
+@app.route("/api/v2/machine-details-disk-info/<string:machine_id>/<string:from_date>/<string:to_date>",
+           methods=['GET'])
+def get_machine_disk_info(machine_id):
+    to_ret = util_obj.get_average_disk_data(machine_id, from_date, to_date)
+    return to_ret
 
 @app.route("/api/v2/machine-ctrl/<string:machine_id>/<string:operation>")
 def machine_ctrl(machine_id, operation):
