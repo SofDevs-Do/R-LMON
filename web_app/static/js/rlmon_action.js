@@ -321,7 +321,7 @@ overview_page_obj={
 		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 
 		    value = data_json[i]['rack_list'][j]['machine_list'][k]["value"];
-		    coloring_function(value, li_object);
+		    no_data = coloring_function(value, li_object);
 
 		    meta_data_obj = document.createElement("div");
 		    meta_data_obj.classList.add("w3-panel", "w3-dark-gray", "w3-hover-shadow");
@@ -370,6 +370,7 @@ overview_page_obj={
     },
 
     color_machines_based_on_cpu_ram_data: function(value, li_object) {
+	no_data = false;
 	if ((value >= 0) && (value < 25)) {
 	    li_object.classList.add("w3-deep-orange");
 	}
@@ -386,10 +387,11 @@ overview_page_obj={
 	    li_object.classList.add("w3-black");
 	    no_data = true;
 	}
+	return no_data;
     },
 
     color_machines_based_on_last_login_data: function(value, li_object) {
-
+	no_data = false;
 	today = new Date(new Date().setDate(new Date().getDate()));
 	one_week_back_date = new Date(new Date().setDate(new Date().getDate()-7));
 	two_week_back_date = new Date(new Date().setDate(new Date().getDate()-14));
@@ -414,6 +416,7 @@ overview_page_obj={
 	    li_object.classList.add("w3-black");
 	    no_data = true;
 	}
+	return no_data;
     },
 
     show_meta_data_div_timer: function(e) {
