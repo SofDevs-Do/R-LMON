@@ -98,6 +98,10 @@ for machine_id in machine_id_list:
     else:
         cpu_ram_disk_dict = cpu_ram_disk_dict[0]
 
+    if (not check_if_machine_data_collected(log_path, machine_id)):
+        warnings.warn("Data not collected from {}".format(machine_id))
+        continue
+
     # obtain address from data-collected and alter in data_dict
     address = get_address(log_path, machine_id)
     data_dict[address_key] = address

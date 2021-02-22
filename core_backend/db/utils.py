@@ -17,6 +17,21 @@ DISK_INFO_FILE_NAME             = "disk-info.txt"
 MISC_FILE_NAME                  = "misc-info.txt"
 
 
+def check_if_machine_data_collected(log_path, machine):
+    machine = str(machine)
+    t_date = os.path.basename(log_path)
+    ping_down_file = os.path.join(log_path, machine, "ping-down")
+    ssh_down_file = os.path.join(log_path, machine, "ssh-down")
+
+    if os.path.isfile(ping_down_file):
+        return False
+
+    if os.path.isfile(ssh_down_file):
+        return False
+
+    return True
+
+
 def get_cpu_ram_data(date_dir, machine_id, data_type):
     """Return the CPU/RAM usage stats for a particular machine on a given date
     """
