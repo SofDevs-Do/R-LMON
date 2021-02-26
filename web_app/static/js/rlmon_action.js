@@ -537,52 +537,59 @@ machine_details_obj={
 
 	machine_details_obj.request_and_fill_mach_col_data(machine_li_obj.rlmon_id.toString());
 	machine_details_obj.request_and_fill_avg_cpu_ram_data(machine_li_obj.rlmon_id.toString());
-	machine_details_obj.populate_avg_disk_data({});
-
-	var avg_disk_util_val = 60.25;
-	var avg_disk_util_val1 = 20.25;
-	var avg_disk_util_data = {
-	    datasets: [{
-		           data: [avg_disk_util_val, (100-avg_disk_util_val)],
-		           backgroundColor: ['rgba(54, 255, 55, 1)', 'transparent'],
-		           // borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
-	               },
-		       {
-			   data: [avg_disk_util_val1, (100-avg_disk_util_val1)],
-			   backgroundColor: ['rgba(254, 255, 55, 1)', 'transparent'],
-			   // borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
-		       }],
-	    labels: ['Avg Disk utilized %', 'AVg Disk Un-utilized%']
-	};
-
-	
-	var ctx_disk = document.getElementById("avg-disk-util-doughnut-chart-canvas");
-	var avg_disk_util_donoughnut_chart = new Chart(ctx_disk, {
-	    type: 'doughnut',
-	    data: avg_disk_util_data,
-	    options: {
-		responsive: true,
-		cutoutPercentage: 60,
-		legend: false,
-		title: {
-		    display: true,
-		    text: 'Average Disk Utilization'
-		},
-	    }
-	});
+	machine_details_obj.request_and_fill_disk_info(machine_li_obj.rlmon_id.toString());
+	// machine_details_obj.populate_avg_disk_data({});
 
     },
 
+    request_and_fill_disk_info: function(machine_id) {
+	var from_date = document.getElementById("from-date-input-md").value;
+	var to_date = document.getElementById("to-date-input-md").value;
+	xhr_object = new XMLHttpRequest();
+	xhr_object.onload = this.get_disk_info;
+	endpoint = navigation_selector_obj.backend_url + '/api/v2/machine-details-disk-info/' + machine_id + '/' + from_date + '/' + to_date;
+	xhr_object.open('GET', endpoint);
+	xhr_object.send();
+    },
+
+    get_disk_info: function() {
+	if(this.readyState == 4 && this.status == 200)
+	{
+	    var res = this.responseText;
+	    var res_json = JSON.parse(res);
+	    machine_details_obj.populate_avg_disk_data(res_json);
+	}
+    },
+
     populate_avg_disk_data: function(avg_disk_data) {
-	var avg_disk_util_val = 40;
-	
+	var fs_list = Object.keys(avg_disk_data);
+	var color_list = ['rgba(54, 255, 55, 1)', 'rgba(254, 255, 55, 1)', 'rgba(28, 129, 165, 1)', 'rgba(121, 0, 74, 1)', 'rgba(135, 69, 74, 1)', 'rgba(135, 69, 239, 1)', 'rgba(135, 208, 239, 1)', 'red', 'rgba(255, 99, 71, 1)', 'rgba(233, 115, 132, 1)'];
+	var cntr ;
+	var total_disk_space = 0;
+	var used_disk_space = 0;
+	var datasets = [];
+	var dataset = {};
+	var labels_disk = [];
+	for(cntr=0; cntr < fs_list.length; cntr++) {
+	    dataset = {};
+	    total_disk_space += parseFloat(avg_disk_data[fs_list[cntr]]['total_GB']);
+	    used_disk_space += avg_disk_data[fs_list[cntr]]['avg_used_GB'];
+	    dataset['data'] = [used_disk_space, total_disk_space - used_disk_space];
+	    dataset['backgroundColor'] = [color_list[cntr], 'transparent'];
+	    dataset['borderColor'] = ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)'];
+	    datasets.push(dataset);
+	    labels_disk.push(avg_disk_data[fs_list[cntr]]['mounted_on']+"-utilized");
+	    labels_disk.push("Un-utilized Disk space");
+	}
+	// console.log(labels_disk);
+	var avg_disk_util_val = ((used_disk_space*100)/total_disk_space).toFixed(2);
 	var avg_disk_util_data = {
 	    datasets: [{
-		data: [avg_disk_util_val, (100-avg_disk_util_val)],
+		data: [used_disk_space, total_disk_space - used_disk_space],
 		backgroundColor: ['rgba(138, 92, 116, 1)', 'transparent'],
 		borderColor: ['rgba(54, 162, 255, 0.2)', 'rgba(54, 162, 235, 0.2)']
 	    }],
-	    labels: ['Avg Disk utilized%', 'Avg Disk Un-utilized%']
+	    labels: ['Avg Disk utilized (in GB)', 'Avg Disk Un-utilized (in GB)']
 	};
 
 	var ctx = document.getElementById("avg-disk-overall-util-doughnut-chart-canvas");
@@ -593,12 +600,70 @@ machine_details_obj={
 		responsive: true,
 		cutoutPercentage: 60,
 		legend: false,
+		tooltips: { bodyFontSize: 7},
 		title: {
 		    display: true,
 		    text: 'Average Disk Utilization'
-		}
+		},
 	    }
 	});
+	// var avg_disk_util_data = {
+	//     datasets: datasets,
+	//     labels: ['Avg Disk utilized (in GB)', 'Avg Disk Un-utilized (in GB)']
+	// };
+
+	// var ctx_disk = document.getElementById("avg-disk-util-doughnut-chart-canvas");
+	// var avg_disk_util_donoughnut_chart = new Chart(ctx_disk, {
+	//     type: 'doughnut',
+	//     data: avg_disk_util_data,
+	//     options: {
+	// 	responsive: true,
+	// 	cutoutPercentage: 60,
+	// 	legend: {
+	// 	    display: true
+	// 	},
+	// 	title: {
+	// 	    display: true,
+	// 	    text: 'Average Disk Utilization'
+	// 	},
+	//     }
+	// });
+
+	console.log(datasets);
+
+	var disk_info_table = document.getElementById("disk-info-table");
+	disk_info_table.innerHTML = '';
+
+	var disks_list = Object.keys(avg_disk_data).sort()
+	
+	var head_row = disk_info_table.insertRow(0);
+	var head_cell1 = head_row.insertCell(0);
+	var head_cell2 = head_row.insertCell(1);
+	var head_cell3 = head_row.insertCell(2);
+	var head_cell4 = head_row.insertCell(3);
+	var head_cell5 = head_row.insertCell(4);
+	head_cell1.innerHTML = "<b>Disk</b>";
+	head_cell2.innerHTML = "<b>Mounted At</b>";
+	head_cell3.innerHTML = "<b>Used(in GB)</b>";
+	head_cell4.innerHTML = "<b>Total(in GB)</b>";
+	head_cell5.innerHTML = "<b>Free%</b>";
+	var i;
+	for(i=0; i<disks_list.length; i++) {
+	    var row = disk_info_table.insertRow(i+1);
+	    var cell1 = row.insertCell(0);
+	    var cell2 = row.insertCell(1);
+	    var cell3 = row.insertCell(2);
+	    var cell4 = row.insertCell(3);
+	    var cell5 = row.insertCell(4);
+	    cell1.innerHTML = disks_list[i];
+	    cell2.innerHTML = avg_disk_data[disks_list[i]]["mounted_on"];
+	    cell3.innerHTML = avg_disk_data[disks_list[i]]["avg_used_GB"].toFixed(2);
+	    cell4.innerHTML = avg_disk_data[disks_list[i]]["total_GB"];
+	    cell5.innerHTML = ((avg_disk_data[disks_list[i]]["total_GB"] - avg_disk_data[disks_list[i]]["avg_used_GB"])*100/avg_disk_data[disks_list[i]]["total_GB"]).toFixed(2);
+	}
+	disk_info_table.classList.add("w3-table", "w3-striped", "w3-bordered", "w3-small", "w3-round");
+
+	
     },
 
     request_and_fill_avg_cpu_ram_data: function(machine_id) {
@@ -652,6 +717,7 @@ machine_details_obj={
 		responsive: true,
 		cutoutPercentage: 60,
 		legend: false,
+		tooltips: { bodyFontSize: 8 },
 		title: {
 		    display: true,
 		    text: 'Average CPU Utilization'
@@ -667,6 +733,7 @@ machine_details_obj={
 		responsive: true,
 		cutoutPercentage: 60,
 		legend: false,
+		tooltips: { bodyFontSize: 8 },
 		title: {
 		    display: true,
 		    text: 'Average RAM Utilization'

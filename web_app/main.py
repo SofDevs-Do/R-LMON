@@ -57,7 +57,7 @@ def get_machine_details(machine_id):
 
 @app.route("/api/v2/machine-details-disk-info/<string:machine_id>/<string:from_date>/<string:to_date>",
            methods=['GET'])
-def get_machine_disk_info(machine_id):
+def get_machine_disk_info(machine_id, from_date, to_date):
     to_ret = util_obj.get_average_disk_data(machine_id, from_date, to_date)
     return to_ret
 

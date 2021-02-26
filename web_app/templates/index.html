@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script type="text/javascript" src="js/rlmon_action.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   </head>
   <body onload="navigation_selector_obj.setup_nav_buttons();">
     <div id="top-menu">
@@ -171,7 +171,7 @@
 	  </div>
 	</div>
       </div>
-      <div id="avg-util-doughnut-chart-div" class="w3-card w3-padding w3-col m6 w3-round w3-center w3-small">
+      <div id="avg-util-doughnut-chart-div" class="w3-card w3-padding w3-col m5 w3-round w3-center w3-small">
 	<div class="w3-container w3-center w3-row-padding w3-light-gray">
 	  <div class="w3-container w3-col s3 w3-padding-8">
 	    <p class="w3-right-align">From date:</p>
@@ -200,9 +200,11 @@
 	    </canvas>
 	  </div>
 	</div>
-	<div class="w3-container w3-row  w3-card-4 w3-padding w3-round-large w3-white">
-	    <canvas id="avg-disk-util-doughnut-chart-canvas">
-	    </canvas>
+	<div class="w3-container w3-row   w3-padding-large w3-round-large w3-white">
+	    <!-- <canvas id="avg-disk-util-doughnut-chart-canvas"> -->
+	    <!-- </canvas> -->
+	    <table id="disk-info-table" class="w3-table-all w3-small w3-round-large">
+	    </table>
 	</div>
       </div>
       <div class="w3-container w3-col m2 w3-padding w3-round">

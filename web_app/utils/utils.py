@@ -109,16 +109,20 @@ class Util:
         mach_disk_info = list(self.mach_col.find({"_id": machine_id}))[0]['disk_info']
         used_disk_date_wise_info = list(self.cpu_ram_disk_col.find({"_id": machine_id}))[0]['disk_info']
         fs_list = mach_disk_info.keys()
-
+        
         for each_fs in fs_list:
             used_GB_sum = 0
             days_count = 0
+            iter_date = _from_date
             while iter_date < _to_date + datetime.timedelta(1):
-                if str(iter_date) in (list(used_disk_date_wise_info[each_fs]['used_GB'])[0]).keys():
-                    used_GB_sum += list(used_disk_date_wise_info[each_fs]['used_GB'])[0][str(iter_date)]
+                if str(iter_date) in used_disk_date_wise_info[each_fs]['used_GB'].keys():
+                    used_GB_sum += int(used_disk_date_wise_info[each_fs]['used_GB'][str(iter_date)])
                     days_count += 1
                 iter_date += datetime.timedelta(1)
-            used_GB_avg = used_GB_sum / days_count
+            if days_count != 0:
+                used_GB_avg = used_GB_sum / days_count
+            else:
+                used_GB_avg = -1  #no log found for that date, yet to be handled
             mach_disk_info[each_fs]['avg_used_GB'] = used_GB_avg
         return mach_disk_info
 
