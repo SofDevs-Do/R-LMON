@@ -35,7 +35,7 @@ def get_machine_overview_meta_data(machine_id, from_date, to_date):
     to_ret = dict()
     to_ret["CPU"] = "{0:.2f}%".format(util_obj.get_average_ram_cpu_data('avg_cpu_util', machine_id, from_date, to_date))
     to_ret["RAM"] = "{0:.2f}%".format(util_obj.get_average_ram_cpu_data('avg_ram_util', machine_id, from_date, to_date))
-    to_ret["machine_name"] = util_obj.get_machine_data(machine_id)["_id"]
+    to_ret["machine_name"] = machine_id
 
     return to_ret
 

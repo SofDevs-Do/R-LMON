@@ -98,7 +98,8 @@ class Util:
 
 
     def get_machine_data(self, machine_id):
-        return list(self.mach_col.find({"_id": machine_id}))[0]
+        for data in self.mach_col.find({"_id": machine_id}):
+            return data
 
     def get_average_disk_data(self, machine_id, from_date, to_date):
         _from_date = datetime.date(*map(lambda x: int(x), from_date.split('-')))

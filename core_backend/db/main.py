@@ -98,6 +98,10 @@ for machine_id in machine_id_list:
     else:
         cpu_ram_disk_dict = cpu_ram_disk_dict[0]
 
+    if (not check_if_machine_data_collected(log_path, machine_id)):
+        warnings.warn("Data not collected from {}".format(machine_id))
+        continue
+
     # obtain address from data-collected and alter in data_dict
     address = get_address(log_path, machine_id)
     data_dict[address_key] = address
@@ -141,23 +145,23 @@ for machine_id in machine_id_list:
 
     # obtain avg_cpu_util from data_collected and alter in data_dict
     avg_cpu_util = get_avg_cpu_util_info(log_path, machine_id)
-    log_date = list(avg_cpu_util.keys())[0]
-    avg_cpu_util_val = avg_cpu_util[log_date]
-    if avg_cpu_util_key in cpu_ram_disk_dict:
-        cpu_ram_disk_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
-    else:
-        cpu_ram_disk_dict[avg_cpu_util_key]=dict()
-        cpu_ram_disk_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
+    for log_date in avg_cpu_util:
+        avg_cpu_util_val = avg_cpu_util[log_date]
+        if avg_cpu_util_key in cpu_ram_disk_dict:
+            cpu_ram_disk_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
+        else:
+            cpu_ram_disk_dict[avg_cpu_util_key]=dict()
+            cpu_ram_disk_dict[avg_cpu_util_key][log_date] = avg_cpu_util_val
 
     # obtain avg_ram_util from data_collected and alter in data_dict
     avg_ram_util = get_avg_mem_util_info(log_path, machine_id)
-    log_date = list(avg_ram_util.keys())[0]
-    avg_ram_util_val = avg_ram_util[log_date]
-    if avg_ram_util_key in cpu_ram_disk_dict:
-        cpu_ram_disk_dict[avg_ram_util_key][log_date] = avg_ram_util_val
-    else:
-        cpu_ram_disk_dict[avg_ram_util_key] = dict()
-        cpu_ram_disk_dict[avg_ram_util_key][log_date] = avg_ram_util_val
+    for log_date in avg_ram_util:
+        avg_ram_util_val = avg_ram_util[log_date]
+        if avg_ram_util_key in cpu_ram_disk_dict:
+            cpu_ram_disk_dict[avg_ram_util_key][log_date] = avg_ram_util_val
+        else:
+            cpu_ram_disk_dict[avg_ram_util_key] = dict()
+            cpu_ram_disk_dict[avg_ram_util_key][log_date] = avg_ram_util_val
 
     # obtain cpu_util from data_collected and alter in data_dict
     cpu_util = get_cpu_ram_data(log_path, machine_id, "cpu")
