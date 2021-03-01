@@ -551,10 +551,20 @@ machine_details_obj={
 	console.log(machine_id);
 	if (confirm("Confirm reboot of the system!")){
 	    console.log("rebooting");
+	    xhr_object = new XMLHttpRequest();
+	    xhr_object.onload = this.reboot_done;
+	    endpoint = navigation_selector_obj.backend_url + '/api/v2/machine-ctrl/' + machine_id + '/' + 'reboot';
+	    xhr_object.open('GET', endpoint);
+	    xhr_object.send();
+
 	}
 	else {
-	    console.log("Reboot cancelled")
+	    console.log("Reboot cancelled");
 	}
+    },
+
+    reboot_done: function() {
+	console.log("reboot done!");
     },
 
     request_and_fill_disk_info: function(machine_id) {
