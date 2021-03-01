@@ -545,6 +545,14 @@ machine_details_obj={
 
 	var reboot_button = document.getElementById("reboot-button");
 	reboot_button.onclick = function() {machine_details_obj.reboot_button_action(machine_li_obj.rlmon_id.toString())};
+
+	var syslog_button = document.getElementById("syslog-button");
+	syslog_button.onclick = function() {machine_details_obj.syslog_button_action(machine_li_obj.rlmon_id.toString())};
+    },
+
+    syslog_button_action: function(machine_id) {
+	document.getElementById('syslog_modal').style.display='block';
+	document.getElementById('syslog_modal_content').innerHTML += "<p>Syslog output will come here!</p>";
     },
 
     reboot_button_action: function(machine_id) {
