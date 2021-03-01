@@ -543,6 +543,18 @@ machine_details_obj={
 	machine_details_obj.request_and_fill_disk_info(machine_li_obj.rlmon_id.toString());
 	// machine_details_obj.populate_avg_disk_data({});
 
+	var reboot_button = document.getElementById("reboot-button");
+	reboot_button.onclick = function() {machine_details_obj.reboot_button_action(machine_li_obj.rlmon_id.toString())};
+    },
+
+    reboot_button_action: function(machine_id) {
+	console.log(machine_id);
+	if (confirm("Confirm reboot of the system!")){
+	    console.log("rebooting");
+	}
+	else {
+	    console.log("Reboot cancelled")
+	}
     },
 
     request_and_fill_disk_info: function(machine_id) {
