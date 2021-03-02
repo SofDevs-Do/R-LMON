@@ -512,10 +512,6 @@ machine_details_obj={
 	    x[i].style.display = "none";
 	}
 	document.getElementById("machine-details-div").style.display = "block";
-	
-	// Add event listeners on change of dates in machine details page
-	document.getElementById("from-date-input-md").addEventListener("change", machine_details_obj.top_fun);
-	document.getElementById("to-date-input-md").addEventListener("change", machine_details_obj.top_fun);
 
 	// set the dates, and restrict the 'from date' field to a
 	// month
@@ -539,16 +535,27 @@ machine_details_obj={
 	// main_machine_details_div.innerHTML = "machine ID: "+machine_li_obj.rlmon_id.toString();
 
 	machine_details_obj.request_and_fill_mach_col_data(machine_li_obj.rlmon_id.toString());
-	machine_details_obj.request_and_fill_avg_cpu_ram_data(machine_li_obj.rlmon_id.toString());
-	machine_details_obj.request_and_fill_disk_info(machine_li_obj.rlmon_id.toString());
-	machine_details_obj.request_cpu_ram_utilization_data(machine_li_obj.rlmon_id.toString());
+	machine_details_obj.fill_date_dependent_data(machine_li_obj.rlmon_id.toString());
 	// machine_details_obj.populate_avg_disk_data({});
 
+	var machine_id = machine_li_obj.rlmon_id.toString();
+
 	var reboot_button = document.getElementById("reboot-button");
-	reboot_button.onclick = function() {machine_details_obj.reboot_button_action(machine_li_obj.rlmon_id.toString())};
+	reboot_button.onclick = function() {machine_details_obj.reboot_button_action(machine_id)};
 
 	var syslog_button = document.getElementById("syslog-button");
-	syslog_button.onclick = function() {machine_details_obj.syslog_button_action(machine_li_obj.rlmon_id.toString())};
+	syslog_button.onclick = function() {machine_details_obj.syslog_button_action(machine_id)};
+
+	var from_date_inp = document.getElementById("from-date-input-md");
+	from_date_inp.onchange = function() {machine_details_obj.fill_date_dependent_data(machine_id)};
+	var to_date_inp = document.getElementById("to-date-input-md");
+	to_date_inp.onchange = function() {machine_details_obj.fill_date_dependent_data(machine_id)};
+    },
+
+    fill_date_dependent_data: function(machine_id) {
+	machine_details_obj.request_and_fill_avg_cpu_ram_data(machine_id);
+	machine_details_obj.request_and_fill_disk_info(machine_id);
+	machine_details_obj.request_cpu_ram_utilization_data(machine_id);
     },
 
     syslog_button_action: function(machine_id) {
@@ -557,9 +564,9 @@ machine_details_obj={
     },
 
     reboot_button_action: function(machine_id) {
-	console.log(machine_id);
+	// console.log(machine_id);
 	if (confirm("Confirm reboot of the system!")){
-	    console.log("rebooting");
+	    // console.log("rebooting");
 	    xhr_object = new XMLHttpRequest();
 	    xhr_object.onload = this.reboot_done;
 	    endpoint = navigation_selector_obj.backend_url + '/api/v2/machine-ctrl/' + machine_id + '/' + 'reboot';
@@ -663,7 +670,7 @@ machine_details_obj={
 	//     }
 	// });
 
-	console.log(datasets);
+	// console.log(datasets);
 
 	var disk_info_table = document.getElementById("disk-info-table");
 	disk_info_table.innerHTML = '';
@@ -873,7 +880,7 @@ machine_details_obj={
 	    ram_usage_data.push({x: date, y: cpu_ram_utilization_data["RAM"][date]})
 	}
 
-	console.log(cpu_usage_data);
+	// console.log(cpu_usage_data);
 
 	//Chart.defaults.global.defaultFontColor = 'black';
 	ctx = graph_canvas.getContext('2d');
@@ -983,7 +990,7 @@ machine_details_obj={
     _update_assigned_to_info: function(assigned_to_info) {
 	var assigned_to_md_div = document.getElementById("assigned-to-md");
 	assigned_to_md_div.innerHTML = "";
-	console.log(assigned_to_info);
+	// console.log(assigned_to_info);
 	assigned_to_md_div.innerHTML = "<li><h6>Assigned To </h6></li> <li>" + assigned_to_info +' </li>' + "</ul>";
     },
 
