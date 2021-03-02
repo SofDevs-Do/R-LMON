@@ -42,7 +42,7 @@ class Util:
 
     def get_ram_cpu_data(self, what_data, machine_id, from_date, to_date):
         query_request_dict = dict()
-        data_list = []
+        data_dict = dict()
         date_list = []
         _from_date = datetime.date(*map(lambda x: int(x), from_date.split('-')))
         _to_date = datetime.date(*map(lambda x: int(x), to_date.split('-')))
@@ -61,12 +61,13 @@ class Util:
         j = 0
         for j in date_list:
             if j not in ret_val[what_data]:
-                data_list.extend([0]*24)
+                for i in range(24):
+                    data_dict[j+" "+"{:02d}".format(i)] = 0
             else:
-                data_list.extend(ret_val[what_data][j])
+                for i in range(24):
+                    data_dict[j+" "+"{:02d}".format(i)] = ret_val[what_data][j][i]
 
-        print(data_list)
-        return data_list
+        return data_dict
 
 
     def get_last_login_data(self, machine_id):

@@ -541,6 +541,7 @@ machine_details_obj={
 	machine_details_obj.request_and_fill_mach_col_data(machine_li_obj.rlmon_id.toString());
 	machine_details_obj.request_and_fill_avg_cpu_ram_data(machine_li_obj.rlmon_id.toString());
 	machine_details_obj.request_and_fill_disk_info(machine_li_obj.rlmon_id.toString());
+	machine_details_obj.request_cpu_ram_utilization_data(machine_li_obj.rlmon_id.toString());
 	// machine_details_obj.populate_avg_disk_data({});
 
 	var reboot_button = document.getElementById("reboot-button");
@@ -831,6 +832,97 @@ machine_details_obj={
 	var users_last_login_info = mach_col_data['users_last_login'];
 	machine_details_obj._update_users_last_login_info(users_last_login_info);
 
+    },
+
+
+    request_cpu_ram_utilization_data: function(machine_id) {
+	var from_date = document.getElementById("from-date-input-md").value;
+	var to_date = document.getElementById("to-date-input-md").value;
+
+	xhr_object = new XMLHttpRequest();
+	xhr_object.onload = this.get_cpu_ram_utilization_data;
+	xhr_object.open('GET', navigation_selector_obj.backend_url
+			+ '/api/v2/machine-details-cpu-ram-data/'
+			+ machine_id + '/' + from_date + '/' + to_date);
+	xhr_object.send();
+    },
+
+   get_cpu_ram_utilization_data: function() {
+	if(this.readyState == 4 && this.status == 200)
+	{
+	    var res = this.responseText;
+	    var res_json = JSON.parse(res);
+	    machine_details_obj.populate_cpu_ram_utilization_data(res_json);
+	}
+   },
+
+    populate_cpu_ram_utilization_data: function(cpu_ram_utilization_data) {
+	graph_canvas_div = document.getElementById("cpu-ram-graph-div");
+	graph_canvas_div.innerHTML = "";
+	graph_canvas = document.createElement("canvas");
+	graph_canvas_div.appendChild(graph_canvas);
+
+	// flatten the date-time stuff
+	cpu_usage_data = []
+	ram_usage_data = []
+	for (let date in cpu_ram_utilization_data["CPU"]) {
+	    cpu_usage_data.push({x: date, y: cpu_ram_utilization_data["CPU"][date]})
+	}
+
+	for (let date in cpu_ram_utilization_data["RAM"]) {
+	    ram_usage_data.push({x: date, y: cpu_ram_utilization_data["RAM"][date]})
+	}
+
+	console.log(cpu_usage_data);
+
+	//Chart.defaults.global.defaultFontColor = 'black';
+	ctx = graph_canvas.getContext('2d');
+	line_graph = new Chart(ctx, {
+	    type: 'line',
+	    data: {
+		datasets: [
+		    {
+			label: 'CPU Usage',
+			fill: false,
+			borderColor: 'rgb(255, 99, 132)',
+			data: cpu_usage_data
+		    },
+		    {
+			label: 'RAM Usage',
+			fill: false,
+			borderColor: 'rgb(132, 99, 255)',
+			data: ram_usage_data
+		    }]
+	    },
+	    options: {
+		scales: {
+		    yAxes: [{
+			ticks: {
+			    suggestedMin: 0,
+			    suggestedMax: 100
+			}
+		    }],
+		    xAxes: [{
+			type: 'time',
+			time: {
+			    displayFormats: {
+				second: 'h:MM:SS',
+				minute: 'h:MM',
+				hour: 'hA',
+				day: 'MMM D',
+				month: 'YYYY MMM',
+				year: 'YYYY'
+			    },
+			},
+			display: true,
+			scaleLabel: {
+			    display: true,
+			    labelString: 'value'
+			}
+		    }]
+		}
+	    }
+	});
     },
 
     _update_users_last_login_info: function(users_last_login_info){
