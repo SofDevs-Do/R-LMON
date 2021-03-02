@@ -117,7 +117,7 @@ class Util:
             iter_date = _from_date
             while iter_date < _to_date + datetime.timedelta(1):
                 if str(iter_date) in used_disk_date_wise_info[each_fs]['used_GB'].keys():
-                    used_GB_sum += int(used_disk_date_wise_info[each_fs]['used_GB'][str(iter_date)])
+                    used_GB_sum += float(used_disk_date_wise_info[each_fs]['used_GB'][str(iter_date)])
                     days_count += 1
                 iter_date += datetime.timedelta(1)
             if days_count != 0:
