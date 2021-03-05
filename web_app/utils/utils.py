@@ -34,7 +34,8 @@ class Util:
         mongo_ret = self.cpu_ram_disk_col.find({"_id": machine_id}, query_request_dict)
 
         for ret_val in mongo_ret:
-            data_list = list(list(ret_val[what_data].values()))
+            if what_data in ret_val:
+                data_list = list(list(ret_val[what_data].values()))
 
         if (len(data_list) > 0):
             return (sum(data_list)/i)
