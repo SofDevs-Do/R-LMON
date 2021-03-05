@@ -161,7 +161,7 @@ def get_avg_cpu_util_info(log_path, machine):
 def get_users_last_login(log_path, machine):
     machine = str(machine)
     if os.path.isfile(os.path.join(log_path, machine, "last-login-info-test-down")):
-        return {"no-data": "no-data"}
+        return {}
     users_last_login_info_file = os.path.join(log_path, machine, USERS_LAST_LOGIN_INFO_FILE_NAME)
     with open(users_last_login_info_file, "r") as users_last_login_info_fp:
         users_last_login_info = users_last_login_info_fp.read().strip().split('\n')

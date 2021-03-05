@@ -72,15 +72,18 @@ class Util:
 
 
     def get_last_login_data(self, machine_id):
-        mongo_ret = list(self.mach_col.find({"_id": machine_id}, {"_id":0, "users_last_login":1}))[0]
-        return mongo_ret
+        mongo_ret = self.mach_col.find({"_id": machine_id}, {"_id":0, "users_last_login":1})
+        for data in mongo_ret:
+            return data
+        return {"users_last_login": dict()}
 
     def get_most_recent_last_login_data(self, machine_id):
         last_login_dict = self.get_last_login_data(machine_id)
         login_dates = sorted(last_login_dict["users_last_login"].items(),
                              key=lambda pair: parser.parse(pair[1]),
                              reverse=True)
-        return parser.parse(login_dates[0][1]).strftime("%Y-%m-%d")
+        for last_login_date in login_dates:
+            return parser.parse(last_login_date[1]).strftime("%Y-%m-%d")
 
     def get_overview_page_data(self, color_coding_selector, from_date, to_date):
         data = dict()
