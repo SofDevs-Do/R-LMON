@@ -57,7 +57,11 @@ class Util:
             i += 1
 
         query_request_dict["_id"] = 0
-        ret_val = list(self.cpu_ram_disk_col.find({"_id": machine_id}, query_request_dict))[0]
+        ret_val = {"cpu_util": dict(), "ram_util": dict()}
+        db_ret = self.cpu_ram_disk_col.find({"_id": machine_id}, query_request_dict)
+        for data in db_ret:
+            ret_val = data
+            break
 
         j = 0
         for j in date_list:
@@ -103,8 +107,23 @@ class Util:
 
 
     def get_machine_data(self, machine_id):
+        ret_data = {'_id': machine_id,
+                    'swap_info': 'no data',
+                    'assigned_to': 'no data',
+                    'users_last_login': dict(),
+                    'comments': 'no data',
+                    'cpu_model': 'no data',
+                    'hostname': 'no data',
+                    'ram_capacity': 'no data',
+                    'os_info': 'no data',
+                    'address': 'no data',
+                    'disk_info': dict()}
         for data in self.mach_col.find({"_id": machine_id}):
-            return data
+            ret_data = data
+            break
+
+        return ret_data
+
 
     def get_average_disk_data(self, machine_id, from_date, to_date):
         _from_date = datetime.date(*map(lambda x: int(x), from_date.split('-')))
@@ -112,8 +131,20 @@ class Util:
         iter_date = _from_date
         i = 0
 
-        mach_disk_info = list(self.mach_col.find({"_id": machine_id}))[0]['disk_info']
-        used_disk_date_wise_info = list(self.cpu_ram_disk_col.find({"_id": machine_id}))[0]['disk_info']
+        mach_disk_info = dict()
+        db_ret = self.mach_col.find({"_id": machine_id})
+        for data in db_ret:
+            if 'disk_info' in data:
+                mach_disk_info = data['disk_info']
+            break
+
+        used_disk_date_wise_info = dict()
+        db_ret = self.cpu_ram_disk_col.find({"_id": machine_id})
+        for data in db_ret:
+            if 'disk_info' in data:
+                used_disk_date_wise_info = data['disk_info']
+            break
+
         fs_list = mach_disk_info.keys()
         
         for each_fs in fs_list:
