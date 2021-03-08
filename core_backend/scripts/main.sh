@@ -4,7 +4,7 @@ RLMON_HOME="${HOME}"/.r_lmon;
 MACHINEFILE="${RLMON_HOME}"/machinefile;
 LOG_DATE_PATH="${RLMON_HOME}"/core_backend/_log/"$(date --date="yesterday" '+%Y-%m-%d')";
 
-. "${RLMON_HOME}"/core_backend/cron/utils/utils-main.sh;
+. "${RLMON_HOME}"/core_backend/scripts/utils/utils-main.sh;
 
 IFS=","
 grep -v '^#' < "${MACHINEFILE}" | \

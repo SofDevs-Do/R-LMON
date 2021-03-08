@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. "${RLMON_HOME}"/core_backend/cron/utils/up-tests.sh;
+. "${RLMON_HOME}"/core_backend/scripts/utils/up-tests.sh;
 
 main()
 {
@@ -51,7 +51,7 @@ main()
 
 	    ## Data collection scripts being invoked.
 	    # Get hostname details
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/hostname.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/hostname.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/hostname.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/hostname.txt;
@@ -60,14 +60,14 @@ main()
 	    
 
 	    # CPU Usage stats collection.
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/cpu-usage.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/cpu-usage.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/cpu-usage.csv < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/cpu-usage.csv;
 		touch "${REMOTE_MACHINE_PATH}"/cpu-test-down;
 	    fi
 
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/avg-cpu-usage.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/avg-cpu-usage.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/avg-cpu-usage.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/avg-cpu-usage.txt;
@@ -76,14 +76,14 @@ main()
 
 
 	    # RAM Usage stats collection
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/mem-usage.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/mem-usage.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/mem-usage.csv < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/mem-usage.csv;
 		touch "${REMOTE_MACHINE_PATH}"/mem-test-down;
 	    fi
 
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/avg-mem-usage.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/avg-mem-usage.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/avg-mem-usage.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/avg-mem-usage.txt;
@@ -92,7 +92,7 @@ main()
 
 
 	    # Uptime of the system
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/uptime.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/uptime.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/uptime.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/uptime.txt;
@@ -100,7 +100,7 @@ main()
 	    fi
 
 	    # IPs of the system
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/get-ip.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/get-ip.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/ip.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/ip.txt;
@@ -108,7 +108,7 @@ main()
 	    fi
 
 	    # CPU model of the system
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/cpu-model.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/cpu-model.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/cpu-model.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/cpu-model.txt;
@@ -116,7 +116,7 @@ main()
 	    fi
 
 	    # RAM capacity of the system
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/ram-capacity.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/ram-capacity.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/ram-capacity.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/ram-capacity.txt;
@@ -124,7 +124,7 @@ main()
 	    fi
 
 	    # OS info of the system
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/which-os.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/which-os.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/os-info.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/os-info.txt;
@@ -132,11 +132,11 @@ main()
 	    fi
 
 	    # list users of the system
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/list-users.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/list-users.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/list-users.txt < /dev/null;
 
 	    # last login info for users of the system
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/last-login-info.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/last-login-info.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/last-login-info.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/last-login-info.txt;
@@ -144,7 +144,7 @@ main()
 	    fi
 
 	    # Disk utilization of the system
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/disk-info.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/disk-info.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/disk-info.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/disk-info.txt;
@@ -152,7 +152,7 @@ main()
 	    fi
 
 	    # Swap space info of the system
-	    bash "${RLMON_HOME}"/core_backend/cron/utils/swap-info.sh \
+	    bash "${RLMON_HOME}"/core_backend/scripts/utils/swap-info.sh \
 		 "${REMOTE_MACHINE}" > "${REMOTE_MACHINE_PATH}"/swap-info.txt < /dev/null;
 	    if [ $? -ne 0 ]; then
 		rm -f "${REMOTE_MACHINE_PATH}"/swap-info.txt;
