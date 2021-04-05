@@ -934,7 +934,8 @@ machine_details_obj={
 			    displayFormats: {
 				second: 'h:MM:SS',
 				minute: 'h:MM',
-				hour: 'hA',
+				hour: 'hA D',
+				week: 'MMM D',
 				day: 'MMM D',
 				month: 'YYYY MMM',
 				year: 'YYYY'
