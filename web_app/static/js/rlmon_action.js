@@ -288,6 +288,8 @@ overview_page_obj={
 	    return "_id";
 	if (disp_string == "Prof in-charge")
 	    return "assigned_to";
+	if (disp_string == "Student")
+	    return "student_assigned_to";
 	if (disp_string == "IP Address")
 	    return "ip_addr";
 	return "no_key";

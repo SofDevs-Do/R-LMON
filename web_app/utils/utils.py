@@ -105,6 +105,7 @@ class Util:
                         data[room]["rack_list"][rack]["machine_list"][machine_pos]["value"] = value
                         ret_data = self.get_machine_data(machine_id)
                         data[room]["rack_list"][rack]["machine_list"][machine_pos]["assigned_to"] = ret_data['assigned_to']
+                        data[room]["rack_list"][rack]["machine_list"][machine_pos]["student_assigned_to"] = ret_data['student_assigned_to']
                         data[room]["rack_list"][rack]["machine_list"][machine_pos]["ip_addr"] = ret_data['address'].split("@")[-1]
         return data
 
@@ -125,7 +126,9 @@ class Util:
                     'ip_info': dict(),
                     'uptime': 'no data'}
         for data in self.mach_col.find({"_id": machine_id}):
-            ret_data = data
+            for field in data:
+                if field in ret_data:
+                    ret_data[field] = data[field]
             break
 
         return ret_data
