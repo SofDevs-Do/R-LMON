@@ -100,10 +100,26 @@ overview_page_obj={
 		}
 	    }
 
-	    overview_page_obj.flattened_data_json = flattened_data_json.sort(
-		function(a, b) {
-		    return a["value"] - b["value"];
-		});
+	    if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
+		document.getElementById("color-coding-selector").value == "RAM utilization") {
+		overview_page_obj.flattened_data_json = flattened_data_json.sort(
+		    function(a, b) {
+			return a["value"] - b["value"];
+		    });
+	    }
+	    else {
+		overview_page_obj.flattened_data_json = flattened_data_json.sort(
+		    function(a, b) {
+			if (a["value"] != null && b["value"] != null)
+			    return (new Date(Date.parse(a["value"]))) - (new Date(Date.parse(b["value"])));
+			else {
+			    if (a["value"] == null)
+				return -1;
+			    else
+				return 1
+			}
+		    });
+	    }
 
 	    overview_page_obj.refresh_vidualization();
 	}
