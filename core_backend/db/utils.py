@@ -171,7 +171,7 @@ def get_users_last_login(log_path, machine):
         data = each_user_data.split()
         user = data[0]
         if len(data) != 4:
-            last_login_info = ' '.join(data[3:-2])
+            last_login_info = ' '.join(data[3:-2]+[data[-1]])
         else:
             last_login_info = ' '.join(data[1:])
         data_dict[user] = last_login_info
