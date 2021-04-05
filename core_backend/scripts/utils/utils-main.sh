@@ -11,8 +11,9 @@ main()
     KVM_SWITCH="${5}";
     KVM_NUMBER="${6}";
     ALLOTED_TO="${7}";
-    COMMENTS="${8}";
-    MACHINE_ID="${9}";
+    STUDENT_ALLOTED_TO="${8}";
+    COMMENTS="${9}";
+    MACHINE_ID="${10}";
 
     # The location to store the collected data from each remote machine.
     REMOTE_MACHINE_PATH="${LOG_DATE_PATH}/${MACHINE_ID}";
@@ -46,6 +47,7 @@ main()
 	    echo "${KVM_SWITCH}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${KVM_NUMBER}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${ALLOTED_TO}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
+	    echo "${STUDENT_ALLOTED_TO}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${COMMENTS}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 
 

@@ -141,6 +141,7 @@ for machine_id in machine_id_list:
     # misc information such as assigned to whom, and other comments.
     misc_information = get_assigned_to_and_comments(log_path, machine_id)
     data_dict["assigned_to"] = misc_information["assigned_to"]
+    data_dict["student_assigned_to"] = misc_information["student_assigned_to"]
     data_dict["comments"] = misc_information["comments"]
 
     # obtain avg_cpu_util from data_collected and alter in data_dict
