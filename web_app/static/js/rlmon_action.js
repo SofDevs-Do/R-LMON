@@ -16,6 +16,7 @@ navigation_selector_obj={
 	document.getElementById("from-date-input").addEventListener("change", overview_page_obj.top_fun);
 	document.getElementById("to-date-input").addEventListener("change", overview_page_obj.top_fun);
 	document.getElementById("color-coding-selector").addEventListener("change", overview_page_obj.top_fun);
+	document.getElementById("overview-page-display-data-selector").addEventListener("change", overview_page_obj.top_fun);
 
 	// set the dates, and restrict the 'from date' field to a
 	// month
@@ -236,6 +237,8 @@ overview_page_obj={
 	flattened_data_json = overview_page_obj.flattened_data_json.slice(0);
 	coloring_function = null;
 	sorted_text = "Sort descending";
+	var disp_data_input_string = document.getElementById("overview-page-display-data-selector").value;
+	var disp_data_based_on_key = overview_page_obj.get_backend_key_from_disp_string(disp_data_input_string);
 
 	// different coloring functions based on the data requested by the user.
 	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
@@ -267,17 +270,27 @@ overview_page_obj={
 	    if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
 		document.getElementById("color-coding-selector").value == "RAM utilization") {
 		if (value > 0)
-		    li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + value.toFixed(2);
+		    li_object.innerHTML = flattened_data_json[i][disp_data_based_on_key] + ": " + value.toFixed(2);
 		else
-		    li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + 0;
+		    li_object.innerHTML = flattened_data_json[i][disp_data_based_on_key] + ": " + 0;
 	    }
 	    else {
-		li_object.innerHTML = flattened_data_json[i]["_id"] + ": " + value;
+		li_object.innerHTML = flattened_data_json[i][disp_data_based_on_key] + ": " + value;
 	    }
 	    li_object.addEventListener("click", machine_details_obj.change_view);
 	    coloring_function(value, li_object);
 	    ul_object.appendChild(li_object);
 	}
+    },
+
+    get_backend_key_from_disp_string: function(disp_string) {
+	if (disp_string == "Machine name")
+	    return "_id";
+	if (disp_string == "Prof in-charge")
+	    return "assigned_to";
+	if (disp_string == "IP Address")
+	    return "ip_addr";
+	return "no_key";
     },
 
     populate_rack_view: function(e) {
@@ -291,6 +304,8 @@ overview_page_obj={
 	var no_data = false;
 	coloring_function = null;
 	var num_machines = 0, num_racks = 0;
+	var disp_data_input_string = document.getElementById("overview-page-display-data-selector").value;
+	var disp_data_based_on_key = overview_page_obj.get_backend_key_from_disp_string(disp_data_input_string);
 
 	// different coloring functions based on the data requested by the user.
 	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
@@ -334,7 +349,7 @@ overview_page_obj={
 		    li_object.rlmon_id = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
 		    li_object.classList.add("w3-hover-shadow", "w3-border-black");
 		    li_object.style.cursor = "pointer";
-		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k]["_id"];
+		    li_object.innerHTML = data_json[i]['rack_list'][j]['machine_list'][k][disp_data_based_on_key];
 
 		    value = data_json[i]['rack_list'][j]['machine_list'][k]["value"];
 		    no_data = coloring_function(value, li_object);

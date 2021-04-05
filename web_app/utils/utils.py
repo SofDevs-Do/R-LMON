@@ -103,6 +103,9 @@ class Util:
                         elif (color_coding_selector == 'users_last_login'):
                             value = self.get_most_recent_last_login_data(machine_id)
                         data[room]["rack_list"][rack]["machine_list"][machine_pos]["value"] = value
+                        ret_data = self.get_machine_data(machine_id)
+                        data[room]["rack_list"][rack]["machine_list"][machine_pos]["assigned_to"] = ret_data['assigned_to']
+                        data[room]["rack_list"][rack]["machine_list"][machine_pos]["ip_addr"] = ret_data['address'].split("@")[-1]
         return data
 
 
@@ -110,6 +113,7 @@ class Util:
         ret_data = {'_id': machine_id,
                     'swap_info': 'no data',
                     'assigned_to': 'no data',
+                    'student_assigned_to': 'no data',
                     'users_last_login': dict(),
                     'comments': 'no data',
                     'cpu_model': 'no data',
@@ -117,7 +121,9 @@ class Util:
                     'ram_capacity': 'no data',
                     'os_info': 'no data',
                     'address': 'no data',
-                    'disk_info': dict()}
+                    'disk_info': dict(),
+                    'ip_info': dict(),
+                    'uptime': 'no data'}
         for data in self.mach_col.find({"_id": machine_id}):
             ret_data = data
             break
