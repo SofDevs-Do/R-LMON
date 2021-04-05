@@ -372,12 +372,14 @@ overview_page_obj={
 	legend_key = document.getElementById("color-coding-selector").value;
 
 	if (legend_key == "CPU utilization" || legend_key == "RAM utilization") {
-	    document.getElementById("legend-div-1").innerHTML = "0-24";
-	    document.getElementById("legend-div-2").innerHTML = "25-49";
-	    document.getElementById("legend-div-3").innerHTML = "50-74";
-	    document.getElementById("legend-div-4").innerHTML = "74-100";
+	    document.getElementById("unit-of-bins").innerHTML = "colour code based on usage %";
+	    document.getElementById("legend-div-1").innerHTML = "0-24%";
+	    document.getElementById("legend-div-2").innerHTML = "25-49%";
+	    document.getElementById("legend-div-3").innerHTML = "50-74%";
+	    document.getElementById("legend-div-4").innerHTML = "74-100%";
 	}
 	else {
+	    document.getElementById("unit-of-bins").innerHTML = "colour code based on most recent last login date being in the rage:";
 	    document.getElementById("legend-div-1").innerHTML = ">4w";
 	    document.getElementById("legend-div-2").innerHTML = "3w";
 	    document.getElementById("legend-div-3").innerHTML = "2w";
