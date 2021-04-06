@@ -198,7 +198,7 @@ def get_swap_info(log_path, machine):
 def get_ram_capacity(log_path, machine):
     machine = str(machine)
     if os.path.isfile(os.path.join(log_path, machine, "ram-capacity-test-down")):
-        return 0
+        return -1
     ram_capacity_file = os.path.join(log_path, machine, RAM_CAPACITY_FILE_NAME)
     with open(ram_capacity_file, "r") as ram_capacity_fp:
         # FIXME: Shell script should find out when the command failed. Remove
@@ -206,7 +206,7 @@ def get_ram_capacity(log_path, machine):
         try:
             ram_capacity = round(float(ram_capacity_fp.read().strip()),2) # RAM capacity reported in GB
         except:
-            ram_capacity = 0
+            ram_capacity = -1
     return ram_capacity
 
 def get_cpu_model(log_path, machine):

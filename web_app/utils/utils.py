@@ -107,6 +107,13 @@ class Util:
                         data[room]["rack_list"][rack]["machine_list"][machine_pos]["assigned_to"] = ret_data['assigned_to']
                         data[room]["rack_list"][rack]["machine_list"][machine_pos]["student_assigned_to"] = ret_data['student_assigned_to']
                         data[room]["rack_list"][rack]["machine_list"][machine_pos]["ip_addr"] = ret_data['address'].split("@")[-1]
+                        data[room]["rack_list"][rack]["machine_list"][machine_pos]["os_info"] = ret_data['os_info']
+                        data[room]["rack_list"][rack]["machine_list"][machine_pos]["cpu_model"] = ret_data['cpu_model']
+                        if (ret_data['ram_capacity'] < 0):
+                            data[room]["rack_list"][rack]["machine_list"][machine_pos]["ram_capacity"] = str("no data")
+                        else:
+                            data[room]["rack_list"][rack]["machine_list"][machine_pos]["ram_capacity"] = str(ret_data['ram_capacity']) + " GB"
+
         return data
 
 
@@ -119,7 +126,7 @@ class Util:
                     'comments': 'no data',
                     'cpu_model': 'no data',
                     'hostname': 'no data',
-                    'ram_capacity': 'no data',
+                    'ram_capacity': -1,
                     'os_info': 'no data',
                     'address': 'no data',
                     'disk_info': dict(),

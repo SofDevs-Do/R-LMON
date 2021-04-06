@@ -292,6 +292,12 @@ overview_page_obj={
 	    return "student_assigned_to";
 	if (disp_string == "IP Address")
 	    return "ip_addr";
+	if (disp_string == "OS Distribution")
+	    return "os_info";
+	if (disp_string == "CPU Model")
+	    return "cpu_model";
+	if (disp_string == "RAM Capacity")
+	    return "ram_capacity";
 	return "no_key";
     },
 
