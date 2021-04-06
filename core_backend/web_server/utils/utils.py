@@ -6,12 +6,13 @@ class Util:
         pass
 
     def machine_ctrl(self, machine_address, operation):
+        cmd_prefix = "systemctl -H " + machine_address
         if (operation == "shutdown"):
-            _operation = " '/sbin/shutdown 0'"
+            cmd_suffix = " poweroff"
         elif (operation == "reboot"):
-            _operation = " '/sbin/reboot'"
+            cmd_suffix = " reboot"
 
-        response = os.system("ssh -o PasswordAuthentication=no " + machine_address + _operation)
+        response = os.system(cmd_prefix + cmd_suffix)
         if (response == 0):
             return("{} successful".format(operation))
 
