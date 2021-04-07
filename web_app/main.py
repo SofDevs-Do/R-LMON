@@ -3,6 +3,7 @@ import string
 
 from flask import Flask
 from flask import render_template
+from flask import redirect
 
 import utils.utils as utils
 
@@ -58,10 +59,11 @@ def get_machine_disk_info(machine_id, from_date, to_date):
     to_ret = util_obj.get_average_disk_data(machine_id, from_date, to_date)
     return to_ret
 
-@app.route("/api/v2/machine-ctrl/<string:machine_id>/<string:operation>")
+@app.route("/api/v2/machine-ctrl/<string:machine_id>/<string:operation>",
+           methods=['POST'])
 def machine_ctrl(machine_id, operation):
-    to_ret = util_obj.machine_ctrl(machine_id, operation)
-    return to_ret
+    ret_data = util_obj.get_machine_data(machine_id)
+    return redirect(util_obj.core_backend_url+"/api/v2/core-backend/machine-ctrl/"+ret_data["address"]+"/"+operation)
 
 
 @app.route("/")

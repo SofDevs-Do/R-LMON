@@ -2,6 +2,7 @@ import os
 import sys
 import pymongo
 import glob
+import yaml
 import warnings
 from utils import *
 

@@ -611,7 +611,7 @@ machine_details_obj={
 	    xhr_object = new XMLHttpRequest();
 	    xhr_object.onload = this.reboot_done;
 	    endpoint = navigation_selector_obj.backend_url + '/api/v2/machine-ctrl/' + machine_id + '/' + 'reboot';
-	    xhr_object.open('GET', endpoint);
+	    xhr_object.open('POST', endpoint);
 	    xhr_object.send();
 
 	}

@@ -10,12 +10,14 @@ class Util:
 
     def __init__(self):
         self.r_lmon_path = os.path.join(os.environ['HOME'], ".r_lmon")
-        url_dict = {"db_url": "127.0.0.1:27017"}
+        url_dict = {"db_url": "127.0.0.1:27017",
+                    "core_backend_url": "127.0.0.1:8001"}
         with open(os.path.join(self.r_lmon_path, "serverfile.yaml"), "r") as f:
             url_dict = yaml.safe_load(f)
         self.db_url = "mongodb://" + url_dict["db_url"]
         self.db_client = pymongo.MongoClient(self.db_url)
         self.db = self.db_client["rlmon_db"]
+        self.core_backend_url = "http://" + url_dict["core_backend_url"]
 
         self.mach_col = self.db['mach_col']
         self.room_rack_col = self.db['room_rack_col']
@@ -189,23 +191,3 @@ class Util:
                 used_GB_avg = -1  #no log found for that date, yet to be handled
             mach_disk_info[each_fs]['avg_used_GB'] = used_GB_avg
         return mach_disk_info
-
-    def machine_ctrl(self, machine_id, operation):
-        mongo_ret = self.mach_col.find({"_id": machine_id}, {"_id": 0, "address": 1})
-        address = ""
-        _operation = ""
-
-        if (operation == "shutdown"):
-            _operation = " '/sbin/shutdown 0'"
-        elif (operation == "reboot"):
-            _operation = " '/sbin/reboot'"
-
-        for ret_val in mongo_ret:
-            address = ret_val["address"]
-
-        if (address != "" and _operation != ""):
-            response = os.system("ssh " + address + _operation)
-            if (response == 0):
-                return True
-
-        return False
