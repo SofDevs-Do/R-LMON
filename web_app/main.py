@@ -7,11 +7,8 @@ from flask import render_template
 import utils.utils as utils
 
 
-db_url = "mongodb://localhost:27017/"
-backend_url = "http://127.0.0.1:8000"
-
 app = Flask(__name__, static_url_path='', static_folder='static')
-util_obj = utils.Util(db_url = db_url)
+util_obj = utils.Util()
 
 
 @app.route("/api/v2/overview-page-data/<string:color_coding_selector>/<string:from_date>/<string:to_date>",

@@ -6,7 +6,12 @@ import warnings
 from utils import *
 
 # connecting to Mongo server
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+r_lmon_path = os.path.join(os.environ['HOME'], ".r_lmon")
+url_dict = {"db_url": "127.0.0.1:27017"}
+with open(os.path.join(r_lmon_path, "serverfile.yaml"), "r") as f:
+    url_dict = yaml.safe_load(f)
+db_url = "mongodb://" + url_dict["db_url"]
+myclient = pymongo.MongoClient(db_url)
 
 # accessing the rlmon_db
 rlmon_db = myclient["rlmon_db"]

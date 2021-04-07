@@ -1,4 +1,5 @@
 import os
+import yaml
 import pymongo
 import datetime
 import statistics
@@ -7,8 +8,12 @@ from dateutil import parser
 
 class Util:
 
-    def __init__(self, db_url):
-        self.db_url = db_url
+    def __init__(self):
+        self.r_lmon_path = os.path.join(os.environ['HOME'], ".r_lmon")
+        url_dict = {"db_url": "127.0.0.1:27017"}
+        with open(os.path.join(self.r_lmon_path, "serverfile.yaml"), "r") as f:
+            url_dict = yaml.safe_load(f)
+        self.db_url = "mongodb://" + url_dict["db_url"]
         self.db_client = pymongo.MongoClient(self.db_url)
         self.db = self.db_client["rlmon_db"]
 
