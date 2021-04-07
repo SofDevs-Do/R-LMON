@@ -81,10 +81,16 @@ class Util:
             return data
         return {"users_last_login": dict()}
 
+    def __select_key_for_last_login(pair):
+        if pair[1] == "**Never logged in**":
+            return parser.parse("1970-01-01")
+        else:
+            return parser.parse(pair[1])
+
     def get_most_recent_last_login_data(self, machine_id):
         last_login_dict = self.get_last_login_data(machine_id)
         login_dates = sorted(last_login_dict["users_last_login"].items(),
-                             key=lambda pair: parser.parse(pair[1]),
+                             key=Util.__select_key_for_last_login,
                              reverse=True)
         for last_login_date in login_dates:
             return parser.parse(last_login_date[1]).strftime("%Y-%m-%d")
