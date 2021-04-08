@@ -1048,13 +1048,13 @@ machine_details_obj={
 	var assigned_to_md_div = document.getElementById("prof-assigned-to-md");
 	assigned_to_md_div.innerHTML = "";
 	// console.log(assigned_to_info);
-	assigned_to_md_div.innerHTML = "<li><h4>Professor Assigned To </h4></li> <li>" + assigned_to_info +' </li>' + "</ul>";
+	assigned_to_md_div.innerHTML = "<li><h7>Professor Assigned To </h7></li> <li>" + assigned_to_info +' </li>' + "</ul>";
     },
 
     _update_student_assigned_to_info: function(student_assigned_to_info) {
 	var student_assigned_to_md_div = document.getElementById("student-assigned-to-md");
 	student_assigned_to_md_div.innerHTML = "";
-	student_assigned_to_md_div.innerHTML = "<li><h4>Student Assigned To </h4></li> <li>" + student_assigned_to_info +' </li>' + "</ul>";
+	student_assigned_to_md_div.innerHTML = "<li><h7>Student Assigned To </h7></li> <li>" + student_assigned_to_info +' </li>' + "</ul>";
     },
 
     _update_ip_info: function(ip_info) {
