@@ -674,21 +674,31 @@ machine_details_obj={
 	    labels: ['Avg Disk utilized (in GB)', 'Avg Disk Un-utilized (in GB)']
 	};
 
-	var ctx = document.getElementById("avg-disk-overall-util-doughnut-chart-canvas");
-	var avg_disk_util_donoughnut_chart = new Chart(ctx, {
-	    type: 'doughnut',
-	    data: avg_disk_util_data,
-	    options: {
-		responsive: true,
-		cutoutPercentage: 60,
-		legend: false,
-		tooltips: { bodyFontSize: 7},
-		title: {
-		    display: true,
-		    text: 'Average Disk Utilization'
-		},
-	    }
-	});
+	// var ctx = document.getElementById("avg-disk-overall-util-doughnut-chart-canvas");
+	// var avg_disk_util_donoughnut_chart = new Chart(ctx, {
+	//     type: 'doughnut',
+	//     data: avg_disk_util_data,
+	//     options: {
+	// 	responsive: true,
+	// 	cutoutPercentage: 60,
+	// 	legend: false,
+	// 	tooltips: { bodyFontSize: 7},
+	// 	title: {
+	// 	    display: true,
+	// 	    text: 'Average Disk Utilization'
+	// 	},
+	//     }
+	// });
+
+	var avg_disk_util_card = document.getElementById("avg-disk-util-card");
+	if (avg_disk_util_val < 0) {
+	    avg_disk_util_card.innerHTML = "<h4>no-data</h4>";
+	}
+	else {
+	    avg_disk_util_card.innerHTML = "<h2>"+avg_disk_util_val+"%</h2>";
+	}
+
+	//---------------------------------------------------------------------
 	// var avg_disk_util_data = {
 	//     datasets: datasets,
 	//     labels: ['Avg Disk utilized (in GB)', 'Avg Disk Un-utilized (in GB)']
@@ -803,37 +813,53 @@ machine_details_obj={
 	    labels: ['Avg RAM utilized %', 'Avg RAM Un-utilized%']
 	};
 
-	var ctx = document.getElementById("avg-cpu-util-doughnut-chart-canvas");
-	var avg_cpu_util_donoughnut_chart = new Chart(ctx, {
-	    type: 'doughnut',
-	    data: avg_cpu_util_data,
-	    options: {
-		responsive: true,
-		cutoutPercentage: 60,
-		legend: false,
-		tooltips: { bodyFontSize: 8 },
-		title: {
-		    display: true,
-		    text: 'Average CPU Utilization'
-		}
-	    }
-	});
+	// var ctx = document.getElementById("avg-cpu-util-doughnut-chart-canvas");
+	// var avg_cpu_util_donoughnut_chart = new Chart(ctx, {
+	//     type: 'doughnut',
+	//     data: avg_cpu_util_data,
+	//     options: {
+	// 	responsive: true,
+	// 	cutoutPercentage: 60,
+	// 	legend: false,
+	// 	tooltips: { bodyFontSize: 8 },
+	// 	title: {
+	// 	    display: true,
+	// 	    text: 'Average CPU Utilization'
+	// 	}
+	//     }
+	// });
 
-	var ctx_ram = document.getElementById("avg-ram-util-doughnut-chart-canvas");
-	var avg_ram_util_donoughnut_chart = new Chart(ctx_ram, {
-	    type: 'doughnut',
-	    data: avg_ram_util_data,
-	    options: {
-		responsive: true,
-		cutoutPercentage: 60,
-		legend: false,
-		tooltips: { bodyFontSize: 8 },
-		title: {
-		    display: true,
-		    text: 'Average RAM Utilization'
-		},
-	    }
-	});
+	var avg_cpu_util_card = document.getElementById("avg-cpu-util-card");
+	if (avg_cpu_util_val < 0) {
+	    avg_cpu_util_card.innerHTML = "<h4>no-data</h4>";
+	}
+	else {
+	    avg_cpu_util_card.innerHTML = "<h2>"+avg_cpu_util_val+"%</h2>";
+	}
+
+	// var ctx_ram = document.getElementById("avg-ram-util-doughnut-chart-canvas");
+	// var avg_ram_util_donoughnut_chart = new Chart(ctx_ram, {
+	//     type: 'doughnut',
+	//     data: avg_ram_util_data,
+	//     options: {
+	// 	responsive: true,
+	// 	cutoutPercentage: 60,
+	// 	legend: false,
+	// 	tooltips: { bodyFontSize: 8 },
+	// 	title: {
+	// 	    display: true,
+	// 	    text: 'Average RAM Utilization'
+	// 	},
+	//     }
+	// });
+
+	var avg_ram_util_card = document.getElementById("avg-ram-util-card");
+	if (avg_ram_util_val < 0) {
+	    avg_ram_util_card.innerHTML = "<h4>no-data</h4>";
+	}
+	else {
+	    avg_ram_util_card.innerHTML = "<h2>"+avg_ram_util_val+"%</h2>";
+	}
 
     },
 
