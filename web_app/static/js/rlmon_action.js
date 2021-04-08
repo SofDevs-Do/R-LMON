@@ -690,11 +690,11 @@ machine_details_obj={
 	// });
 
 	var avg_disk_util_card = document.getElementById("avg-disk-util-card");
-	if (avg_disk_util_val < 0) {
-	    avg_disk_util_card.innerHTML = "<h4>no-data</h4>";
+	if (avg_disk_util_val > 0) {
+	    avg_disk_util_card.innerHTML = "<h2>"+avg_disk_util_val+"%</h2>";
 	}
 	else {
-	    avg_disk_util_card.innerHTML = "<h2>"+avg_disk_util_val+"%</h2>";
+	    avg_disk_util_card.innerHTML = "<h2>no-data</h2>";
 	}
 
 	//---------------------------------------------------------------------
@@ -829,11 +829,11 @@ machine_details_obj={
 	// });
 
 	var avg_cpu_util_card = document.getElementById("avg-cpu-util-card");
-	if (avg_cpu_util_val < 0) {
-	    avg_cpu_util_card.innerHTML = "<h4>no-data</h4>";
+	if (avg_cpu_util_val > 0) {
+	    avg_cpu_util_card.innerHTML = "<h2>"+avg_cpu_util_val+"%</h2>";
 	}
 	else {
-	    avg_cpu_util_card.innerHTML = "<h2>"+avg_cpu_util_val+"%</h2>";
+	    avg_cpu_util_card.innerHTML = "<h2>no-data</h2>";
 	}
 
 	// var ctx_ram = document.getElementById("avg-ram-util-doughnut-chart-canvas");
@@ -853,11 +853,11 @@ machine_details_obj={
 	// });
 
 	var avg_ram_util_card = document.getElementById("avg-ram-util-card");
-	if (avg_ram_util_val < 0) {
-	    avg_ram_util_card.innerHTML = "<h4>no-data</h4>";
+	if (avg_ram_util_val > 0) {
+	    avg_ram_util_card.innerHTML = "<h2>"+avg_ram_util_val+"%</h2>";
 	}
 	else {
-	    avg_ram_util_card.innerHTML = "<h2>"+avg_ram_util_val+"%</h2>";
+	    avg_ram_util_card.innerHTML = "<h2>no-data</h2>";
 	}
 
     },
