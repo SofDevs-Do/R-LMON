@@ -1,6 +1,5 @@
 navigation_selector_obj={
 
-    backend_url: "http://127.0.0.1:8000",
     prev_view : "machine-overview-data-div",
 
     setup_nav_buttons: function() {
@@ -67,7 +66,7 @@ overview_page_obj={
 
 	xhr_object = new XMLHttpRequest();
 	xhr_object.onload = overview_page_obj.get_machine_overview_data_callback;
-	xhr_object.open('GET', navigation_selector_obj.backend_url
+	xhr_object.open('GET', server_details.web_server_ip
 			+ '/api/v2/overview-page-data/'
 			+ color_coding_selector + '/'
 			+ from_date +'/'
@@ -524,7 +523,7 @@ overview_page_obj={
 	xhr_object = new XMLHttpRequest();
 	xhr_object.onload = this.populate_meta_data;
 	xhr_object.meta_data_div = meta_data_div;
-	xhr_object.open('GET', navigation_selector_obj.backend_url
+	xhr_object.open('GET', server_details.web_server_ip
 			+ '/api/v2/overview-machine-meta-data/'
 			+ meta_data_div.parentElement.rlmon_id + '/'
 			+ from_date + '/'
@@ -610,7 +609,7 @@ machine_details_obj={
 	    // console.log("rebooting");
 	    xhr_object = new XMLHttpRequest();
 	    xhr_object.onload = this.reboot_done;
-	    endpoint = navigation_selector_obj.backend_url + '/api/v2/machine-ctrl/' + machine_id + '/' + 'reboot';
+	    endpoint = server_details.web_server_ip + '/api/v2/machine-ctrl/' + machine_id + '/' + 'reboot';
 	    xhr_object.open('POST', endpoint);
 	    xhr_object.send();
 
@@ -629,7 +628,7 @@ machine_details_obj={
 	var to_date = document.getElementById("to-date-input-md").value;
 	xhr_object = new XMLHttpRequest();
 	xhr_object.onload = this.get_disk_info;
-	endpoint = navigation_selector_obj.backend_url + '/api/v2/machine-details-disk-info/' + machine_id + '/' + from_date + '/' + to_date;
+	endpoint = server_details.web_server_ip + '/api/v2/machine-details-disk-info/' + machine_id + '/' + from_date + '/' + to_date;
 	xhr_object.open('GET', endpoint);
 	xhr_object.send();
     },
@@ -754,7 +753,7 @@ machine_details_obj={
 	xhr_object = new XMLHttpRequest();
 	xhr_object.onload = this.get_avg_cpu_ram_data;
 
-	endpoint = navigation_selector_obj.backend_url + '/api/v2/overview-machine-meta-data/' + machine_id + '/' + from_date + '/' + to_date;
+	endpoint = server_details.web_server_ip + '/api/v2/overview-machine-meta-data/' + machine_id + '/' + from_date + '/' + to_date;
 	
 	xhr_object.open('GET', endpoint);
 	xhr_object.send();
@@ -828,7 +827,7 @@ machine_details_obj={
     request_and_fill_mach_col_data: function(machine_id) {
 	xhr_object = new XMLHttpRequest();
 	xhr_object.onload = this.get_mach_col_data;
-	xhr_object.open('GET', navigation_selector_obj.backend_url
+	xhr_object.open('GET', server_details.web_server_ip
 			+ '/api/v2/machine-details-page-data/'
 			+ machine_id);
 	xhr_object.send();
@@ -892,7 +891,7 @@ machine_details_obj={
 
 	xhr_object = new XMLHttpRequest();
 	xhr_object.onload = this.get_cpu_ram_utilization_data;
-	xhr_object.open('GET', navigation_selector_obj.backend_url
+	xhr_object.open('GET', server_details.web_server_ip
 			+ '/api/v2/machine-details-cpu-ram-data/'
 			+ machine_id + '/' + from_date + '/' + to_date);
 	xhr_object.send();
