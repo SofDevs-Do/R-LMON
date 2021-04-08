@@ -737,11 +737,23 @@ machine_details_obj={
 	    var cell3 = row.insertCell(2);
 	    var cell4 = row.insertCell(3);
 	    var cell5 = row.insertCell(4);
+	    var avg_used_GB_raw_data = avg_disk_data[disks_list[i]]["avg_used_GB"].toFixed(2);
+	    var used_percentage_raw_data = ((avg_disk_data[disks_list[i]]["total_GB"] - avg_disk_data[disks_list[i]]["avg_used_GB"])*100/avg_disk_data[disks_list[i]]["total_GB"]).toFixed(2);
 	    cell1.innerHTML = disks_list[i];
 	    cell2.innerHTML = avg_disk_data[disks_list[i]]["mounted_on"];
-	    cell3.innerHTML = avg_disk_data[disks_list[i]]["avg_used_GB"].toFixed(2);
+	    if(avg_used_GB_raw_data != -1) {
+		cell3.innerHTML = avg_used_GB_raw_data;
+	    }
+	    else {
+		cell3.innerHTML = "no-data";
+	    }
 	    cell4.innerHTML = avg_disk_data[disks_list[i]]["total_GB"];
-	    cell5.innerHTML = ((avg_disk_data[disks_list[i]]["total_GB"] - avg_disk_data[disks_list[i]]["avg_used_GB"])*100/avg_disk_data[disks_list[i]]["total_GB"]).toFixed(2);
+	    if(avg_used_GB_raw_data != -1) {
+		cell5.innerHTML = used_percentage_raw_data;
+	    }
+	    else {
+		cell5.innerHTML = "no-data";
+	    }
 	}
 	disk_info_table.classList.add("w3-table", "w3-striped", "w3-bordered", "w3-small", "w3-round");
 
