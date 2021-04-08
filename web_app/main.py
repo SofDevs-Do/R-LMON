@@ -4,6 +4,7 @@ import string
 from flask import Flask
 from flask import render_template
 from flask import redirect
+from flask import request
 
 import utils.utils as utils
 
@@ -68,4 +69,4 @@ def machine_ctrl(machine_id, operation):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", web_server_ip="http://"+request.host)
