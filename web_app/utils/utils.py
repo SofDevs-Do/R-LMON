@@ -111,10 +111,7 @@ class Util:
                     for machine_pos in data[room]["rack_list"][rack]["machine_list"]:
                         machine_id = data[room]["rack_list"][rack]["machine_list"][machine_pos]["_id"]
                         value = -1
-                        if (color_coding_selector == 'avg_cpu_util' or color_coding_selector == 'avg_ram_util'):
-                            value = self.get_average_ram_cpu_data(color_coding_selector, machine_id, from_date, to_date)
-                        elif (color_coding_selector == 'users_last_login'):
-                            value = self.get_most_recent_last_login_data(machine_id)
+                        value = self.get_average_ram_cpu_data(color_coding_selector, machine_id, from_date, to_date)
                         data[room]["rack_list"][rack]["machine_list"][machine_pos]["value"] = value
                         ret_data = self.get_machine_data(machine_id)
                         data[room]["rack_list"][rack]["machine_list"][machine_pos]["assigned_to"] = ret_data['assigned_to']

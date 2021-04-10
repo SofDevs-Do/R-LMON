@@ -20,8 +20,6 @@ def get_overview_page_data(color_coding_selector, from_date, to_date):
         to_ret = util_obj.get_overview_page_data('avg_cpu_util', from_date, to_date)
     elif (color_coding_selector == "RAM utilization"):
         to_ret = util_obj.get_overview_page_data('avg_ram_util', from_date, to_date)
-    elif (color_coding_selector == "Last login"):
-        to_ret = util_obj.get_overview_page_data('users_last_login', from_date, to_date)
     else:
         print("Not implemented warning")
         to_ret = dict()
