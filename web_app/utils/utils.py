@@ -81,18 +81,36 @@ class Util:
 
         return data_dict
 
+    def __select_key_for_last_login(pair):
+        if pair[1] == "**Never logged in**":
+            return parser.parse("1970-01-01")
+        else:
+            return parser.parse(pair[1])
+
+
+    def __format_date_data(self, date_string):
+        if date_string != "**Never logged in**":
+            return parser.parse(date_string).strftime("%Y-%m-%d")
+        return date_string
+
+
+    def get_all_logins(self, since_date):
+        mongo_ret = list(self.mach_col.find())
+        _all_users = []
+        for machine in mongo_ret:
+            for user in machine["users_last_login"]:
+                _all_users.append((user, machine["users_last_login"][user], machine["_id"]))
+
+        all_users = list(map(lambda x: (x[0], self.__format_date_data(x[1]), x[2]),
+                             sorted(_all_users, key=Util.__select_key_for_last_login)))
+        return {"all_users_logins": all_users}
+
 
     def get_last_login_data(self, machine_id):
         mongo_ret = self.mach_col.find({"_id": machine_id}, {"_id":0, "users_last_login":1})
         for data in mongo_ret:
             return data
         return {"users_last_login": dict()}
-
-    def __select_key_for_last_login(pair):
-        if pair[1] == "**Never logged in**":
-            return parser.parse("1970-01-01")
-        else:
-            return parser.parse(pair[1])
 
     def get_most_recent_last_login_data(self, machine_id):
         last_login_dict = self.get_last_login_data(machine_id)

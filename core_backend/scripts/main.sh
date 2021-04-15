@@ -24,4 +24,3 @@ grep -v '^#' < "${MACHINEFILE}" | \
       done; }
 
 python3 "${RLMON_HOME}"/core_backend/db/update-db.py "${RLMON_HOME}" "$(date --date="yesterday" '+%Y-%m-%d')";
-python3 "${RLMON_HOME}"/core_backend/scripts/maintanance.py;

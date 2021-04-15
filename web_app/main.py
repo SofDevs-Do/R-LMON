@@ -25,6 +25,12 @@ def get_overview_page_data(color_coding_selector, from_date, to_date):
         to_ret = dict()
     return to_ret
 
+@app.route("/api/v2/utils-page-last-logins-data/<string:since_date>",
+           methods=['GET'])
+def get_utils_page_logins_data(since_date):
+    to_ret = util_obj.get_all_logins(since_date)
+    return to_ret
+
 
 @app.route("/api/v2/overview-machine-meta-data/<string:machine_id>/<string:from_date>/<string:to_date>",
            methods=['GET'])

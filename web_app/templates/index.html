@@ -19,6 +19,7 @@
       <div class="w3-bar w3-black">
 	<span class="w3-bar-item"> CCBD Systems Monitoring Dashboard</span>
 	<button id="machine-overview-data-button" class="w3-bar-item w3-button rlmon-display-buttons">Overview</button>
+	<button id="utils-page-button" class="w3-bar-item w3-button rlmon-display-buttons">Utilities</button>
 	<button id="net-diag-button" class="w3-bar-item w3-button rlmon-display-buttons">Network Diagram</button>
       </div> 
     </div>
@@ -119,7 +120,7 @@
 		</p>
 	      </div>
 	    </div>
-	    
+
 	    <div class="w3-cell-row w3-padding w3-round-large">
 	      <div class="w3-cell w3-deep-orange" style="width:20%">
 		<p id="legend-div-1">0-24%</p>
@@ -137,7 +138,7 @@
 		<p>No data</p>
 	      </div>
 	    </div>
-	    
+
 	  </div>
 	</div>
 
@@ -154,6 +155,59 @@
       </div>
     </div>
     
+    <div id="utils-page-div" class="rlmon-display-div" style="display:none">
+
+	<div id="utils-page-display-settings-div" class="w3-section s3 w3-col w3-small w3-row-padding w3-center" style="position:sticky;top:1%">
+
+	  <div class="w3-gray w3-card-4 w3-round-large">
+
+	    <div class="w3-row-padding">
+	      <div class="w3-half w3-padding-small">
+		<p>Not logged in since:</p>
+	      </div>
+	      <div class="w3-container w3-half w3-center w3-padding-small">
+		<input type="date" id="not-logged-in-since-input" name="from-date" value="2021-01-01">
+	      </div>
+	    </div>
+
+	  </div>
+
+	  <div class="w3-gray w3-section w3-card-4 w3-round-large">
+
+	    <div class="w3-row-padding">
+	      <div class="w3-center">
+		<p>
+		  Colour code based on last login date
+		</p>
+	      </div>
+	    </div>
+
+	    <div class="w3-cell-row w3-padding w3-round-large">
+	      <div class="w3-cell w3-deep-orange" style="width:20%">
+		<p id="utils-legend-div-1">>4w</p>
+	      </div>
+	      <div class="w3-cell w3-amber" style="width:20%">
+		<p id="utils-legend-div-2">>3w</p>
+	      </div>
+	      <div class="w3-cell w3-light-green" style="width:20%">
+		<p id="utils-legend-div-3">>2w</p>
+	      </div>
+	      <div class="w3-cell w3-green" style="width:20%">
+		<p id="utils-legend-div-4">>1w</p>
+	      </div>
+	      <div class="w3-cell w3-black" style="width:20%">
+		<p>No data</p>
+	      </div>
+	    </div>
+
+	  </div>
+	</div>
+
+      <div id="utils-page-data-disp-div" class="w3-row w3-col s9 w3-dark-grey w3-section w3-card-4 w3-round-large">
+
+      </div>
+    </div>
+
     <div id="net-diag-div" class="rlmon-display-div" style="display:none">
       net-diag under development
     </div>
