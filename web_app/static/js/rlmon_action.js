@@ -41,6 +41,10 @@ navigation_selector_obj={
 	    x[i].style.display = "none";
 	}
 	e.target.corresponding_div.style.display = "block";
+
+	if (e.target.id == "utils-page-button") {
+	    utils_page_obj.top_fun();
+	}
     }
 }
 
@@ -73,14 +77,8 @@ overview_page_obj={
 			+ to_date);
 	xhr_object.send();
 
-	if (document.getElementById("color-coding-selector").value == "Last login") {
-	    document.getElementById("from-date-input").disabled = true;
-	    document.getElementById("to-date-input").disabled = true;
-	}
-	else {
-	    document.getElementById("from-date-input").disabled = false;
-	    document.getElementById("to-date-input").disabled = false;
-	}
+	document.getElementById("from-date-input").disabled = false;
+	document.getElementById("to-date-input").disabled = false;
     },
 
     get_machine_overview_data_callback: function() {
@@ -100,26 +98,10 @@ overview_page_obj={
 		}
 	    }
 
-	    if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
-		document.getElementById("color-coding-selector").value == "RAM utilization") {
-		overview_page_obj.flattened_data_json = flattened_data_json.sort(
-		    function(a, b) {
-			return a["value"] - b["value"];
-		    });
-	    }
-	    else {
-		overview_page_obj.flattened_data_json = flattened_data_json.sort(
-		    function(a, b) {
-			if (a["value"] != null && b["value"] != null)
-			    return (new Date(Date.parse(a["value"]))) - (new Date(Date.parse(b["value"])));
-			else {
-			    if (a["value"] == null)
-				return -1;
-			    else
-				return 1
-			}
-		    });
-	    }
+	    overview_page_obj.flattened_data_json = flattened_data_json.sort(
+		function(a, b) {
+		    return a["value"] - b["value"];
+		});
 
 	    overview_page_obj.refresh_vidualization();
 	}
@@ -143,11 +125,8 @@ overview_page_obj={
 	}
 	ul_object = document.getElementById("machine-graph-sorted-view-list-div");
 	overview_page_obj.populate_sorted_graph_view(ul_object);
-	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
-	    document.getElementById("color-coding-selector").value == "RAM utilization") {
-	    graph_canvas_div = document.getElementById("machine-graph-graph-canvas");
-	    overview_page_obj.populate_bar_graph_view(graph_canvas_div);
-	}
+	graph_canvas_div = document.getElementById("machine-graph-graph-canvas");
+	overview_page_obj.populate_bar_graph_view(graph_canvas_div);
     },
 
     populate_graph_view: function(e) {
@@ -240,13 +219,7 @@ overview_page_obj={
 	var disp_data_based_on_key = overview_page_obj.get_backend_key_from_disp_string(disp_data_input_string);
 
 	// different coloring functions based on the data requested by the user.
-	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
-	    document.getElementById("color-coding-selector").value == "RAM utilization") {
-	    coloring_function = overview_page_obj.color_machines_based_on_cpu_ram_data;
-	}
-	else {
-	    coloring_function = overview_page_obj.color_machines_based_on_last_login_data;
-	}
+	coloring_function = overview_page_obj.color_machines_based_on_cpu_ram_data;
 
 	if (overview_page_obj.order_of_view != "low-top") {
 	    flattened_data_json = flattened_data_json.reverse();
@@ -266,16 +239,10 @@ overview_page_obj={
 	    li_object.classList.add("w3-hover-shadow", "w3-border-black");
 	    li_object.style.cursor = "pointer";
 	    value = flattened_data_json[i]["value"];
-	    if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
-		document.getElementById("color-coding-selector").value == "RAM utilization") {
-		if (value > 0)
-		    li_object.innerHTML = flattened_data_json[i][disp_data_based_on_key] + ": " + value.toFixed(2);
-		else
-		    li_object.innerHTML = flattened_data_json[i][disp_data_based_on_key] + ": " + 0;
-	    }
-	    else {
-		li_object.innerHTML = flattened_data_json[i][disp_data_based_on_key] + ": " + value;
-	    }
+	    if (value > 0)
+		li_object.innerHTML = flattened_data_json[i][disp_data_based_on_key] + ": " + value.toFixed(2);
+	    else
+		li_object.innerHTML = flattened_data_json[i][disp_data_based_on_key] + ": " + 0;
 	    li_object.addEventListener("click", machine_details_obj.change_view);
 	    coloring_function(value, li_object);
 	    ul_object.appendChild(li_object);
@@ -314,15 +281,7 @@ overview_page_obj={
 	var disp_data_input_string = document.getElementById("overview-page-display-data-selector").value;
 	var disp_data_based_on_key = overview_page_obj.get_backend_key_from_disp_string(disp_data_input_string);
 
-	// different coloring functions based on the data requested by the user.
-	if (document.getElementById("color-coding-selector").value == "CPU utilization" ||
-	    document.getElementById("color-coding-selector").value == "RAM utilization") {
-	    coloring_function = overview_page_obj.color_machines_based_on_cpu_ram_data;
-	}
-	else {
-	    coloring_function = overview_page_obj.color_machines_based_on_last_login_data;
-	}
-
+	coloring_function = overview_page_obj.color_machines_based_on_cpu_ram_data;
 
 	for (let i in data_json) {
 	    // for each room
@@ -393,20 +352,11 @@ overview_page_obj={
     update_legend: function() {
 	legend_key = document.getElementById("color-coding-selector").value;
 
-	if (legend_key == "CPU utilization" || legend_key == "RAM utilization") {
-	    document.getElementById("unit-of-bins").innerHTML = "colour code based on usage %";
-	    document.getElementById("legend-div-1").innerHTML = "0-24%";
-	    document.getElementById("legend-div-2").innerHTML = "25-49%";
-	    document.getElementById("legend-div-3").innerHTML = "50-74%";
-	    document.getElementById("legend-div-4").innerHTML = "74-100%";
-	}
-	else {
-	    document.getElementById("unit-of-bins").innerHTML = "colour code based on most recent last login date being in the rage:";
-	    document.getElementById("legend-div-1").innerHTML = ">4w";
-	    document.getElementById("legend-div-2").innerHTML = "3w";
-	    document.getElementById("legend-div-3").innerHTML = "2w";
-	    document.getElementById("legend-div-4").innerHTML = "1w";
-	}
+	document.getElementById("unit-of-bins").innerHTML = "colour code based on usage %";
+	document.getElementById("legend-div-1").innerHTML = "0-24%";
+	document.getElementById("legend-div-2").innerHTML = "25-49%";
+	document.getElementById("legend-div-3").innerHTML = "50-74%";
+	document.getElementById("legend-div-4").innerHTML = "74-100%";
     },
 
     color_machines_based_on_cpu_ram_data: function(value, li_object) {
@@ -540,6 +490,95 @@ overview_page_obj={
 	    this.meta_data_div.meta_data_added = true;
 	    overview_page_obj.fill_meta_data(this.meta_data_div);
 	}
+    }
+}
+
+
+utils_page_obj = {
+
+    order_of_view: "high-top",
+
+    top_fun: function() {
+	document.getElementById("not-logged-in-since-input").addEventListener("change", utils_page_obj.request_for_logins);
+	utils_page_obj.request_for_logins(null);
+    },
+
+    request_for_logins: function(e) {
+	since_date = document.getElementById("not-logged-in-since-input").value;
+
+	xhr_object = new XMLHttpRequest();
+	xhr_object.onload = utils_page_obj.recieve_login_data;
+	xhr_object.open('GET', server_details.web_server_ip
+			+ '/api/v2/utils-page-last-logins-data/'
+			+ since_date);
+	xhr_object.send();
+    },
+
+    recieve_login_data: function() {
+	if(this.readyState == 4 && this.status == 200) {
+	    var res = this.responseText;
+	    var data_json = JSON.parse(res);
+	    utils_page_obj.login_data_json = data_json;
+	    utils_page_obj.fill_login_data();
+	}
+    },
+
+    fill_login_data: function() {
+	login_data = utils_page_obj.login_data_json["all_users_logins"];
+	utils_page_data_disp_div = document.getElementById("utils-page-data-disp-div");
+	utils_page_data_disp_div.innerHTML = "";
+	data_disp_div = document.createElement("div");
+	data_disp_div.id = "sorted_view_list";
+	data_disp_div.classList.add("w3-section", "w3-row-padding", "w3-small", "w3-center");
+
+	ul_object = document.createElement("ul");
+	ul_object.id = "utils-page-sorted-view-list-div";
+	ul_object.classList.add("w3-ul", "w3-center", "w3-tiny", "w3-col");
+	//ul_object.style.width=(100/overview_page_obj.number_of_racks_in_row).toString()+"%";
+	ul_object.style.width="40%";
+
+	li_object = document.createElement("li");
+	li_object.id = "utils-page-sorted-view-list-label"
+	li_object.classList.add("w3-medium", "w3-border-black", "w3-gray", "w3-hover-shadow");
+	li_object.style.cursor = "pointer";
+
+	if (utils_page_obj.order_of_view != "low-top") {
+	    li_object.innerHTML = "Sort descending";
+	    login_data = login_data.reverse();
+	}
+	else {
+	    li_object.innerHTML = "Sort ascending";
+	    login_data = login_data.reverse();
+	}
+
+	li_object.addEventListener("click", utils_page_obj.toggle_sorted_view);
+	ul_object.appendChild(li_object);
+
+	for (let i in login_data) {
+	    data = login_data[i];
+	    li_object = document.createElement("li");
+	    li_object.rlmon_id = data[2];
+	    li_object.classList.add("w3-hover-shadow", "w3-border-black");
+	    li_object.style.cursor = "pointer";
+	    li_object.innerHTML = data[0] + "@" + data[2] + " on " + data[1];
+	    li_object.addEventListener("click", machine_details_obj.change_view);
+	    overview_page_obj.color_machines_based_on_last_login_data(data[1], li_object);
+	    ul_object.appendChild(li_object);
+	}
+
+	data_disp_div.appendChild(ul_object);
+	utils_page_data_disp_div.appendChild(data_disp_div);
+
+    },
+
+    toggle_sorted_view: function(e) {
+	if (utils_page_obj.order_of_view != "low-top") {
+	    utils_page_obj.order_of_view = "low-top";
+	}
+	else {
+	    utils_page_obj.order_of_view = "high-top";
+	}
+	utils_page_obj.fill_login_data();
     }
 }
 
