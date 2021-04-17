@@ -600,7 +600,8 @@ machine_details_obj={
 
     syslog_button_action: function(machine_id) {
 	document.getElementById('syslog_modal').style.display='block';
-	document.getElementById('syslog_modal_content').innerHTML += "<p>Syslog output will come here!</p>";
+	// document.getElementById('syslog_modal_content').innerHTML += "<p>Syslog output will come here!</p>";
+	machine_details_obj.request_and_fill_syslog_data(machine_id);
     },
 
     reboot_button_action: function(machine_id) {
@@ -622,6 +623,30 @@ machine_details_obj={
     reboot_done: function() {
 	console.log("reboot done!");
     },
+
+    request_and_fill_syslog_data: function(machine_id) {
+	console.log('request_and_fill_syslog');
+	xhr_object = new XMLHttpRequest();
+	xhr_object.onload = this.get_syslog_data;
+	endpoint = server_details.web_server_ip + "/api/v2/get-syslog/" + machine_id;
+	xhr_object.open('GET', endpoint);
+	xhr_object.send();
+    },
+
+    get_syslog_data: function() {
+	console.log('get_syslog_data');
+	if(this.readyState == 4 && this.status == 200) {
+	    var res = this.responseText;
+	    // var res_json = JSON.parse(res);
+	    machine_details_obj.populate_syslog_data(res);
+	}
+    },
+
+    populate_syslog_data: function(syslog_data) {
+	console.log('populating');
+	document.getElementById('syslog_modal_content').innerHTML = "<pre>"+syslog_data+"</pre>";
+    },
+    
 
     request_and_fill_disk_info: function(machine_id) {
 	var from_date = document.getElementById("from-date-input-md").value;

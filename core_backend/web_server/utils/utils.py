@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 class Util:
 
@@ -21,7 +22,10 @@ class Util:
     def get_syslog(self, machine_address):
         operation = "get_syslog_info"
         _operation = "cat /var/log/syslog"
-        response = os.system("ssh -o PasswordAuthentication=no " + machine_address + _operation)
-        if (response == 0):
-            return("{} successful".format(operation))
-        return("{} failed".format(operation))
+        _command = "ssh -o PasswordAuthentication=no " + machine_address + " " + _operation
+        response = subprocess.check_output(_command, shell=True)
+        # response = os.system("ssh -o PasswordAuthentication=no " + machine_address + " " + _operation, shell=True)
+        # if (response == 0):
+        #     return("{} successful".format(operation))
+        # return("{} failed".format(operation))
+        return response

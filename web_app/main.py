@@ -1,5 +1,6 @@
 import random
 import string
+import requests
 
 from flask import Flask
 from flask import render_template
@@ -65,6 +66,14 @@ def get_machine_disk_info(machine_id, from_date, to_date):
 def machine_ctrl(machine_id, operation):
     ret_data = util_obj.get_machine_data(machine_id)
     return redirect(util_obj.core_backend_url+"/api/v2/core-backend/machine-ctrl/"+ret_data["address"]+"/"+operation)
+
+@app.route("/api/v2/get-syslog/<string:machine_id>",
+           methods=['GET'])
+def get_syslog(machine_id):
+    print("!!!!")
+    ret_data = util_obj.get_machine_data(machine_id)
+    # return redirect(util_obj.core_backend_url+"/api/v2/core-backend/get-syslog/"+ret_data["address"])
+    return requests.get(util_obj.core_backend_url+"/api/v2/core-backend/get-syslog/"+ret_data["address"]).content
 
 
 @app.route("/")
