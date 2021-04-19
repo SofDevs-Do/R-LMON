@@ -1123,27 +1123,26 @@ machine_details_obj={
 
     _update_kvm_info: function(kvm_info){
 	var kvm_info_md_div = document.getElementById("kvm-info-md");
-	kvm_info_md_div.innerHTML = "";
-	kvm_info_md_div.innerHTML = "<li><h6>KVM Switch </h6></li> <li>" + kvm_info.join(' </li> <li> ') + " </li> </ul>";
+	kvm_info_md_div.innerHTML = "<div>" + kvm_info[0] + "</div>";
+	document.getElementById("kvm-info-button").addEventListener("click", machine_details_obj.edit_button_callback);
     },
 
     _update_comments_info: function(comments_info){
 	var comments_md_div = document.getElementById("comments-md");
-	comments_md_div.innerHTML = "";
-	comments_md_div.innerHTML = "<li><h6>Comments </h6></li> <li>" + comments_info.join(' </li> <li> ') + " </li> </ul>";	
+	comments_md_div.innerHTML = "<div>" + comments_info[0] + "</div>";
+	document.getElementById("comments-button").addEventListener("click", machine_details_obj.edit_button_callback);
     },
 
     _update_assigned_to_info: function(assigned_to_info) {
 	var assigned_to_md_div = document.getElementById("prof-assigned-to-md");
-	assigned_to_md_div.innerHTML = "";
-	// console.log(assigned_to_info);
-	assigned_to_md_div.innerHTML = "<li><h7>Professor Assigned To </h7></li> <li>" + assigned_to_info +' </li>' + "</ul>";
+	assigned_to_md_div.innerHTML = "<div>" + assigned_to_info + "</div>";
+	document.getElementById("prof-assigned-to-button").addEventListener("click", machine_details_obj.edit_button_callback);
     },
 
     _update_student_assigned_to_info: function(student_assigned_to_info) {
 	var student_assigned_to_md_div = document.getElementById("student-assigned-to-md");
-	student_assigned_to_md_div.innerHTML = "";
-	student_assigned_to_md_div.innerHTML = "<li><h7>Student Assigned To </h7></li> <li>" + student_assigned_to_info +' </li>' + "</ul>";
+	student_assigned_to_md_div.innerHTML = "<div>" + student_assigned_to_info + "</div>";
+	document.getElementById("student-assigned-to-md").addEventListener("click", machine_details_obj.edit_button_callback);
     },
 
     _update_ip_info: function(ip_info) {
@@ -1165,6 +1164,10 @@ machine_details_obj={
     _update_os_info: function(os_info) {
 	var os_info_div = document.getElementById("os-info-md");
 	os_info_div.innerHTML = "<td>" + "OS : " + "</td> <td>" + os_info + "</td>";
+    },
+
+    edit_button_callback: function(e) {
+	value_div = document.getElementById(e.target.id.replace('-button', '-md'));
+
     }
-    
 }
