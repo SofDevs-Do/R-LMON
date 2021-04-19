@@ -24,6 +24,11 @@ class Util:
         self.cpu_ram_disk_col = self.db['cpu_ram_disk_col']
 
 
+    def update_fields(self, machine_id, update_field, data):
+        data = data.replace("<br>", "")
+        print(machine_id, update_field, data)
+
+
     def get_average_ram_cpu_data(self, what_data, machine_id, from_date, to_date):
         query_request_dict = dict()
         data_list = []

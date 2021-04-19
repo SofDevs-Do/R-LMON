@@ -618,6 +618,7 @@ machine_details_obj={
 	// machine_details_obj.populate_avg_disk_data({});
 
 	var machine_id = machine_li_obj.rlmon_id.toString();
+	machine_details_obj.machine_id = machine_id;
 
 	var reboot_button = document.getElementById("reboot-button");
 	reboot_button.onclick = function() {machine_details_obj.reboot_button_action(machine_id)};
@@ -1123,26 +1124,26 @@ machine_details_obj={
 
     _update_kvm_info: function(kvm_info){
 	var kvm_info_md_div = document.getElementById("kvm-info-md");
-	kvm_info_md_div.innerHTML = "<div>" + kvm_info[0] + "</div>";
+	kvm_info_md_div.innerHTML = kvm_info[0];
 	document.getElementById("kvm-info-button").addEventListener("click", machine_details_obj.edit_button_callback);
     },
 
     _update_comments_info: function(comments_info){
 	var comments_md_div = document.getElementById("comments-md");
-	comments_md_div.innerHTML = "<div>" + comments_info[0] + "</div>";
+	comments_md_div.innerHTML = comments_info[0];
 	document.getElementById("comments-button").addEventListener("click", machine_details_obj.edit_button_callback);
     },
 
     _update_assigned_to_info: function(assigned_to_info) {
 	var assigned_to_md_div = document.getElementById("prof-assigned-to-md");
-	assigned_to_md_div.innerHTML = "<div>" + assigned_to_info + "</div>";
+	assigned_to_md_div.innerHTML = assigned_to_info;
 	document.getElementById("prof-assigned-to-button").addEventListener("click", machine_details_obj.edit_button_callback);
     },
 
     _update_student_assigned_to_info: function(student_assigned_to_info) {
 	var student_assigned_to_md_div = document.getElementById("student-assigned-to-md");
-	student_assigned_to_md_div.innerHTML = "<div>" + student_assigned_to_info + "</div>";
-	document.getElementById("student-assigned-to-md").addEventListener("click", machine_details_obj.edit_button_callback);
+	student_assigned_to_md_div.innerHTML = student_assigned_to_info;
+	document.getElementById("student-assigned-to-button").addEventListener("click", machine_details_obj.edit_button_callback);
     },
 
     _update_ip_info: function(ip_info) {
@@ -1168,6 +1169,47 @@ machine_details_obj={
 
     edit_button_callback: function(e) {
 	value_div = document.getElementById(e.target.id.replace('-button', '-md'));
+	value_div.contentEditable = "true";
+	value_div.style.border = "solid #aaaaaa";
+	value_div.addEventListener("blur", machine_details_obj.change_and_update_backend);
+    },
 
+    change_and_update_backend: function(e) {
+	update_value = e.target.innerHTML;
+	e.target.style.border = "none";
+
+	update_field = e.target.id;
+	if (update_field == "prof-assigned-to-md") {
+	    update_field = "assigned_to";
+	}
+	else if (update_field == "student-assigned-to-md") {
+	    update_field = "student_assigned_to";
+	}
+	else if (update_field == "kvm-info-md") {
+	    update_field = "kvm_info";
+	}
+	else if (update_field == "comments-md") {
+	    update_field = "comments";
+	}
+	else {
+	    update_field = "";
+	}
+
+	xhr_object = new XMLHttpRequest();
+	xhr_object.onload = machine_details_obj.update_backend_with_new_data;
+	xhr_object.open('POST', server_details.web_server_ip
+			+ '/api/v2/update-data/'
+			+ machine_details_obj.machine_id + '/'
+			+ update_field);
+	xhr_object.setRequestHeader('Content-Type', 'application/json');
+	xhr_object.send(JSON.stringify({"data":update_value}));
+
+	e.target.contentEditable = "false";
+    },
+
+    update_backend_with_new_data: function(e) {
+	if(this.readyState == 4 && this.status == 200) {
+	    //console.log("sent for update");
+	}
     }
 }

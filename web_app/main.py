@@ -79,6 +79,12 @@ def get_syslog(machine_id):
     # return redirect(util_obj.core_backend_url+"/api/v2/core-backend/get-syslog/"+ret_data["address"])
     return requests.get(util_obj.core_backend_url+"/api/v2/core-backend/get-syslog/"+ret_data["address"]).content
 
+@app.route("/api/v2/update-data/<string:machine_id>/<string:update_field>",
+           methods=['POST'])
+def update_fields(machine_id, update_field):
+    ret_data = util_obj.update_fields(machine_id, update_field, request.get_json()["data"])
+    return dict()
+
 
 @app.route("/")
 def index():
