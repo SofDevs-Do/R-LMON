@@ -25,8 +25,12 @@ class Util:
 
 
     def update_fields(self, machine_id, update_field, data):
+        machine_id_key = "_id"
         data = data.replace("<br>", "")
-        print(machine_id, update_field, data)
+        # print(machine_id, update_field, data)
+        data_dict = list(self.mach_col.find({machine_id_key : machine_id}))
+        data_dict[0][update_field] = data
+        self.mach_col.update_one({machine_id_key : machine_id}, {'$set' : data_dict[0]}, upsert=True)
 
 
     def get_average_ram_cpu_data(self, what_data, machine_id, from_date, to_date):
