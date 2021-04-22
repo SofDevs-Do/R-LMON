@@ -144,6 +144,34 @@ for machine_id in machine_id_list:
     users_last_login = get_users_last_login(log_path, machine_id)
     data_dict[users_last_login_key] = users_last_login
 
+    # misc information such as assigned to whom, and other comments.
+    # check if these data are present in the DB already, if not, then add
+    # No Data in their place, otherwise, read from the DB and use it
+    # to populate the fields
+
+    for machine in mach_col.find({"_id": machine_id}):
+        if ("assigned_to" in machine):
+            data_dict["assigned_to"] = machine["assigned_to"]
+        else:
+            data_dict["assigned_to"] = "No Data"
+
+        if ("student_assigned_to" in machine):
+            data_dict["student_assigned_to"] = machine["student_assigned_to"]
+        else:
+            data_dict["student_assigned_to"] = "No Data"
+
+        if ("comments" in machine):
+            data_dict["comments"] = machine["comments"]
+        else:
+            data_dict["comments"] = "No Data"
+
+        break
+
+    else:
+        data_dict["assigned_to"] = "No data"
+        data_dict["student_assigned_to"] = "No data"
+        data_dict["comments"] = "No data"
+
 
     # obtain avg_cpu_util from data_collected and alter in data_dict
     avg_cpu_util = get_avg_cpu_util_info(log_path, machine_id)

@@ -8,7 +8,7 @@ main()
     ROOM_ID="${2}";
     RACK_ID="${3}";
     MACHINE_LOCATION="${4}";
-    MACHINE_ID="${10}";
+    MACHINE_ID="${5}";
 
     # The location to store the collected data from each remote machine.
     REMOTE_MACHINE_PATH="${LOG_DATE_PATH}/${MACHINE_ID}";
