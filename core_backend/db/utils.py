@@ -96,20 +96,6 @@ def get_rack_details(machine_file_path):
 
     return toret
 
-def get_assigned_to_and_comments(log_path, machine):
-    machine = str(machine)
-    t_date = os.path.basename(log_path)
-    misc_info_file = os.path.join(log_path, machine, MISC_FILE_NAME)
-    with open(misc_info_file, "r") as misc_info_fp:
-        misc_info = misc_info_fp.readlines()[-3:]
-
-    misc_data = dict()
-    if (len(misc_info) > 0):
-        misc_data["assigned_to"] = misc_info[0].strip()
-        misc_data["student_assigned_to"] = misc_info[1].strip()
-        misc_data["comments"] = misc_info[2].strip()
-
-    return misc_data
 
 def get_address(log_path, machine):
     machine = str(machine)

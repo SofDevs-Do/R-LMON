@@ -8,11 +8,6 @@ main()
     ROOM_ID="${2}";
     RACK_ID="${3}";
     MACHINE_LOCATION="${4}";
-    KVM_SWITCH="${5}";
-    KVM_NUMBER="${6}";
-    ALLOTED_TO="${7}";
-    STUDENT_ALLOTED_TO="${8}";
-    COMMENTS="${9}";
     MACHINE_ID="${10}";
 
     # The location to store the collected data from each remote machine.
@@ -44,11 +39,6 @@ main()
 	    echo "${ROOM_ID}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${RACK_ID}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 	    echo "${MACHINE_LOCATION}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
-	    echo "${KVM_SWITCH}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
-	    echo "${KVM_NUMBER}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
-	    echo "${ALLOTED_TO}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
-	    echo "${STUDENT_ALLOTED_TO}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
-	    echo "${COMMENTS}" >> "${REMOTE_MACHINE_PATH}"/misc-info.txt
 
 
 	    ## Data collection scripts being invoked.
