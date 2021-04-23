@@ -1171,6 +1171,7 @@ machine_details_obj={
 	value_div = document.getElementById(e.target.id.replace('-button', '-md'));
 	value_div.contentEditable = "true";
 	value_div.style.border = "solid #aaaaaa";
+	value_div.focus();
 	value_div.addEventListener("blur", machine_details_obj.change_and_update_backend);
     },
 
