@@ -116,13 +116,16 @@ def get_disk_info(log_path, machine):
     with open(disk_info_file, "r") as disk_info_fp:
         disk_info = disk_info_fp.read().strip().split('\n')
     disk_data = dict()
-    for each_fs_info in disk_info:
-        each_fs_info_l = each_fs_info.split()
-        fs = each_fs_info_l[0]
-        total_GB = each_fs_info_l[1][:-1]
-        used_GB = each_fs_info_l[2][:-1]
-        mounted_on = each_fs_info_l[5]
-        disk_data[fs] = {'total_GB': total_GB, 'used_GB': {t_date : used_GB}, 'mounted_on': mounted_on}
+    try:
+        for each_fs_info in disk_info:
+            each_fs_info_l = each_fs_info.split()
+            fs = each_fs_info_l[0]
+            total_GB = each_fs_info_l[1][:-1]
+            used_GB = each_fs_info_l[2][:-1]
+            mounted_on = each_fs_info_l[5]
+            disk_data[fs] = {'total_GB': total_GB, 'used_GB': {t_date : used_GB}, 'mounted_on': mounted_on}
+    except:
+        pass
     return disk_data
 
 def get_avg_mem_util_info(log_path, machine):
