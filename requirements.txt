@@ -3,3 +3,4 @@ Flask
 pymongo
 python_dateutil
 PyYAML
+gunicorn
