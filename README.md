@@ -4,9 +4,9 @@ This is a light-weight system monitoring tool for cluster machines.
 ## Installation
 ### On monitoring machine
 1) Clone this repository as `$HOME/.r_lmon` directory.
-`
-$ git clone https://github.com/SofDevs-Do/R-LMON
-`
+```
+$ git clone https://github.com/SofDevs-Do/R-LMON $HOME/.r_lmon
+```
 
 2) Configure/update the `machinefile` located at `$HOME/.r_lmon/machinefile`. You will have to add a unique machine ID, username@IP, unique room ID, unique rack ID, and position of the machine in the rack in a new line. You may use '`#`' as a single line comment in this file, spaces and tabs are allowed in the file for your convinience. However, leading and trailing spaces, tabs will not be ignored.
 
